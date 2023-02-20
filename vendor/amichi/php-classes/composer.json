@@ -1,0 +1,23 @@
+{
+    "name": "amichi/php-classes",
+    "minimum-stability": "dev",
+    "type": "library",
+    "description": "Classes PHP para uso no projeto Hcode Store",
+    "homepage": "https://github.com/luizamichi/hcode-store/tree/master/vendor/amichi/php-classes",
+    "authors": [
+        {
+            "name": "Luiz Amichi",
+            "email": "eu@luizamichi.com.br"
+        }
+    ],
+    "require": {
+        "php": ">=8.1.12",
+        "phpmailer/phpmailer": "6.6.0",
+        "rain/raintpl": "3.1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "": "src"
+        }
+    }
+}

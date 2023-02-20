@@ -18,3 +18,24 @@ putenv("PHP_SESSION_NAME=HcodeStore"); // Nome da sessão para armazenar no cook
 putenv("SECRET_KEY=CursoCompletoPHP"); // Chave para criptografia
 putenv("SECRET_IV=SolusComputacao"); // Contra chave para criptografia
 date_default_timezone_set("America/Sao_Paulo"); // Localização para ajustar o horário
+
+
+// Banco de dados
+putenv("MYSQL_HOSTNAME=192.168.15.33"); // Servidor SQL
+putenv("MYSQL_DRIVER=mysql"); // Driver SQL
+putenv("MYSQL_SCHEMA=hcode_store"); // Nome do banco de dados
+putenv("MYSQL_USERNAME=pi"); // Nome do usuário
+putenv("MYSQL_PASSWORD=mjolnir"); // Senha de acesso
+putenv("MYSQL_PORT=3306"); // Porta do servidor SQL
+
+
+// Servidor de e-mail
+putenv("SMTP_EMAIL_HOSTNAME=smtp.hostinger.com"); // Servidor de e-mail de saída (SMTP)
+putenv("SMTP_EMAIL_ADDRESS=hcodestore@luizamichi.com.br"); // Endereço de e-mail
+putenv("SMTP_EMAIL_PASSWORD=HcodeStore"); // Senha do e-mail
+putenv("SMTP_EMAIL_NAME_FROM=Hcode Store"); // Nome que vai junto à mensagem
+putenv("SMTP_EMAIL_REPLY="); // E-mail que será replicada a mensagem
+putenv("SMTP_DEBUG=0"); // 0: desligado, 1: mensagens do cliente, 2: mensagens do servidor, 3: mensagens da conexão, 4: mensagens de baixo nível
+putenv("SMTP_PORT=587"); // 465: SMTP com TLS implícito (SMTPS RFC8314), 587: SMTP + STARTTLS
+putenv("SMTP_SECURE=tls"); // SMTPS: TLS implícito na porta 465, STARTTLS: TLS explícito na porta 587
+putenv("SMTP_AUTH=true"); // Autenticação SMTP
