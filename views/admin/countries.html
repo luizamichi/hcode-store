@@ -1,0 +1,80 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-list"></i>
+            Lista de Países
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item active">Países</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>COI</th>
+                    <th>DDI</th>
+                    <th>Código IBGE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loop="$countries"}
+                  <tr id="{$value.id}">
+                    <td>{$value.id}</td>
+                    <td data-find="search">{$value.name}</td>
+                    <td data-find="search">{$value.coi}</td>
+                    <td data-find="search">{$value.ddi}</td>
+                    <td data-find="search">{$value.ibgeCode}</td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="5">
+                      <small>
+                        <span id="count">{function="count($countries)"}</span>
+                        <span id="countText">países encontrados</span>
+                      </small>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.title += " (Countries)";
+
+  window.addEventListener("load", () => {
+    $("#countText").text("países encontrados");
+    if ($("#count").text() == 1) {
+      $("#countText").text("país encontrado");
+    }
+  });
+</script>

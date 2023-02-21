@@ -19,8 +19,10 @@ require_once __DIR__ . "/functions.php";
 session_name(getenv("PHP_SESSION_NAME") ?: "Ecommerce");
 session_start();
 
-use Amichi\Page;
-use Amichi\PageAdmin;
+
+use Amichi\Controller\CountryController;
+
+use Amichi\View\CountryView;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -63,22 +65,24 @@ $midView = function (Request $request, RequestHandler $handler): Response {
 };
 
 
-$app->get("/", function (Request $req, Response $res, array $args): Response {
-    $page = new Page();
-    $page->setTpl("index");
+$app->group(
+    "/api/country",
+    function ($app) {
+        $app->get("", CountryController::class . ":getAll");
+        $app->get("/{idCountry}", CountryController::class . ":get");
+        $app->post("", CountryController::class . ":post");
+        $app->put("/{idCountry}", CountryController::class . ":put");
+        $app->delete("/{idCountry}", CountryController::class . ":delete");
+    }
+)->add($midCORS)->add($midJSON);
 
-    $res->getBody()->write($page->getTpl());
-    return $res;
-});
 
-
-$app->get("/admin", function (Request $req, Response $res, array $args): Response {
-    $page = new PageAdmin();
-    $page->setTpl("index");
-
-    $res->getBody()->write($page->getTpl());
-    return $res;
-});
+$app->group(
+    "/admin",
+    function ($app) {
+        $app->get("/countries", CountryView::class . ":getAll");
+    }
+)->add($midView);
 
 
 $app->run();
