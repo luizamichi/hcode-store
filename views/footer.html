@@ -1,0 +1,147 @@
+  <!-- Footer Start -->
+  <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
+    <div class="row px-xl-5 pt-5">
+      <div class="col-lg-4 col-md-12 mb-5 pr-3 pr-xl-5">
+        <h5 class="text-secondary text-uppercase mb-4">Sobre</h5>
+        <p class="mb-4">Hcode Treinamentos é uma empresa com foco no ensino online de TI de uma maneira objetiva e divertida.</p>
+        <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Rua José Roque Salton, 250 - Londrina, PR</p>
+        <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>contato@luizamichi.com.br</p>
+        <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+55 (44) 99866-5521</p>
+      </div>
+      <div class="col-lg-8 col-md-12">
+        <div class="row">
+          <div class="col-md-4 mb-5">
+            <h5 class="text-secondary text-uppercase mb-4">Loja</h5>
+            <div class="d-flex flex-column justify-content-start">
+              <a class="text-secondary mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Início</a>
+              <a class="text-secondary mb-2" href="/products"><i class="fa fa-angle-right mr-2"></i>Produtos</a>
+              <a class="text-secondary mb-2" href="/categories"><i class="fa fa-angle-right mr-2"></i>Categorias</a>
+              <a class="text-secondary mb-2" href="/contact"><i class="fa fa-angle-right mr-2"></i>Contato</a>
+            </div>
+          </div>
+          <div class="col-md-4 mb-5">
+            <h5 class="text-secondary text-uppercase mb-4">Minha conta</h5>
+            <div class="d-flex flex-column justify-content-start">
+              <a class="text-secondary mb-2" href="/profile"><i class="fa fa-angle-right mr-2"></i>Painel do usuário</a>
+              <a class="text-secondary mb-2" href="/cart"><i class="fa fa-angle-right mr-2"></i>Carrinho</a>
+              <a class="text-secondary mb-2" href="/wishlist"><i class="fa fa-angle-right mr-2"></i>Lista de desejos</a>
+            </div>
+          </div>
+          <div class="col-md-4 mb-5">
+            <h5 class="text-secondary text-uppercase mb-4">Novidades</h5>
+            <p>Ainda não possui uma conta? Crie agora mesmo e receba todas as novidades!</p>
+            <form action="/admin/register" method="get">
+              <div class="input-group">
+                <input type="text" class="form-control" name="email" placeholder="Endereço de e-mail" />
+                <div class="input-group-append">
+                  <button class="btn btn-primary">Inscrever-se</button>
+                </div>
+              </div>
+            </form>
+            <h6 class="text-secondary text-uppercase mt-4 mb-3">Siga-nos</h6>
+            <div class="d-flex">
+              <a class="btn btn-primary btn-square mr-2" href="https://twitter.com/hcodebr"><i class="fab fa-twitter"></i></a>
+              <a class="btn btn-primary btn-square mr-2" href="https://www.instagram.com/hcodebrasil"><i class="fab fa-facebook-f"></i></a>
+              <a class="btn btn-primary btn-square mr-2" href="https://br.linkedin.com/company/grupo-hcode"><i class="fab fa-linkedin-in"></i></a>
+              <a class="btn btn-primary btn-square" href="https://facebook.com/hcodebr"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
+      <div class="col-md-6 px-xl-0">
+        <p class="mb-md-0 text-center text-md-left text-secondary">
+          &copy; <a class="text-primary" href="https://www.hcode.com.br">Hcode Store</a>. Todos os direitos reservados.
+          Por <a class="text-primary" href="https://htmlcodex.com">HTML Codex</a>
+        </p>
+      </div>
+      <div class="col-md-6 px-xl-0 text-center text-md-right">
+        <img class="img-fluid" src="/res/multiShop/img/payments.png" alt="Formas de pagamento" />
+      </div>
+    </div>
+  </div>
+  <!-- Footer End -->
+
+  <!-- Back to Top -->
+  <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+  <script src="/res/multiShop/lib/easing/easing.min.js"></script>
+  <script src="/res/multiShop/lib/owlcarousel/owl.carousel.min.js"></script>
+
+  <!-- Contact Javascript File -->
+  <script src="/res/multiShop/mail/jqBootstrapValidation.min.js"></script>
+  <script src="/res/multiShop/mail/contact.js"></script>
+
+  <!-- Template Javascript -->
+  <script src="/res/multiShop/js/main.js"></script>
+
+  <!-- jquery-validation -->
+  <script src="/res/adminLte/plugins/jquery-validation/jquery.validate.min.js"></script>
+
+  <!-- InputMask -->
+  <script src="/res/adminLte/plugins/inputmask/jquery.inputmask.min.js"></script>
+
+  <script>
+    function invertColors(clicked = false) {
+      let isReversed = localStorage.getItem("invertColors");
+
+      if (isReversed === "true" || clicked) {
+        var head = document.getElementsByTagName("head")[0];
+        var style = document.createElement("style");
+        var css = "html {-webkit-filter: invert(100%);" +
+          "-moz-filter: invert(100%);" +
+          "-o-filter: invert(100%);" +
+          "-ms-filter: invert(100%); }";
+
+        if (!window.counter) {
+          window.counter = 1;
+        }
+        else {
+          window.counter++;
+          if (window.counter % 2 === 0) {
+            var css = "html {-webkit-filter: invert(0%); -moz-filter:  invert(0%); -o-filter: invert(0%); -ms-filter: invert(0%); }"
+          }
+        };
+
+        style.type = "text/css";
+        if (style.styleSheet) {
+          style.styleSheet.cssText = css;
+        }
+        else {
+          style.appendChild(document.createTextNode(css));
+        }
+
+        head.appendChild(style);
+      }
+    }
+
+    $("#invert-colors").click(function () {
+      localStorage.setItem("invertColors", localStorage.getItem("invertColors") === "false");
+      invertColors(true);
+    });
+
+    invertColors();
+
+    $.ajax({
+      type: "get",
+      url: "/api/category",
+      dataType: "json",
+      data: {
+        _sortBy: "name"
+      },
+      success: (response) => {
+        response.map(element => $("#categories-navbar").append("<a href='/categories/" + element.slug + "' class='nav-item nav-link'>" + element.name + "</a>"));
+      },
+      error: (xhr, status, error) => {
+        let json = xhr.responseJSON ?? {};
+        alert(json.message ?? "Não foi possível carregar as categorias.");
+      }
+    });
+  </script>
+</body>
+
+</html>

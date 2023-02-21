@@ -1,0 +1,163 @@
+<!-- Carousel Start -->
+<div class="container-fluid mb-3">
+  <div class="row px-xl-5">
+    <div class="col-lg-12">
+      <div id="header-carousel" class="carousel slide carousel-fade mb-30 mb-lg-0" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#header-carousel" data-slide-to="0" class="active"></li>
+          <li data-target="#header-carousel" data-slide-to="1"></li>
+          <li data-target="#header-carousel" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="carousel-item position-relative active" style="height: 430px;">
+            <img class="position-absolute w-100 h-100" src="/res/multiShop/img/carousel-1.jpg" style="object-fit: cover;" alt="Moda masculina" />
+            <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+              <div class="p-3" style="max-width: 700px;">
+                <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Moda Masculina</h1>
+                <p class="mx-md-5 px-5 animate__animated animate__bounceIn">Encontre camisetas, bermudas, moletons, e peças jeans que deixam seu look estiloso e confortável, perfeito para os dias mais quentes do ano.</p>
+                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="/products">Compre Agora</a>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item position-relative" style="height: 430px;">
+            <img class="position-absolute w-100 h-100" src="/res/multiShop/img/carousel-2.jpg" style="object-fit: cover;" alt="Moda feminina" />
+            <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+              <div class="p-3" style="max-width: 700px;">
+                <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Moda Feminina</h1>
+                <p class="mx-md-5 px-5 animate__animated animate__bounceIn">O melhor da moda feminina você encontra aqui. Modelos incríveis e exclusivos que vão renovar seu closet.</p>
+                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="/products">Compre Agora</a>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item position-relative" style="height: 430px;">
+            <img class="position-absolute w-100 h-100" src="/res/multiShop/img/carousel-3.jpg" style="object-fit: cover;" alt="Moda infantil" />
+            <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+              <div class="p-3" style="max-width: 700px;">
+                <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Moda Infantil</h1>
+                <p class="mx-md-5 px-5 animate__animated animate__bounceIn">Escolha a maior loja de moda infantil para fazer parte do guarda-roupa das crianças! Peças confortáveis, charmosas e muito acessíveis, confira!</p>
+                <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" href="/products">Compre Agora</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Carousel End -->
+
+<!-- Featured Start -->
+<div class="container-fluid pt-5">
+  <div class="row px-xl-5 pb-3">
+    <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+      <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+        <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
+        <h5 class="font-weight-semi-bold m-0">Produtos de Qualidade</h5>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+      <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+        <h1 class="fa fa-shipping-fast text-primary m-0 mr-2"></h1>
+        <h5 class="font-weight-semi-bold m-0">Envio Imediato</h5>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+      <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+        <h1 class="fas fa-exchange-alt text-primary m-0 mr-3"></h1>
+        <h5 class="font-weight-semi-bold m-0">14 Dias Para Troca</h5>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+      <div class="d-flex align-items-center bg-light mb-4" style="padding: 30px;">
+        <h1 class="fa fa-phone-volume text-primary m-0 mr-3"></h1>
+        <h5 class="font-weight-semi-bold m-0">Suporte 24/7</h5>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Featured End -->
+
+<!-- Categories Start -->
+<div class="container-fluid pt-5">
+  <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Categorias</span></h2>
+  <div class="row px-xl-5 pb-3">
+    {loop="$categories"}
+    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+      <a class="text-decoration-none" href="/categories/{$value.slug}">
+        <div class="cat-item d-flex align-items-center mb-4">
+          <div class="overflow-hidden" style="width: 100px; height: 100px;">
+            <img class="img-fluid" src="/res/multiShop/img/cat-{$key + 1}.jpg" alt="{$value.name}" />
+          </div>
+          <div class="flex-fill pl-3">
+            <h6>{$value.name}</h6>
+          </div>
+        </div>
+      </a>
+    </div>
+    {/loop}
+  </div>
+</div>
+<!-- Categories End -->
+
+<!-- Products Start -->
+<div class="container-fluid pt-5 pb-3">
+  <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Produtos</span></h2>
+  <div class="row px-xl-5">
+    {loop="$products"}
+    <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+      <div class="product-item bg-light mb-4">
+        <div class="product-img position-relative overflow-hidden">
+          {if="$value.image"}
+          <img class="img-fluid w-100" src="data:image/png;base64,{$value.image}" alt="{$value.name}" />
+          {else}
+          <img class="img-fluid w-100" src="/res/multiShop/img/package.png" alt="Produto sem imagem" />
+          {/if}
+        </div>
+        <div class="text-center py-4">
+          <a class="h6 text-decoration-none text-truncate" href="/products/{$value.slug}">{$value.name}</a>
+          <div class="d-flex align-items-center justify-content-center mt-2">
+            <h5>R$ {function="formatPrice($value.price)"}</h5>
+            <h6 class="text-muted ml-2"><del>{function="formatPrice($value.price)"}</del></h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    {/loop}
+  </div>
+</div>
+<!-- Products End -->
+
+<!-- Vendor Start -->
+<div class="container-fluid py-5">
+  <div class="row px-xl-5">
+    <div class="col">
+      <div class="owl-carousel vendor-carousel">
+        <div class="bg-light p-4">
+          <img src="/res/multiShop/img/vendor-1.jpg" alt="Fruity Pebbles" />
+        </div>
+        <div class="bg-light p-4">
+          <img src="/res/multiShop/img/vendor-2.jpg" alt="DataXchange" />
+        </div>
+        <div class="bg-light p-4">
+          <img src="/res/multiShop/img/vendor-3.jpg" alt="BluePhlare" />
+        </div>
+        <div class="bg-light p-4">
+          <img src="/res/multiShop/img/vendor-4.jpg" alt="Fuzion Source" />
+        </div>
+        <div class="bg-light p-4">
+          <img src="/res/multiShop/img/vendor-5.jpg" alt="TechCom" />
+        </div>
+        <div class="bg-light p-4">
+          <img src="/res/multiShop/img/vendor-6.jpg" alt="Atomized Media" />
+        </div>
+        <div class="bg-light p-4">
+          <img src="/res/multiShop/img/vendor-7.jpg" alt="International Hearts" />
+        </div>
+        <div class="bg-light p-4">
+          <img src="/res/multiShop/img/vendor-8.jpg" alt="WorkApply" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Vendor End -->

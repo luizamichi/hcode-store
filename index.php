@@ -13,12 +13,14 @@
 
 require_once __DIR__ . "/vendor/autoload.php";
 require_once __DIR__ . "/env.php";
+require_once __DIR__ . "/functions.php";
 
 
 session_name(getenv("PHP_SESSION_NAME") ?: "Ecommerce");
 session_start();
 
-use Amichi\DB\SQL;
+use Amichi\Page;
+use Amichi\PageAdmin;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -51,13 +53,32 @@ $midJSON = function (Request $request, RequestHandler $handler): Response {
 };
 
 
-$app->get("/", function (Request $req, Response $res, array $args): Response {
-    $sql = new SQL();
-    $rows = $sql->send("SELECT * FROM tb_tests")->fetchAll();
+$midView = function (Request $request, RequestHandler $handler): Response {
+    $env = (string) $request->getAttribute("__route__")?->getCallable();
+    $env = str_contains($env, "View");
 
-    $res->getBody()->write(json_encode($rows));
+    putenv("APPLICATION_ENVIRONMENT=" . ($env ? "view" : "api"));
+
+    return $handler->handle($request);
+};
+
+
+$app->get("/", function (Request $req, Response $res, array $args): Response {
+    $page = new Page();
+    $page->setTpl("index");
+
+    $res->getBody()->write($page->getTpl());
     return $res;
-})->add($midCORS)->add($midJSON);
+});
+
+
+$app->get("/admin", function (Request $req, Response $res, array $args): Response {
+    $page = new PageAdmin();
+    $page->setTpl("index");
+
+    $res->getBody()->write($page->getTpl());
+    return $res;
+});
 
 
 $app->run();
