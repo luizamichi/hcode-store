@@ -21,8 +21,10 @@ session_start();
 
 
 use Amichi\Controller\CountryController;
+use Amichi\Controller\StateController;
 
 use Amichi\View\CountryView;
+use Amichi\View\StateView;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -70,6 +72,7 @@ $app->group(
     function ($app) {
         $app->get("", CountryController::class . ":getAll");
         $app->get("/{idCountry}", CountryController::class . ":get");
+        $app->get("/{idCountry}/state", StateController::class . ":getByCountry");
         $app->post("", CountryController::class . ":post");
         $app->put("/{idCountry}", CountryController::class . ":put");
         $app->delete("/{idCountry}", CountryController::class . ":delete");
@@ -78,9 +81,22 @@ $app->group(
 
 
 $app->group(
+    "/api/state",
+    function ($app) {
+        $app->get("", StateController::class . ":getAll");
+        $app->get("/{idState}", StateController::class . ":get");
+        $app->post("", StateController::class . ":post");
+        $app->put("/{idState}", StateController::class . ":put");
+        $app->delete("/{idState}", StateController::class . ":delete");
+    }
+)->add($midCORS)->add($midJSON);
+
+
+$app->group(
     "/admin",
     function ($app) {
         $app->get("/countries", CountryView::class . ":getAll");
+        $app->get("/states", StateView::class . ":getAll");
     }
 )->add($midView);
 

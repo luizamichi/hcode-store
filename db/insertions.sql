@@ -31,3 +31,35 @@ VALUES
     (28, 981, 'Bósnia e Herzegovina', 'BIH', 387),
     (29, 1015, 'Botsuana', 'BOT', 267),
     (30, 1058, 'Brasil', 'BRA', 55);
+
+
+INSERT INTO
+    tb_states (id_state, id_country, num_ibge_state, des_state, des_uf)
+VALUES
+    (1, 30, 12, 'Acre', 'AC'),
+    (2, 30, 27, 'Alagoas', 'AL'),
+    (3, 30, 16, 'Amapá', 'AP'),
+    (4, 30, 13, 'Amazonas', 'AM'),
+    (5, 30, 29, 'Bahia', 'BA'),
+    (6, 30, 23, 'Ceará', 'CE'),
+    (7, 30, 53, 'Espírito Santo', 'ES'),
+    (8, 30, 32, 'Goiás', 'GO'),
+    (9, 30, 52, 'Maranhão', 'MA'),
+    (10, 30, 21, 'Mato Grosso', 'MT'),
+    (11, 30, 51, 'Mato Grosso do Sul', 'MS'),
+    (12, 30, 50, 'Minas Gerais', 'MG'),
+    (13, 30, 31, 'Pará', 'PA'),
+    (14, 30, 15, 'Paraíba', 'PB'),
+    (15, 30, 25, 'Paraná', 'PR'),
+    (16, 30, 41, 'Pernambuco', 'PE'),
+    (17, 30, 26, 'Piauí', 'PI'),
+    (18, 30, 22, 'Rio de Janeiro', 'RJ'),
+    (19, 30, 24, 'Rio Grande do Norte', 'RN'),
+    (20, 30, 43, 'Rio Grande do Sul', 'RS'),
+    (21, 30, 33, 'Rondônia', 'RO'),
+    (22, 30, 11, 'Roraima', 'RR'),
+    (23, 30, 14, 'Santa Catarina', 'SC'),
+    (24, 30, 42, 'São Paulo', 'SP'),
+    (25, 30, 35, 'Sergipe', 'SE'),
+    (26, 30, 28, 'Tocantins', 'TO'),
+    (27, 30, 17, 'Distrito Federal', 'DF');

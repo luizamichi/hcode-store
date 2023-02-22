@@ -20,3 +20,18 @@ CREATE TABLE tb_countries (
     CONSTRAINT uk_tb_countries_num_ibge_country UNIQUE KEY (num_ibge_country),
     CONSTRAINT uk_tb_countries_des_coi UNIQUE KEY (des_coi)
 ) COMMENT = 'Países';
+
+
+DROP TABLE IF EXISTS tb_states;
+
+CREATE TABLE tb_states (
+    id_state INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do estado',
+    id_country INT UNSIGNED NOT NULL COMMENT 'País do estado',
+    num_ibge_state INT UNSIGNED NULL COMMENT 'Código IBGE do estado',
+    des_state VARCHAR(32) NOT NULL COMMENT 'Nome do estado',
+    des_uf CHAR(2) NOT NULL COMMENT 'Unidade federativa',
+    CONSTRAINT pk_tb_states PRIMARY KEY (id_state),
+    CONSTRAINT fk_tb_states_to_tb_countries FOREIGN KEY (id_country) REFERENCES tb_countries (id_country) ON DELETE CASCADE,
+    CONSTRAINT uk_tb_states_num_ibge_state UNIQUE KEY (num_ibge_state),
+    CONSTRAINT uk_tb_states_des_uf UNIQUE KEY (des_uf, id_country)
+) COMMENT = 'Estados';

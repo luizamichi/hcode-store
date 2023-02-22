@@ -34,3 +34,35 @@ BEGIN
      WHERE id_country = pid_country;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_state;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_state (
+    IN pid_state INT,
+    IN pid_country INT,
+    IN pnum_ibge_state INT,
+    IN pdes_state VARCHAR(32),
+    IN pdes_uf CHAR(2)
+)
+BEGIN
+    IF pid_state > 0 THEN
+        UPDATE tb_states
+           SET id_country = pid_country,
+               num_ibge_state = pnum_ibge_state,
+               des_state = pdes_state,
+               des_uf = pdes_uf
+         WHERE id_state = pid_state;
+    ELSE
+        INSERT INTO tb_states (id_country, num_ibge_state, des_state, des_uf)
+                       VALUES (pid_country, pnum_ibge_state, pdes_state, pdes_uf);
+
+        SET pid_state = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_states
+     WHERE id_state = pid_state;
+END $$
+DELIMITER ;
