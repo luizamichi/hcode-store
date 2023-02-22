@@ -35,3 +35,19 @@ CREATE TABLE tb_states (
     CONSTRAINT uk_tb_states_num_ibge_state UNIQUE KEY (num_ibge_state),
     CONSTRAINT uk_tb_states_des_uf UNIQUE KEY (des_uf, id_country)
 ) COMMENT = 'Estados';
+
+
+DROP TABLE IF EXISTS tb_cities;
+
+CREATE TABLE tb_cities (
+    id_city INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK da cidade',
+    id_state INT UNSIGNED NOT NULL COMMENT 'Estado da cidade',
+    num_ibge_city INT UNSIGNED NULL COMMENT 'Código IBGE da cidade',
+    des_city VARCHAR(32) NOT NULL COMMENT 'Nome da cidade',
+    num_ddd TINYINT UNSIGNED NULL COMMENT 'Código de discagem telefônica da cidade',
+    dt_city_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro da cidade',
+    CONSTRAINT pk_tb_cities PRIMARY KEY (id_city),
+    CONSTRAINT fk_tb_cities_to_tb_states FOREIGN KEY (id_state) REFERENCES tb_states (id_state) ON DELETE CASCADE,
+    CONSTRAINT uk_tb_cities_num_ibge_city UNIQUE KEY (num_ibge_city),
+    CONSTRAINT uk_tb_cities_des_city UNIQUE KEY (des_city, id_state)
+) COMMENT = 'Cidades';

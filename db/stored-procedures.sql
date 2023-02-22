@@ -66,3 +66,36 @@ BEGIN
      WHERE id_state = pid_state;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_city;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_city (
+    IN pid_city INT,
+    IN pid_state INT,
+    IN pnum_ibge_city INT,
+    IN pdes_city VARCHAR(32),
+    IN pnum_ddd TINYINT
+)
+BEGIN
+    IF pid_city > 0 THEN
+        UPDATE tb_cities
+           SET id_state = pid_state,
+               num_ibge_city = pnum_ibge_city,
+               des_city = pdes_city,
+               num_ddd = pnum_ddd
+         WHERE id_city = pid_city;
+
+    ELSE
+        INSERT INTO tb_cities (id_state, num_ibge_city, des_city, num_ddd, dt_city_created_at)
+                       VALUES (pid_state, pnum_ibge_city, pdes_city, pnum_ddd, NOW());
+
+        SET pid_city = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_cities
+     WHERE id_city = pid_city;
+END $$
+DELIMITER ;

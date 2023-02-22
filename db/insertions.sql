@@ -63,3 +63,30 @@ VALUES
     (25, 30, 35, 'Sergipe', 'SE'),
     (26, 30, 28, 'Tocantins', 'TO'),
     (27, 30, 17, 'Distrito Federal', 'DF');
+
+
+INSERT INTO
+    tb_cities (id_city, id_state, num_ibge_city, des_city, num_ddd, dt_city_created_at)
+VALUES
+    (1, 1, 1200013, 'Acrelândia', 68, NOW()),
+    (2, 1, 1200054, 'Assis Brasil', 68, NOW()),
+    (3, 1, 1200104, 'Brasiléia', 68, NOW()),
+    (4, 1, 1200138, 'Bujari', 68, NOW()),
+    (5, 1, 1200179, 'Capixaba', 68, NOW()),
+    (6, 1, 1200203, 'Cruzeiro do Sul', 68, NOW()),
+    (7, 1, 1200252, 'Epitaciolândia', 68, NOW()),
+    (8, 1, 1200302, 'Feijó', 68, NOW()),
+    (9, 1, 1200328, 'Jordão', 68, NOW()),
+    (10, 1, 1200336, 'Manoel Urbano', 68, NOW()),
+    (11, 1, 1200344, 'Marechal Thaumaturgo', 68, NOW()),
+    (12, 1, 1200351, 'Mâncio Lima', 68, NOW()),
+    (13, 1, 1200385, 'Plácido de Castro', 68, NOW()),
+    (14, 1, 1200807, 'Porto Acre', 68, NOW()),
+    (15, 1, 1200393, 'Porto Walter', 68, NOW()),
+    (16, 1, 1200401, 'Rio Branco', 68, NOW()),
+    (17, 1, 1200427, 'Rodrigues Alves', 68, NOW()),
+    (18, 1, 1200435, 'Santa Rosa do Purus', 68, NOW()),
+    (19, 1, 1200500, 'Sena Madureira', 68, NOW()),
+    (20, 1, 1200450, 'Senador Guiomard', 68, NOW()),
+    (21, 1, 1200609, 'Tarauacá', 68, NOW()),
+    (22, 1, 1200708, 'Xapuri', 68, NOW());

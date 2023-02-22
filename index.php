@@ -20,9 +20,12 @@ session_name(getenv("PHP_SESSION_NAME") ?: "Ecommerce");
 session_start();
 
 
+use Amichi\Controller\CityController;
 use Amichi\Controller\CountryController;
+use Amichi\Controller\OtherController;
 use Amichi\Controller\StateController;
 
+use Amichi\View\CityView;
 use Amichi\View\CountryView;
 use Amichi\View\StateView;
 
@@ -68,6 +71,14 @@ $midView = function (Request $request, RequestHandler $handler): Response {
 
 
 $app->group(
+    "/api",
+    function ($app) {
+        $app->get("/zipcode/{zipCode}", OtherController::class . ":zipCode");
+    }
+)->add($midCORS)->add($midJSON);
+
+
+$app->group(
     "/api/country",
     function ($app) {
         $app->get("", CountryController::class . ":getAll");
@@ -85,6 +96,7 @@ $app->group(
     function ($app) {
         $app->get("", StateController::class . ":getAll");
         $app->get("/{idState}", StateController::class . ":get");
+        $app->get("/{idState}/city", CityController::class . ":getByState");
         $app->post("", StateController::class . ":post");
         $app->put("/{idState}", StateController::class . ":put");
         $app->delete("/{idState}", StateController::class . ":delete");
@@ -93,10 +105,22 @@ $app->group(
 
 
 $app->group(
+    "/api/city",
+    function ($app) {
+        $app->get("", CityController::class . ":getAll");
+        $app->get("/{idCity}", CityController::class . ":get");
+        $app->post("", CityController::class . ":post");
+        $app->put("/{idCity}", CityController::class . ":put");
+        $app->delete("/{idCity}", CityController::class . ":delete");
+    }
+)->add($midCORS)->add($midJSON);
+
+$app->group(
     "/admin",
     function ($app) {
         $app->get("/countries", CountryView::class . ":getAll");
         $app->get("/states", StateView::class . ":getAll");
+        $app->get("/cities", CityView::class . ":getAll");
     }
 )->add($midView);
 
