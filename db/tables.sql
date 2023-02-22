@@ -51,3 +51,15 @@ CREATE TABLE tb_cities (
     CONSTRAINT uk_tb_cities_num_ibge_city UNIQUE KEY (num_ibge_city),
     CONSTRAINT uk_tb_cities_des_city UNIQUE KEY (des_city, id_state)
 ) COMMENT = 'Cidades';
+
+
+DROP TABLE IF EXISTS tb_street_types;
+
+CREATE TABLE tb_street_types (
+    id_street_type INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID do tipo de logradouro',
+    des_street_type VARCHAR(32) NOT NULL COMMENT 'Tipo do logradouro',
+    des_acronym VARCHAR(4) NULL COMMENT 'Acrônimo do tipo do logradouro',
+    CONSTRAINT pk_tb_street_types PRIMARY KEY (id_street_type),
+    CONSTRAINT uk_tb_street_types_des_street_type UNIQUE KEY (des_street_type),
+    CONSTRAINT uk_tb_street_types_des_acronym UNIQUE KEY (des_acronym)
+) COMMENT = 'Tipos de logradouro';

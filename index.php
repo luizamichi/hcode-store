@@ -24,10 +24,12 @@ use Amichi\Controller\CityController;
 use Amichi\Controller\CountryController;
 use Amichi\Controller\OtherController;
 use Amichi\Controller\StateController;
+use Amichi\Controller\StreetTypeController;
 
 use Amichi\View\CityView;
 use Amichi\View\CountryView;
 use Amichi\View\StateView;
+use Amichi\View\StreetTypeView;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -115,12 +117,26 @@ $app->group(
     }
 )->add($midCORS)->add($midJSON);
 
+
+$app->group(
+    "/api/streettype",
+    function ($app) {
+        $app->get("", StreetTypeController::class . ":getAll");
+        $app->get("/{idStreetType}", StreetTypeController::class . ":get");
+        $app->post("", StreetTypeController::class . ":post");
+        $app->put("/{idStreetType}", StreetTypeController::class . ":put");
+        $app->delete("/{idStreetType}", StreetTypeController::class . ":delete");
+    }
+)->add($midCORS)->add($midJSON);
+
+
 $app->group(
     "/admin",
     function ($app) {
         $app->get("/countries", CountryView::class . ":getAll");
         $app->get("/states", StateView::class . ":getAll");
         $app->get("/cities", CityView::class . ":getAll");
+        $app->get("/streettypes", StreetTypeView::class . ":getAll");
     }
 )->add($midView);
 

@@ -99,3 +99,32 @@ BEGIN
      WHERE id_city = pid_city;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_street_type;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_street_type (
+    IN pid_street_type INT,
+    IN pdes_street_type VARCHAR(32),
+    IN pdes_acronym VARCHAR(4)
+)
+BEGIN
+    IF pid_street_type > 0 THEN
+        UPDATE tb_street_types
+           SET des_street_type = pdes_street_type,
+               des_acronym = pdes_acronym
+         WHERE id_street_type = pid_street_type;
+
+    ELSE
+        INSERT INTO tb_street_types (des_street_type, des_acronym)
+                             VALUES (pdes_street_type, pdes_acronym);
+
+        SET pid_street_type = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_street_types
+     WHERE id_street_type = pid_street_type;
+END $$
+DELIMITER ;

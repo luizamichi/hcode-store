@@ -23,3 +23,10 @@ CREATE VIEW vw_cities AS
            id_state, id_country, num_ibge_state, des_state, des_uf
       FROM tb_cities
      INNER JOIN tb_states USING (id_state);
+
+
+DROP VIEW IF EXISTS vw_street_types;
+
+CREATE VIEW vw_street_types AS
+    SELECT id_street_type, des_street_type, des_acronym
+      FROM tb_street_types;
