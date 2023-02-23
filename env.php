@@ -39,3 +39,13 @@ putenv("SMTP_DEBUG=0"); // 0: desligado, 1: mensagens do cliente, 2: mensagens d
 putenv("SMTP_PORT=587"); // 465: SMTP com TLS implícito (SMTPS RFC8314), 587: SMTP + STARTTLS
 putenv("SMTP_SECURE=tls"); // SMTPS: TLS implícito na porta 465, STARTTLS: TLS explícito na porta 587
 putenv("SMTP_AUTH=true"); // Autenticação SMTP
+
+
+// Empresa
+putenv("ENTERPRISE_NAME=Hcode Treinamentos"); // Razão social
+putenv("ENTERPRISE_CNPJ=29642267000164"); // CNPJ
+putenv("ENTERPRISE_ADDRESS=Rua José Roque Salton, 250"); // Endereço
+putenv("ENTERPRISE_ZIP_CODE=86047622"); // CEP
+putenv("ENTERPRISE_CITY=Londrina"); // Cidade
+putenv("ENTERPRISE_FU=PR"); // Estado (UF)
+putenv("ENTERPRISE_LOGO=/res/multiShop/img/hcode.png"); // Logotipo

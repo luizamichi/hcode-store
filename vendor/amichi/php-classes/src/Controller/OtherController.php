@@ -13,6 +13,7 @@
 namespace Amichi\Controller;
 
 use Amichi\Controller;
+use Amichi\DB\SQL;
 use Amichi\HttpException;
 use Amichi\Model\City;
 use Amichi\Model\Country;
@@ -31,6 +32,120 @@ use Psr\Http\Message\ResponseInterface as Response;
  */
 class OtherController extends Controller
 {
+    /**
+     * Executa uma consulta no banco de dados
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function sqlQuery(Request $request, Response $response, array $args): Response
+    {
+        $response->getBody()->write(
+            json_encode(
+                (new SQL())->send(self::string($request->getParsedBody()["query"], true, "query"))->fetchAll()
+            )
+        );
+
+        return $response;
+    }
+
+
+    /**
+     * Executa um código PHP
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @throws Throwable Se não conseguir executar o script PHP
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function phpEval(Request $request, Response $response, array $args): Response
+    {
+        $code = self::string($request->getParsedBody()["code"], true, "code");
+        $message = "Código executado com sucesso.";
+        $success = true;
+
+        try {
+            $eval = eval($code);
+        } catch (\Throwable $th) {
+            $message = $th->getMessage();
+            $success = false;
+        } finally {
+            $response->getBody()->write(
+                json_encode(
+                    [
+                        "code" => $code,
+                        "eval" => $eval ?? "",
+                        "message" => $message,
+                        "success" => $success
+                    ]
+                )
+            );
+        }
+
+        return $response;
+    }
+
+
+    /**
+     * Retorna os dados armazenados na sessão
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function phpSession(Request $request, Response $response, array $args): Response
+    {
+        $response->getBody()->write(json_encode($_SESSION));
+
+        return $response;
+    }
+
+
+    /**
+     * Retorna o status do webservice
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function status(Request $request, Response $response, array $args): Response
+    {
+        $response->getBody()->write(
+            json_encode(
+                [
+                    "phpVersion" => phpversion(),
+                    "mysqlVersion" => (new SQL())->getAttribute(SQL::ATTR_SERVER_VERSION),
+                    "phpDateTime" => date("Y-m-d H:i:s"),
+                    "mysqlDateTime" => (new SQL())->send("SELECT NOW() dt")->fetch()->dt,
+                    "requestTime" => $_SERVER["REQUEST_TIME"],
+                    "server" => $_SERVER["SERVER_NAME"],
+                    "remotePort" => $_SERVER["REMOTE_PORT"]
+                ]
+            )
+        );
+
+        return $response;
+    }
+
+
     /**
      * Retorna os dados de um endereço a partir do CEP informado na URL
      *
@@ -94,5 +209,22 @@ class OtherController extends Controller
         $response->getBody()->write(json_encode($json));
 
         return $response->withStatus($status);
+    }
+
+
+    /**
+     * Retorna o JSON de erro de acesso 404
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function error(Request $request, Response $response, array $args): Response
+    {
+        throw (new HttpException("Serviço não encontrado.", 404))->json();
     }
 }

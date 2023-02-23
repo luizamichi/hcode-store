@@ -30,6 +30,7 @@ use Amichi\Controller\StreetTypeController;
 use Amichi\View\CityView;
 use Amichi\View\ContactView;
 use Amichi\View\CountryView;
+use Amichi\View\OtherView;
 use Amichi\View\StateView;
 use Amichi\View\StreetTypeView;
 
@@ -77,6 +78,10 @@ $midView = function (Request $request, RequestHandler $handler): Response {
 $app->group(
     "/api",
     function ($app) {
+        $app->get("/status", OtherController::class . ":status");
+        $app->post("/sqlquery", OtherController::class . ":sqlQuery");
+        $app->post("/phpeval", OtherController::class . ":phpEval");
+        $app->get("/session", OtherController::class . ":phpSession");
         $app->get("/zipcode/{zipCode}", OtherController::class . ":zipCode");
     }
 )->add($midCORS)->add($midJSON);
@@ -147,6 +152,9 @@ $app->group(
 $app->group(
     "/admin",
     function ($app) {
+        $app->get("", OtherView::class . ":administrativePanel");
+        $app->get("/configurations", OtherView::class . ":configurations");
+
         $app->get("/countries", CountryView::class . ":getAll");
         $app->get("/states", StateView::class . ":getAll");
         $app->get("/cities", CityView::class . ":getAll");
@@ -163,6 +171,11 @@ $app->group(
         $app->get("/contact", ContactView::class . ":webView");
     }
 )->add($midView);
+
+
+$app->get("/api/{route}", OtherController::class . ":error")->add($midJSON);
+$app->get("/{route}", OtherView::class . ":error")->add($midView);
+$app->get("/admin/{route}", OtherView::class . ":administrativePanel")->add($midView);
 
 
 $app->run();
