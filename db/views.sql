@@ -30,3 +30,10 @@ DROP VIEW IF EXISTS vw_street_types;
 CREATE VIEW vw_street_types AS
     SELECT id_street_type, des_street_type, des_acronym
       FROM tb_street_types;
+
+
+DROP VIEW IF EXISTS vw_contacts;
+
+CREATE VIEW vw_contacts AS
+    SELECT id_contact, des_contact, des_contact_email, des_contact_subject, des_message, dt_contact_created_at
+      FROM tb_contacts;

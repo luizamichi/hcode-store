@@ -21,12 +21,14 @@ session_start();
 
 
 use Amichi\Controller\CityController;
+use Amichi\Controller\ContactController;
 use Amichi\Controller\CountryController;
 use Amichi\Controller\OtherController;
 use Amichi\Controller\StateController;
 use Amichi\Controller\StreetTypeController;
 
 use Amichi\View\CityView;
+use Amichi\View\ContactView;
 use Amichi\View\CountryView;
 use Amichi\View\StateView;
 use Amichi\View\StreetTypeView;
@@ -131,12 +133,34 @@ $app->group(
 
 
 $app->group(
+    "/api/contact",
+    function ($app) {
+        $app->get("", ContactController::class . ":getAll");
+        $app->get("/{idContact}", ContactController::class . ":get");
+        $app->post("", ContactController::class . ":post");
+        $app->put("/{idContact}", ContactController::class . ":put");
+        $app->delete("/{idContact}", ContactController::class . ":delete");
+    }
+)->add($midCORS)->add($midJSON);
+
+
+$app->group(
     "/admin",
     function ($app) {
         $app->get("/countries", CountryView::class . ":getAll");
         $app->get("/states", StateView::class . ":getAll");
         $app->get("/cities", CityView::class . ":getAll");
         $app->get("/streettypes", StreetTypeView::class . ":getAll");
+
+        $app->get("/contacts", ContactView::class . ":getAll");
+    }
+)->add($midView);
+
+
+$app->group(
+    "",
+    function ($app) {
+        $app->get("/contact", ContactView::class . ":webView");
     }
 )->add($midView);
 

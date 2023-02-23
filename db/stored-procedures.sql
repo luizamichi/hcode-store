@@ -128,3 +128,27 @@ BEGIN
      WHERE id_street_type = pid_street_type;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_contact;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_contact (
+    IN pdes_contact VARCHAR(64),
+    IN pdes_contact_email VARCHAR(128),
+    IN pdes_contact_subject VARCHAR(256),
+    IN pdes_message LONGTEXT
+)
+BEGIN
+    DECLARE vid_contact INT DEFAULT 0;
+
+    INSERT INTO tb_contacts (des_contact, des_contact_email, des_contact_subject, des_message, dt_contact_created_at)
+                     VALUES (pdes_contact, pdes_contact_email, pdes_contact_subject, pdes_message, NOW());
+
+    SET vid_contact = LAST_INSERT_ID();
+
+    SELECT *
+      FROM vw_contacts
+     WHERE id_contact = vid_contact;
+END $$
+DELIMITER ;

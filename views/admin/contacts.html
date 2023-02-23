@@ -1,0 +1,105 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-list"></i>
+            Lista de Contatos
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item active">Contatos</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Assunto</th>
+                    <th>Data</th>
+                    <th>Mensagem</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loop="$contacts"}
+                  <tr>
+                    <td>{$value.id}</td>
+                    <td data-find="search">{$value.name}</td>
+                    <td data-find="search">{$value.email}</td>
+                    <td data-find="search">{$value.subject}</td>
+                    <td>{function="formatDate($value.dateRegister)"}</td>
+                    <td data-type="showMessage">
+                      ...
+                      <div style="display: none;">{function="nl2br($value.message)"}</div>
+                    </td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="6">
+                      <small>
+                        <span id="count">{function="count($contacts)"}</span>
+                        <span id="countText">contatos encontrados</span>
+                      </small>
+                    </td>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabel">Conteúdo da mensagem</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.title += " (Contacts)";
+
+  window.addEventListener("load", () => {
+    $("#countText").text("contatos encontrados");
+    if ($("#count").text() == 1) {
+      $("#countText").text("contato encontrado");
+    }
+
+    $("td[data-type='showMessage']").click(function () {
+      $(".modal-body").html($(this).children().html());
+      $("#modal").modal("show");
+    });
+  });
+</script>

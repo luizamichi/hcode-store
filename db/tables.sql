@@ -63,3 +63,16 @@ CREATE TABLE tb_street_types (
     CONSTRAINT uk_tb_street_types_des_street_type UNIQUE KEY (des_street_type),
     CONSTRAINT uk_tb_street_types_des_acronym UNIQUE KEY (des_acronym)
 ) COMMENT = 'Tipos de logradouro';
+
+
+DROP TABLE IF EXISTS tb_contacts;
+
+CREATE TABLE tb_contacts (
+    id_contact INT UNSIGNED AUTO_INCREMENT COMMENT 'PK do contato',
+    des_contact VARCHAR(64) NOT NULL COMMENT 'Nome do contato',
+    des_contact_email VARCHAR(128) NOT NULL COMMENT 'E-mail do contato',
+    des_contact_subject VARCHAR(256) NOT NULL COMMENT 'Assunto do contato',
+    des_message LONGTEXT NOT NULL COMMENT 'Mensagem do contato',
+    dt_contact_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do contato',
+    CONSTRAINT pk_tb_contacts PRIMARY KEY (id_contact)
+) COMMENT = 'Contatos';
