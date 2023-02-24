@@ -26,6 +26,7 @@ use Amichi\Controller\CountryController;
 use Amichi\Controller\OtherController;
 use Amichi\Controller\StateController;
 use Amichi\Controller\StreetTypeController;
+use Amichi\Controller\UserController;
 
 use Amichi\View\CityView;
 use Amichi\View\ContactView;
@@ -33,6 +34,7 @@ use Amichi\View\CountryView;
 use Amichi\View\OtherView;
 use Amichi\View\StateView;
 use Amichi\View\StreetTypeView;
+use Amichi\View\UserView;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -150,6 +152,26 @@ $app->group(
 
 
 $app->group(
+    "/api/user",
+    function ($app) {
+        $app->get("", UserController::class . ":getAll");
+        $app->get("/{idUser}", UserController::class . ":get");
+        $app->post("", UserController::class . ":post");
+        $app->put("/{idUser}", UserController::class . ":put");
+        $app->delete("/{idUser}", UserController::class . ":delete");
+    }
+)->add($midCORS)->add($midJSON);
+
+
+$app->group(
+    "/admin",
+    function ($app) {
+        $app->get("/register", UserView::class . ":register");
+    }
+)->add($midView);
+
+
+$app->group(
     "/admin",
     function ($app) {
         $app->get("", OtherView::class . ":administrativePanel");
@@ -161,6 +183,10 @@ $app->group(
         $app->get("/streettypes", StreetTypeView::class . ":getAll");
 
         $app->get("/contacts", ContactView::class . ":getAll");
+
+        $app->get("/users", UserView::class . ":getAll");
+        $app->get("/users/create", UserView::class . ":create");
+        $app->get("/users/{idUser}", UserView::class . ":update");
     }
 )->add($midView);
 

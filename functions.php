@@ -11,6 +11,8 @@
  * @link     https://github.com/luizamichi/hcode-store
  */
 
+use Amichi\Model\User;
+
 /**
  * Retorna o valor da variável
  *
@@ -70,7 +72,7 @@ function formatZipCode(?string $zipCode): string
  */
 function checkLogin(): bool
 {
-    return (bool) random_int(0, 1);
+    return (bool) User::loadFromSession();
 }
 
 
@@ -92,7 +94,7 @@ function getCartId(): int
  */
 function getUserId(): int
 {
-    return random_int(0, 1) ? random_int(1, 1000) : 0;
+    return User::loadFromSession()?->id ?? 0;
 }
 
 
@@ -103,7 +105,7 @@ function getUserId(): int
  */
 function getUserName(): string
 {
-    return substr(md5(mt_rand()), 10);
+    return User::loadFromSession()?->name ?? "";
 }
 
 

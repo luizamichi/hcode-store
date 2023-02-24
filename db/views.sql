@@ -37,3 +37,19 @@ DROP VIEW IF EXISTS vw_contacts;
 CREATE VIEW vw_contacts AS
     SELECT id_contact, des_contact, des_contact_email, des_contact_subject, des_message, dt_contact_created_at
       FROM tb_contacts;
+
+
+DROP VIEW IF EXISTS vw_persons;
+
+CREATE VIEW vw_persons AS
+    SELECT id_person, des_person, des_email, des_cpf, num_phone, bin_photo
+      FROM tb_persons;
+
+
+DROP VIEW IF EXISTS vw_users;
+
+CREATE VIEW vw_users AS
+    SELECT id_user, des_login, des_password, is_admin, dt_user_created_at, dt_user_changed_in,
+           id_person, des_person, des_email, des_cpf, num_phone, bin_photo
+      FROM tb_users
+     INNER JOIN tb_persons USING (id_person);

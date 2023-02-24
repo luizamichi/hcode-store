@@ -76,3 +76,34 @@ CREATE TABLE tb_contacts (
     dt_contact_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do contato',
     CONSTRAINT pk_tb_contacts PRIMARY KEY (id_contact)
 ) COMMENT = 'Contatos';
+
+
+DROP TABLE IF EXISTS tb_persons;
+
+CREATE TABLE tb_persons (
+    id_person INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK da pessoa',
+    des_person VARCHAR(64) NOT NULL COMMENT 'Nome completo da pessoa',
+    des_email VARCHAR(128) NULL COMMENT 'E-mail da pessoa',
+    des_cpf CHAR(11) NULL COMMENT 'CPF da pessoa',
+    num_phone bigint UNSIGNED NULL COMMENT 'Telefone da pessoa',
+    bin_photo MEDIUMBLOB NULL COMMENT 'Foto da pessoa',
+    CONSTRAINT pk_tb_persons PRIMARY KEY (id_person),
+    CONSTRAINT uk_tb_persons_des_email UNIQUE KEY (des_email),
+    CONSTRAINT uk_tb_persons_des_cpf UNIQUE KEY (des_cpf)
+) COMMENT = 'Pessoas';
+
+
+DROP TABLE IF EXISTS tb_users;
+
+CREATE TABLE tb_users (
+    id_user INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do usuário',
+    id_person INT UNSIGNED NOT NULL COMMENT 'Pessoa que tem acesso',
+    des_login VARCHAR(64) NOT NULL COMMENT 'Login do usuário',
+    des_password VARCHAR(256) NOT NULL COMMENT 'Senha do usuário',
+    is_admin TINYINT NOT NULL DEFAULT 0 COMMENT 'Usuário é administrador?',
+    dt_user_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do usuário',
+    dt_user_changed_in TIMESTAMP NULL COMMENT 'Data da última alteração do usuário',
+    CONSTRAINT pk_tb_users PRIMARY KEY (id_user),
+    CONSTRAINT fk_tb_users_to_tb_persons FOREIGN KEY (id_person) REFERENCES tb_persons (id_person) ON DELETE CASCADE,
+    CONSTRAINT uk_tb_users_des_login UNIQUE KEY (des_login)
+) COMMENT = 'Usuários';

@@ -146,3 +146,39 @@ INSERT INTO
 VALUES
     (1, 'Contato', 'contato@luizamichi.com.br', 'Parabéns', 'Meus parabéns pela inauguração da loja online.', NOW()),
     (2, 'Contact', 'contact@luizamichi.com.br', 'Dúvida', 'Gostaria de saber se é possível realizar o pagamento pelo cartão de crédito.', NOW());
+
+
+INSERT INTO
+    tb_persons (id_person, des_person, des_email, des_cpf, num_phone, bin_photo)
+VALUES
+    (1, 'Olinda Jesus Canela', 'olinda@hcode.com.br', NULL, NULL, NULL),
+    (2, 'Élton Novais Anjos', 'elton_novais@hcode.com.br', NULL, NULL, NULL),
+    (3, 'Jacinta Júdice Caiado', 'jacinta@hcode.com.br', NULL, NULL, NULL),
+    (4, 'Letízia Barros Loureiro', 'letizia@hcode.com.br', NULL, NULL, NULL),
+    (5, 'Dilan Chaves Marroquim', 'dilan_chaves@hcode.com.br', NULL, NULL, NULL),
+    (6, 'Nancy Lampreia Baião', 'nancy_lampreia@hcode.com.br', NULL, NULL, NULL),
+    (7, 'Ruan Monteiro Lameiras', 'ruan_monteiro@hcode.com.br', NULL, NULL, NULL),
+    (8, 'Cristovão Saltão Melgaço', 'cristovao@hcode.com.br', NULL, NULL, NULL),
+    (9, 'Alfredo Sanches Prado', 'alfredo@hcode.com.br', NULL, NULL, NULL),
+    (10, 'Alex Quesado Sacadura', 'alex_quesado@hcode.com.br', NULL, NULL, NULL),
+    (11, 'Enrico Severino Rodrigues', 'enrico-rodrigues96@hcode.com.br', NULL, NULL, NULL),
+    (12, 'Luiz Amichi', 'eu@luizamichi.com.br', NULL, 44998665521, NULL),
+    (13, 'Andrea Carolina Rocha', 'dominio@luizamichi.com.br', NULL, NULL, NULL);
+
+
+INSERT INTO
+    tb_users (id_user, id_person, des_login, des_password, is_admin, dt_user_created_at, dt_user_changed_in)
+VALUES
+    (1, 3, 'jacinta', '$2y$10$7UN4gb/quQkgG2KKsuX3IOH/SwJJ9UlkRliBib4Smoi1blOQjznsK', 0, NOW(), NULL),
+    (2, 1, 'olinda', '$2y$10$/MAk7SZl/djjYbb4AS2kOegGcYsTSC3FNxail.NnvE.5S./4iBoVu', 1, NOW(), NULL),
+    (3, 10, 'alex_quesado', '$2y$10$Lo/3dgTps9CTupwm4tMNhuI54eaAWtKCvdSYSWXANzOqxT3XGSY7m', 0, NOW(), NULL),
+    (4, 5, 'dilan_chaves', '$2y$10$hPQ.tp30Yk48C7SlMmLpmuG7SBC7PYaBhmkZSp5CkEbZND0oY7kqC', 0, NOW(), NULL),
+    (5, 7, 'ruan_monteiro', '$2y$10$sAlasvAqZtvzKHClwYmli.sMlOKh4py9b/EI3hegKHIeUW99QHKSa', 0, NOW(), NULL),
+    (6, 9, 'alfredo', '$2y$10$fmeZOOlE3b2K8fuu7wlIneybLijCEpkeML8C5.f8/paWNj8kImsP6', 1, NOW(), NULL),
+    (7, 2, 'elton_novais', '$2y$10$LaLPjAgkU3MtJdp2w3A2kuoBwobCT1ju6dxBjIBZXt0PWkEeehdp.', 0, NOW(), NULL),
+    (8, 4, 'letizia', '$2y$10$IjO4EqLEy7YH83vE6cB4aO1RNGjidQYLNfCKonuqekQvCoXC4ceD.', 0, NOW(), NULL),
+    (9, 8, 'cristovao', '$2y$10$E8vnFxv8apXr8NXf/N2G2ukaMx5RrxmDtUQ4wxmZaPS1uB/HtoQ5m', 1, NOW(), NULL),
+    (10, 6, 'nancy_lampreia', '$2y$10$KVFDxRpEOt40a2/DKIA/cuUexcCrSeeZREUjzUvRhlBS4pLdzhz.a', 0, NOW(), NULL),
+    (11, 11, 'enrico', '$2y$12$JFWwC8S9Xny.vlof37ddyuTcFX4AR5sRNGvjl00LrMUu8mHQF8LnW', 1, NOW(), NULL),
+    (12, 12, 'luizamichi', '$2y$12$et/EqfwCsYVO6ScZ57bmLeSGuUBjG5g6AJYp4YpxsgXyTnUpg9wUS', 1, NOW(), NULL),
+    (13, 13, 'andrea_rocha', '$2y$12$N36opMKT6i.xhaIqfWd2H.z6akj9ac4B.AR8E9F0veTPI62EIs1g2', 0, NOW(), NULL);

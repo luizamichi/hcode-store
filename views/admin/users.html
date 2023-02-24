@@ -1,0 +1,136 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-list"></i>
+            Lista de Usuários
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item active">Usuários</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <a class="btn btn-dark mb-3" href="/admin/users/create">Cadastrar</a>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th></th>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Login</th>
+                    <th>Administrador</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loop="$users"}
+                  <tr data-id="{$value.id}">
+                    <td>{$value.id}</td>
+                    <td>
+                      {if="$value.photo"}
+                      <img class="img-circle img-sm elevation-1" src="data:image/png;base64,{$value.photo}" alt="{$value.name}" />
+                      {/if}
+                    </td>
+                    <td data-find="search">{$value.name}</td>
+                    <td data-find="search">{$value.email}</td>
+                    <td data-find="search">{$value.login}</td>
+                    <td>{if="$value.isAdmin"}Sim{else}Não{/if}</td>
+                    <td>
+                      <a class="btn btn-default btn-xs" href="/admin/users/{$value.id}/logs">
+                        <i class="fas fa-history"></i>
+                        Logs
+                      </a>
+                      <a class="btn btn-primary btn-xs" href="/admin/users/{$value.id}">
+                        <i class="fa fa-edit"></i>
+                        Alterar
+                      </a>
+                      <button class="btn btn-danger btn-xs" data-id="{$value.id}" data-type="delete" data-url="/api/user/{$value.id}" type="submit">
+                        <i class="fa fa-trash"></i>
+                        Excluir
+                      </button>
+                    </td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="7">
+                      <small>
+                        <span id="count">{function="count($users)"}</span>
+                        <span id="countText">usuários encontrados</span>
+                      </small>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.title += " (Users)";
+
+  window.addEventListener("load", () => {
+    $("#count").change(function () {
+      $("#countText").text("usuários encontrados");
+      if ($("#count").text() == 1) {
+        $("#countText").text("usuário encontrado");
+      }
+    });
+
+    $("#count").trigger("change");
+
+    $("button[data-type='delete']").click(function () {
+      let id = $(this).data("id");
+      let url = $(this).data("url");
+      let method = $(this).data("type");
+      if (confirm("Deseja remover o usuário " + id + "?")) {
+        $.ajax({
+          type: method,
+          url: url,
+          dataType: "json",
+          data: {},
+          beforeSend: () => {
+            $("a, button").attr("disabled", true).toggleClass("disabled");
+          },
+          complete: () => {
+            $("a, button").attr("disabled", false).toggleClass("disabled");
+          },
+          success: (response) => {
+            alert("Usuário " + id + " removido com sucesso.");
+            $("[data-id=" + id + "]").remove();
+            $("#count").text($("#count").text() - 1).trigger("change");
+          },
+          error: (xhr, status, error) => {
+            let json = xhr.responseJSON ?? {};
+            alert(json.message ?? "Não foi possível remover o usuário.");
+          }
+        });
+      }
+    });
+  });
+</script>

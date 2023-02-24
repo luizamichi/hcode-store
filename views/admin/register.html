@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>AdminLTE 3 | Register User</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link href="/res/adminLte/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+  <!-- icheck bootstrap -->
+  <link href="/res/adminLte/plugins/icheck-bootstrap/icheck-bootstrap.min.css" rel="stylesheet" />
+  <!-- Theme style -->
+  <link href="/res/adminLte/dist/css/adminlte.min.css" rel="stylesheet" />
+  <!-- Favicon -->
+  <link href="/res/adminLte/img/logo.png" rel="shortcut icon" type="image/x-icon" />
+</head>
+
+<body class="hold-transition login-page">
+  <div class="login-box">
+    <div class="card card-outline card-primary">
+      <div class="card-header text-center">
+        <p class="h1"><strong>Admin</strong>LTE</p>
+      </div>
+
+      <div class="card-body">
+        <p class="login-box-msg" id="message">Registre um novo usuário</p>
+
+        <form action="/api/register" id="registerUser" method="post">
+          <div class="input-group mb-3">
+            <input autofocus class="form-control" id="name" name="name" placeholder="Nome completo" type="text" />
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-info-circle"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group mb-3">
+            <input class="form-control" data-inputmask="'mask': '999.999.999-99'" data-mask id="cpf" name="cpf" placeholder="CPF" type="text" />
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-id-card-alt"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group mb-3">
+            <input class="form-control" id="email" name="email" placeholder="E-mail" type="email" value="{$email}" />
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group mb-3">
+            <input class="form-control" data-inputmask="'mask': '(99) 99999-9999'" data-mask id="phone" name="phone" placeholder="Telefone" type="tel" />
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-phone"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group mb-3">
+            <input class="form-control" id="password" name="password" placeholder="Senha" type="password" />
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group mb-3">
+            <input class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Redigite a senha" type="password" />
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-8">
+              <div class="icheck-primary">
+                <input id="agreeTerms" name="agreeTerms" type="checkbox" />
+                <label for="agreeTerms">
+                  Aceito os <a data-toggle="tooltip" data-placement="top" href="javascript:void(0)" title="Sua conta não será de administrador, você deverá atualizar seus dados posteriormente caso necessário.">termos</a> de uso
+                </label>
+              </div>
+            </div>
+
+            <div class="col-4">
+              <button class="btn btn-primary btn-block" disabled type="submit">Registrar</button>
+            </div>
+          </div>
+        </form>
+
+        <p class="mb-1">
+          <a href="/admin/login">Já sou cadastrado</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery -->
+  <script src="/res/adminLte/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="/res/adminLte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="/res/adminLte/dist/js/adminlte.min.js"></script>
+  <!-- InputMask -->
+  <script src="/res/adminLte/plugins/inputmask/jquery.inputmask.min.js"></script>
+  <!-- jquery-validation -->
+  <script src="/res/adminLte/plugins/jquery-validation/jquery.validate.min.js"></script>
+  <script src="/res/adminLte/plugins/jquery-validation/additional-methods.min.js"></script>
+
+  <script>
+    $("#agreeTerms").change(() => {
+      $("button").attr("disabled", $("#agreeTerms:checked").val() !== "on");
+    });
+
+    $("[data-toggle='tooltip']").tooltip();
+
+    $("[data-mask]").inputmask();
+
+    $.validator.setDefaults({
+      submitHandler: function () {
+        $.ajax({
+          type: "post",
+          url: "/api/user",
+          data: $("#registerUser").serialize(),
+          dataType: "json",
+          beforeSend: () => {
+            $("button, input").attr("disabled", true);
+          },
+          complete: () => {
+            $("button, input").attr("disabled", false);
+          },
+          success: (response) => {
+            alert("Usuário cadastrado com sucesso.");
+            window.location.href = "/admin";
+          },
+          error: (xhr, status, error) => {
+            let json = xhr.responseJSON ?? {};
+            alert(json.message ?? "Não foi possível cadastrar o usuário.");
+          }
+        });
+      }
+    });
+
+    $.validator.methods.cpf = function (value, element) {
+      return this.optional(element) || /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/.test(value);
+    }
+
+    $.validator.methods.phone = function (value, element) {
+      return this.optional(element) || /^\(\d{2}\)\s\d{5}\-\d{4}$/.test(value);
+    }
+
+    $("#registerUser").validate({
+      rules: {
+        name: {
+          required: true,
+          minlength: 6,
+          maxlength: 64
+        },
+        cpf: {
+          cpf: true,
+          minlength: 14,
+          maxlength: 14
+        },
+        email: {
+          email: true,
+          required: true,
+          minlength: 6,
+          maxlength: 128
+        },
+        phone: {
+          phone: true,
+          minlength: 15,
+          maxlength: 15
+        },
+        password: {
+          required: true,
+          minlength: 6,
+          maxlength: 256
+        },
+        confirmPassword: {
+          equalTo: "#password"
+        }
+      },
+      messages: {
+        name: {
+          required: "Por favor, insira um nome",
+          minlength: "Por favor, insira um nome com no mínimo 6 caracteres",
+          maxlength: "Por favor, insira um nome com no máximo 64 caracteres"
+        },
+        cpf: {
+          cpf: "Por favor, insira um CPF válido",
+          minlength: "Por favor, insira um CPF com tamanho válido",
+          maxlength: "Por favor, insira um CPF com tamanho válido"
+        },
+        email: {
+          email: "Por favor, insira um e-mail válido",
+          required: "Por favor, insira um e-mail",
+          minlength: "Por favor, insira um e-mail com no mínimo 6 caracteres",
+          maxlength: "Por favor, insira um e-mail com no máximo 128 caracteres"
+        },
+        phone: {
+          phone: "Por favor, insira um telefone válido",
+          minlength: "Por favor, insira um telefone com tamanho válido",
+          maxlength: "Por favor, insira um telefone com tamanho válido"
+        },
+        password: {
+          required: "Por favor, insira uma senha",
+          minlength: "Por favor, insira uma senha com no mínimo 6 caracteres",
+          maxlength: "Por favor, insira uma senha com no máximo 256 caracteres"
+        },
+        confirmPassword: {
+          equalTo: "Por favor, informe as senhas equivalentes"
+        }
+      },
+      errorElement: "span",
+      errorPlacement: function (error, element) {
+        error.addClass("invalid-feedback");
+        element.closest(".input-group").append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass("is-invalid");
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass("is-invalid");
+      }
+    });
+  </script>
+</body>
+
+</html>

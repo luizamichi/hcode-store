@@ -152,3 +152,100 @@ BEGIN
      WHERE id_contact = vid_contact;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_create_user;
+
+DELIMITER $$
+CREATE PROCEDURE sp_create_user (
+    IN pdes_login VARCHAR(64),
+    IN pdes_password VARCHAR(256),
+    IN pis_admin TINYINT,
+    IN pdes_person VARCHAR(64),
+    IN pdes_email VARCHAR(128),
+    IN pdes_cpf CHAR(11),
+    IN pnum_phone BIGINT,
+    IN pbin_photo MEDIUMBLOB
+)
+BEGIN
+    DECLARE vid_user INT DEFAULT 0;
+    DECLARE vid_person INT DEFAULT 0;
+
+    INSERT INTO tb_persons (des_person, des_email, des_cpf, num_phone, bin_photo)
+                    VALUES (pdes_person, pdes_email, pdes_cpf, pnum_phone, pbin_photo);
+
+    SET vid_person = LAST_INSERT_ID();
+
+    INSERT INTO tb_users (id_person, des_login, des_password, is_admin, dt_user_created_at)
+                  VALUES (vid_person, pdes_login, pdes_password, pis_admin, NOW());
+
+    SET vid_user = LAST_INSERT_ID();
+
+    SELECT *
+      FROM vw_users
+     WHERE id_user = vid_user;
+END $$
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_update_user;
+
+DELIMITER $$
+CREATE PROCEDURE sp_update_user (
+    IN pid_user INT,
+    IN pdes_login VARCHAR(64),
+    IN pis_admin TINYINT,
+    IN pdes_person VARCHAR(64),
+    IN pdes_email VARCHAR(128),
+    IN pdes_cpf CHAR(11),
+    IN pnum_phone BIGINT
+)
+BEGIN
+    DECLARE vid_person INT DEFAULT 0;
+
+    SELECT id_person INTO vid_person
+      FROM tb_users
+     WHERE id_user = pid_user;
+
+    UPDATE tb_persons
+       SET des_person = pdes_person,
+           des_email = pdes_email,
+           des_cpf = pdes_cpf,
+           num_phone = pnum_phone
+     WHERE id_person = vid_person;
+
+    UPDATE tb_users
+       SET des_login = pdes_login,
+           is_admin = pis_admin,
+           dt_user_changed_in = NOW()
+     WHERE id_user = pid_user;
+
+    SELECT *
+      FROM vw_users
+     WHERE id_user = pid_user;
+END $$
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_delete_user;
+
+DELIMITER $$
+CREATE PROCEDURE sp_delete_user (
+    IN pid_user INT
+)
+BEGIN
+    DECLARE vid_person INT DEFAULT 0;
+
+    SELECT id_person INTO vid_person
+      FROM tb_users
+     WHERE id_user = pid_user;
+
+    DELETE
+      FROM tb_users
+     WHERE id_user = pid_user;
+
+    DELETE
+      FROM tb_persons
+     WHERE id_person = vid_person;
+END $$
+DELIMITER ;
