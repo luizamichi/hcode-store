@@ -15,6 +15,7 @@ namespace Amichi\Controller;
 use Amichi\Controller;
 use Amichi\HttpException;
 use Amichi\Model\User;
+use Amichi\Model\UserLog;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -77,6 +78,37 @@ class UserController extends Controller
         $response->getBody()->write(json_encode($user));
 
         return $response->withStatus($user ? 200 : 204);
+    }
+
+
+    /**
+     * Retorna os logs do usuário a partir do ID informado na URL
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function getLogs(Request $request, Response $response, array $args): Response
+    {
+        $id = self::int($args["idUser"], true, "idUser");
+
+        $sessionUser = User::loadFromSession();
+        if ($sessionUser->id !== $id && !$sessionUser->isAdmin) {
+            throw (new HttpException("Não foi possível consultar os logs do usuário $id, pois, você não possui permissão.", 400))->json();
+        }
+
+        $userLogs = array_map(
+            fn (UserLog $userLog): array => $userLog->array(),
+            UserLog::listFromUserId($id)
+        );
+
+        $response->getBody()->write(json_encode($userLogs));
+
+        return $response;
     }
 
 
@@ -155,10 +187,13 @@ class UserController extends Controller
         $user->password = $userDB->password;
 
         $sessionUser = User::loadFromSession();
+        $enableLog = false;
 
         if (!$sessionUser || !$sessionUser->isAdmin) {
             $user->isAdmin = false;
             $user->login = $user->email;
+
+            $enableLog = true;
         }
 
         if ($sessionUser->id !== $id && !$sessionUser->isAdmin) {
@@ -170,6 +205,12 @@ class UserController extends Controller
         if ($errors) {
             $message = count($errors) === 1 ? "O seguinte erro foi encontrado" : "Os seguintes erros foram encontrados";
             throw (new HttpException("Não foi possível alterar o usuário $id. $message: " . implode(", ", $errors) . ".", 400))->json();
+        }
+
+        if ($enableLog) {
+            $userLog = UserLog::loadFromSession();
+            $userLog->description = "Data update";
+            $userLog->save();
         }
 
         $response->getBody()->write(json_encode($user->update()));
@@ -228,6 +269,10 @@ class UserController extends Controller
         if ($user && password_verify($data["password"] ?? "", $user->password)) {
             $user->saveInSession();
 
+            $userLog = UserLog::loadFromSession();
+            $userLog->description = "Login";
+            $userLog->save();
+
             $response->getBody()->write(json_encode($user));
             return $response;
         }
@@ -249,9 +294,17 @@ class UserController extends Controller
      */
     public static function logout(Request $request, Response $response, array $args): Response
     {
+        $userLog = UserLog::loadFromSession();
         $user = User::loadFromSession()->clearSession();
 
         $response->getBody()->write(json_encode($user));
+
+        if ($user) {
+            $userLog->idUser = $user->id;
+            $userLog->description = "Logout";
+            $userLog->save();
+        }
+
         return $response;
     }
 }

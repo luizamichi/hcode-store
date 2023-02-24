@@ -14,6 +14,7 @@ namespace Amichi\View;
 
 use Amichi\Controller;
 use Amichi\Model\User;
+use Amichi\Model\UserLog;
 use Amichi\PageAdmin;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -55,6 +56,42 @@ class UserView extends Controller
                         self::int($params["_offset"]),
                         self::string($params["_sortBy"])
                     )
+                )
+            ]
+        );
+
+        $response->getBody()->write($page->getTpl());
+        return $response;
+    }
+
+
+    /**
+     * Retorna o template da lista de logs do usuário
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function getLogs(Request $request, Response $response, array $args): Response
+    {
+        $user = User::loadFromId(self::int($args["idUser"]));
+
+        if (!$user) {
+            return $response->withHeader("Location", "/admin/users")->withStatus(302);
+        }
+
+        $page = new PageAdmin();
+        $page->setTpl(
+            "users-log",
+            [
+                "user" => $user->array(),
+                "logs" => array_map(
+                    fn (UserLog $userLog): array => $userLog->array(),
+                    UserLog::listFromUserId($user->id)
                 )
             ]
         );
@@ -161,7 +198,14 @@ class UserView extends Controller
      */
     public static function logout(Request $request, Response $response, array $args): Response
     {
+        $userLog = UserLog::loadFromSession();
         $user = User::loadFromSession()?->clearSession();
+
+        if ($user) {
+            $userLog->idUser = $user->id;
+            $userLog->description = "Logout";
+            $userLog->save();
+        }
 
         if ($user?->isAdmin) {
             return $response->withHeader("Location", "/admin")->withStatus(302);

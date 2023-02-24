@@ -209,6 +209,8 @@ $app->group(
         $app->post("", UserController::class . ":post");
         $app->put("/{idUser}", UserController::class . ":put")->add($midLoggedUser);
         $app->delete("/{idUser}", UserController::class . ":delete")->add($midLoggedAdmin);
+
+        $app->get("/{idUser}/log", UserController::class . ":getLogs")->add($midLoggedUser);
     }
 )->add($midCORS)->add($midJSON);
 
@@ -239,6 +241,7 @@ $app->group(
         $app->get("/users", UserView::class . ":getAll");
         $app->get("/users/create", UserView::class . ":create");
         $app->get("/users/{idUser}", UserView::class . ":update");
+        $app->get("/users/{idUser}/logs", UserView::class . ":getLogs");
     }
 )->add($midView)->add($midIsAdmin);
 

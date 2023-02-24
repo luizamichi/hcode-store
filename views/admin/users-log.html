@@ -1,0 +1,126 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-history"></i>
+            Logs do Usuário {$user.name}
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/admin/users">Usuários</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/admin/users/{$user.id}">{$user.name}</a>
+            </li>
+            <li class="breadcrumb-item active">Logs</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-sign-out-alt"></i>
+                Registros de atividade
+              </h3>
+            </div>
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Descrição</th>
+                    <th>Sessão PHP</th>
+                    <th>Data de registro</th>
+                    <th>Informações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loop="$logs"}
+                  <tr>
+                    <td>{$value.id}</td>
+                    <td data-find="search">{$value.description}</td>
+                    <td>{$value.idSession}</td>
+                    <td>{function="formatDate($value.dateRegister)"}</td>
+                    <td data-type="showContent">
+                      ...
+                      <div style="display: none;">
+                        <p><strong>Dispositivo</strong>: {$value.device}</p>
+                        <p><strong>Navegador web</strong>: {$value.userAgent}</p>
+                        <p><strong>URL de origem</strong>: {$value.sourceUrl}</p>
+                        <p><strong>URL acessada</strong>: {$value.url}</p>
+                      </div>
+                    </td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="5">
+                      <small>
+                        <span id="countLog">{function="count($logs)"}</span>
+                        <span id="countTextLog">registros de atividade encontrados</span>
+                      </small>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabel">Informações do log</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.title += " (Users Logs)";
+
+  window.addEventListener("load", () => {
+    $("#countTextLog").text("registros de atividade encontrados");
+    if ($("#countLog").text() == 1) {
+      $("#countTextLog").text("registro de atividade encontrado");
+    }
+
+    $("#countTextRecovery").text("recuperações de senha encontradas");
+    if ($("#countRecovery").text() == 1) {
+      $("#countTextRecovery").text("recuperação de senha encontrada");
+    }
+
+    $("td[data-type='showContent']").click(function () {
+      $(".modal-body").html($(this).children().html());
+      $("#modal").modal("show");
+    });
+  });
+</script>

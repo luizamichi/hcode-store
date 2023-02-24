@@ -107,3 +107,20 @@ CREATE TABLE tb_users (
     CONSTRAINT fk_tb_users_to_tb_persons FOREIGN KEY (id_person) REFERENCES tb_persons (id_person) ON DELETE CASCADE,
     CONSTRAINT uk_tb_users_des_login UNIQUE KEY (des_login)
 ) COMMENT = 'Usuários';
+
+
+DROP TABLE IF EXISTS tb_users_logs;
+
+CREATE TABLE tb_users_logs (
+    id_log INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do log',
+    id_user INT UNSIGNED NOT NULL COMMENT 'Usuário logado',
+    des_log VARCHAR(128) NOT NULL COMMENT 'Descrição do log',
+    des_device VARCHAR(256) NULL COMMENT 'Identificador da máquina do usuário',
+    des_user_agent VARCHAR(256) NOT NULL COMMENT 'Navegador web do usuário',
+    des_php_session_id VARCHAR(64) NOT NULL COMMENT 'ID da sessão PHP',
+    des_source_url VARCHAR(256) NULL COMMENT 'URL de origem',
+    des_url VARCHAR(256) NOT NULL COMMENT 'URL acessada pelo usuário',
+    dt_log_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data do log',
+    CONSTRAINT pk_tb_users_logs PRIMARY KEY (id_log),
+    CONSTRAINT fk_tb_users_logs_to_tb_users FOREIGN KEY (id_user) REFERENCES tb_users (id_user) ON DELETE CASCADE
+) COMMENT = 'Logs';

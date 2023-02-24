@@ -249,3 +249,41 @@ BEGIN
      WHERE id_person = vid_person;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_user_log;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_user_log (
+    IN pid_log INT,
+    IN pid_user INT,
+    IN pdes_log VARCHAR(128),
+    IN pdes_device VARCHAR(256),
+    IN pdes_user_agent VARCHAR(256),
+    IN pdes_php_session_id VARCHAR(64),
+    IN pdes_source_url VARCHAR(256),
+    IN pdes_url VARCHAR(256)
+)
+BEGIN
+    IF pid_log > 0 THEN
+        UPDATE tb_users_logs
+           SET des_log = pdes_log,
+               des_device = pdes_device,
+               des_user_agent = pdes_user_agent,
+               des_php_session_id = pdes_php_session_id,
+               des_source_url = pdes_source_url,
+               des_url = pdes_url
+         WHERE id_log = pid_log;
+
+    ELSE
+        INSERT INTO tb_users_logs (id_user, des_log, des_device, des_user_agent, des_php_session_id, des_source_url, des_url, dt_log_created_at)
+                           VALUES (pid_user, pdes_log, pdes_device, pdes_user_agent, pdes_php_session_id, pdes_source_url, pdes_url, NOW());
+
+        SET pid_log = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_users_logs
+     WHERE id_log = pid_log;
+END $$
+DELIMITER ;

@@ -182,3 +182,9 @@ VALUES
     (11, 11, 'enrico', '$2y$12$JFWwC8S9Xny.vlof37ddyuTcFX4AR5sRNGvjl00LrMUu8mHQF8LnW', 1, NOW(), NULL),
     (12, 12, 'luizamichi', '$2y$12$et/EqfwCsYVO6ScZ57bmLeSGuUBjG5g6AJYp4YpxsgXyTnUpg9wUS', 1, NOW(), NULL),
     (13, 13, 'andrea_rocha', '$2y$12$N36opMKT6i.xhaIqfWd2H.z6akj9ac4B.AR8E9F0veTPI62EIs1g2', 0, NOW(), NULL);
+
+
+INSERT INTO
+    tb_users_logs (id_log, id_user, des_log, des_device, des_user_agent, des_php_session_id, des_source_url, des_url, dt_log_created_at)
+VALUES
+    (1, 1, 'Login', 'Desktop', 'Insomnia/2022.6.0', '769cukva9a9cbsocnasovmo01i', NULL, '/api/login', NOW());

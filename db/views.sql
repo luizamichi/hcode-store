@@ -53,3 +53,12 @@ CREATE VIEW vw_users AS
            id_person, des_person, des_email, des_cpf, num_phone, bin_photo
       FROM tb_users
      INNER JOIN tb_persons USING (id_person);
+
+
+DROP VIEW IF EXISTS vw_users_logs;
+
+CREATE VIEW vw_users_logs AS
+    SELECT id_log, des_log, des_device, des_user_agent, des_php_session_id, des_source_url, des_url, dt_log_created_at,
+           id_user, id_person, des_login, des_password, is_admin, dt_user_created_at, dt_user_changed_in
+      FROM tb_users_logs
+     INNER JOIN tb_users USING (id_user);
