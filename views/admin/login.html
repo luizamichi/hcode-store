@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>AdminLTE 3 | Log in</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link href="/res/adminLte/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+  <!-- icheck bootstrap -->
+  <link href="/res/adminLte/plugins/icheck-bootstrap/icheck-bootstrap.min.css" rel="stylesheet" />
+  <!-- Theme style -->
+  <link href="/res/adminLte/dist/css/adminlte.min.css" rel="stylesheet" />
+  <!-- Favicon -->
+  <link href="/res/adminLte/img/logo.png" rel="shortcut icon" type="image/x-icon" />
+</head>
+
+<body class="hold-transition login-page">
+  <div class="login-box">
+    <div class="card card-outline card-primary">
+      <div class="card-header text-center">
+        <p class="h1"><strong>Hcode</strong> Store</p>
+      </div>
+
+      <div class="card-body">
+        <p class="login-box-msg" id="message">Faça o login para iniciar sua sessão</p>
+
+        <form action="/api/login" method="post">
+          <div class="input-group mb-3">
+            <input autofocus class="form-control" id="login" name="login" placeholder="Login" type="text" />
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-user"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <input class="form-control" id="password" name="password" placeholder="Senha" type="password" />
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+          </div>
+        </form>
+
+        <p class="my-1">
+          <a href="/admin/forgot">Esqueci minha senha</a>
+        </p>
+        <p class="mb-0">
+          <a href="/admin/register" class="text-center">Criar conta</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery -->
+  <script src="/res/adminLte/plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="/res/adminLte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="/res/adminLte/dist/js/adminlte.min.js"></script>
+
+  <script>
+    $("form").submit((event) => {
+      event.preventDefault();
+
+      if ($("#login").val() !== "" && $("#password").val() !== "") {
+        $.ajax({
+          type: "post",
+          url: "/api/login",
+          data: $("form").serialize(),
+          dataType: "json",
+          beforeSend: () => {
+            $("button, input").attr("disabled", true);
+          },
+          complete: () => {
+            $("button, input").attr("disabled", false);
+          },
+          success: (response) => {
+            $("#message").text("Autenticação realizada com sucesso. Aguarde, você será redirecionado.");
+            window.location.href = "/admin";
+          },
+          error: (xhr, status, error) => {
+            let json = xhr.responseJSON ?? {};
+            $("#message").text(json.message ?? "Erro ao realizar o login.");
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

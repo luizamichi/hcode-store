@@ -80,6 +80,8 @@ $midView = function (Request $request, RequestHandler $handler): Response {
 $app->group(
     "/api",
     function ($app) {
+        $app->post("/login", UserController::class . ":login");
+        $app->get("/logout", UserController::class . ":logout");
         $app->get("/status", OtherController::class . ":status");
         $app->post("/sqlquery", OtherController::class . ":sqlQuery");
         $app->post("/phpeval", OtherController::class . ":phpEval");
@@ -166,6 +168,8 @@ $app->group(
 $app->group(
     "/admin",
     function ($app) {
+        $app->get("/login", UserView::class . ":login");
+        $app->get("/logout", UserView::class . ":logout");
         $app->get("/register", UserView::class . ":register");
     }
 )->add($midView);

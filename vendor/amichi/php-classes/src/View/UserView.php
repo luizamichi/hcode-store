@@ -113,6 +113,65 @@ class UserView extends Controller
 
 
     /**
+     * Retorna o template de login
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function login(Request $request, Response $response, array $args): Response
+    {
+        $user = User::loadFromSession();
+
+        if ($user) {
+            if ($user->isAdmin) {
+                return $response->withHeader("Location", "/admin")->withStatus(302);
+            }
+
+            return $response->withHeader("Location", "/")->withStatus(302);
+        }
+
+        $page = new PageAdmin(
+            [
+                "header" => false,
+                "footer" => false
+            ]
+        );
+        $page->setTpl("login");
+
+        $response->getBody()->write($page->getTpl());
+        return $response;
+    }
+
+
+    /**
+     * Realiza o logout e redireciona para a página de login
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function logout(Request $request, Response $response, array $args): Response
+    {
+        $user = User::loadFromSession()?->clearSession();
+
+        if ($user?->isAdmin) {
+            return $response->withHeader("Location", "/admin")->withStatus(302);
+        }
+
+        return $response->withHeader("Location", "/")->withStatus(302);
+    }
+
+
+    /**
      * Retorna o template de registro de novo usuário
      *
      * @param Request  $request  Requisição

@@ -108,6 +108,13 @@ class UserController extends Controller
         ];
 
         $user = User::loadFromData($body);
+
+        $sessionUser = User::loadFromSession();
+        if (!$sessionUser || !$sessionUser->isAdmin) {
+            $user->isAdmin = false;
+            $user->login = (string) $user->email;
+        }
+
         $user->validate($errors);
 
         if ($errors) {
@@ -147,6 +154,17 @@ class UserController extends Controller
         $user->idPerson = $userDB->idPerson;
         $user->password = $userDB->password;
 
+        $sessionUser = User::loadFromSession();
+
+        if (!$sessionUser || !$sessionUser->isAdmin) {
+            $user->isAdmin = false;
+            $user->login = $user->email;
+        }
+
+        if ($sessionUser->id !== $id && !$sessionUser->isAdmin) {
+            throw (new HttpException("Não foi possível alterar o usuário $id, pois, você não possui permissão.", 400))->json();
+        }
+
         $user->validate($errors);
 
         if ($errors) {
@@ -182,6 +200,58 @@ class UserController extends Controller
 
         $response->getBody()->write(json_encode($user->delete()));
 
+        $sessionUser = User::loadFromSession();
+        if ($sessionUser && $sessionUser->id === $user->id) {
+            User::clearSession();
+        }
+
+        return $response;
+    }
+
+
+    /**
+     * Realiza o login do usuário
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function login(Request $request, Response $response, array $args): Response
+    {
+        $data = (array) $request->getParsedBody();
+        $user = User::loadFromLogin($data["login"] ?? "");
+
+        if ($user && password_verify($data["password"] ?? "", $user->password)) {
+            $user->saveInSession();
+
+            $response->getBody()->write(json_encode($user));
+            return $response;
+        }
+
+        throw (new HttpException("Usuário inexistente ou senha inválida.", 401))->json();
+    }
+
+
+    /**
+     * Realiza o logout do usuário
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function logout(Request $request, Response $response, array $args): Response
+    {
+        $user = User::loadFromSession()->clearSession();
+
+        $response->getBody()->write(json_encode($user));
         return $response;
     }
 }
