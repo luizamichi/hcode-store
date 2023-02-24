@@ -28,6 +28,10 @@ use Amichi\Controller\StateController;
 use Amichi\Controller\StreetTypeController;
 use Amichi\Controller\UserController;
 
+use Amichi\Model\User;
+
+use Amichi\HttpException;
+
 use Amichi\View\CityView;
 use Amichi\View\ContactView;
 use Amichi\View\CountryView;
@@ -77,15 +81,59 @@ $midView = function (Request $request, RequestHandler $handler): Response {
 };
 
 
+$midLoggedUser = function (Request $request, RequestHandler $handler): Response {
+    $user = User::loadFromSession();
+
+    if ($user) {
+        return $handler->handle($request);
+    }
+
+    throw (new HttpException("Usuário não está logado.", 403))->json();
+};
+
+
+$midLoggedAdmin = function (Request $request, RequestHandler $handler): Response {
+    $user = User::loadFromSession();
+
+    if ($user && $user->isAdmin) {
+        return $handler->handle($request);
+    }
+
+    throw (new HttpException("Administrador não está logado.", 403))->json();
+};
+
+
+$midIsUser = function (Request $request, RequestHandler $handler): Response {
+    $user = User::loadFromSession();
+
+    if ($user) {
+        return $handler->handle($request);
+    }
+
+    return $handler->handle($request)->withHeader("Location", "/admin/login")->withStatus(302);
+};
+
+
+$midIsAdmin = function (Request $request, RequestHandler $handler): Response {
+    $user = User::loadFromSession();
+
+    if ($user && $user->isAdmin) {
+        return $handler->handle($request);
+    }
+
+    return $handler->handle($request)->withHeader("Location", "/admin/login")->withStatus(302);
+};
+
+
 $app->group(
     "/api",
-    function ($app) {
+    function ($app) use ($midLoggedAdmin, $midLoggedUser) {
         $app->post("/login", UserController::class . ":login");
-        $app->get("/logout", UserController::class . ":logout");
+        $app->get("/logout", UserController::class . ":logout")->add($midLoggedUser);
         $app->get("/status", OtherController::class . ":status");
-        $app->post("/sqlquery", OtherController::class . ":sqlQuery");
-        $app->post("/phpeval", OtherController::class . ":phpEval");
-        $app->get("/session", OtherController::class . ":phpSession");
+        $app->post("/sqlquery", OtherController::class . ":sqlQuery")->add($midLoggedAdmin);
+        $app->post("/phpeval", OtherController::class . ":phpEval")->add($midLoggedAdmin);
+        $app->get("/session", OtherController::class . ":phpSession")->add($midLoggedAdmin);
         $app->get("/zipcode/{zipCode}", OtherController::class . ":zipCode");
     }
 )->add($midCORS)->add($midJSON);
@@ -93,74 +141,74 @@ $app->group(
 
 $app->group(
     "/api/country",
-    function ($app) {
+    function ($app) use ($midLoggedAdmin) {
         $app->get("", CountryController::class . ":getAll");
         $app->get("/{idCountry}", CountryController::class . ":get");
         $app->get("/{idCountry}/state", StateController::class . ":getByCountry");
-        $app->post("", CountryController::class . ":post");
-        $app->put("/{idCountry}", CountryController::class . ":put");
-        $app->delete("/{idCountry}", CountryController::class . ":delete");
+        $app->post("", CountryController::class . ":post")->add($midLoggedAdmin);
+        $app->put("/{idCountry}", CountryController::class . ":put")->add($midLoggedAdmin);
+        $app->delete("/{idCountry}", CountryController::class . ":delete")->add($midLoggedAdmin);
     }
 )->add($midCORS)->add($midJSON);
 
 
 $app->group(
     "/api/state",
-    function ($app) {
+    function ($app) use ($midLoggedAdmin) {
         $app->get("", StateController::class . ":getAll");
         $app->get("/{idState}", StateController::class . ":get");
         $app->get("/{idState}/city", CityController::class . ":getByState");
-        $app->post("", StateController::class . ":post");
-        $app->put("/{idState}", StateController::class . ":put");
-        $app->delete("/{idState}", StateController::class . ":delete");
+        $app->post("", StateController::class . ":post")->add($midLoggedAdmin);
+        $app->put("/{idState}", StateController::class . ":put")->add($midLoggedAdmin);
+        $app->delete("/{idState}", StateController::class . ":delete")->add($midLoggedAdmin);
     }
 )->add($midCORS)->add($midJSON);
 
 
 $app->group(
     "/api/city",
-    function ($app) {
+    function ($app) use ($midLoggedAdmin) {
         $app->get("", CityController::class . ":getAll");
         $app->get("/{idCity}", CityController::class . ":get");
-        $app->post("", CityController::class . ":post");
-        $app->put("/{idCity}", CityController::class . ":put");
-        $app->delete("/{idCity}", CityController::class . ":delete");
+        $app->post("", CityController::class . ":post")->add($midLoggedAdmin);
+        $app->put("/{idCity}", CityController::class . ":put")->add($midLoggedAdmin);
+        $app->delete("/{idCity}", CityController::class . ":delete")->add($midLoggedAdmin);
     }
 )->add($midCORS)->add($midJSON);
 
 
 $app->group(
     "/api/streettype",
-    function ($app) {
+    function ($app) use ($midLoggedAdmin) {
         $app->get("", StreetTypeController::class . ":getAll");
         $app->get("/{idStreetType}", StreetTypeController::class . ":get");
-        $app->post("", StreetTypeController::class . ":post");
-        $app->put("/{idStreetType}", StreetTypeController::class . ":put");
-        $app->delete("/{idStreetType}", StreetTypeController::class . ":delete");
+        $app->post("", StreetTypeController::class . ":post")->add($midLoggedAdmin);
+        $app->put("/{idStreetType}", StreetTypeController::class . ":put")->add($midLoggedAdmin);
+        $app->delete("/{idStreetType}", StreetTypeController::class . ":delete")->add($midLoggedAdmin);
     }
 )->add($midCORS)->add($midJSON);
 
 
 $app->group(
     "/api/contact",
-    function ($app) {
-        $app->get("", ContactController::class . ":getAll");
-        $app->get("/{idContact}", ContactController::class . ":get");
+    function ($app) use ($midLoggedAdmin) {
+        $app->get("", ContactController::class . ":getAll")->add($midLoggedAdmin);
+        $app->get("/{idContact}", ContactController::class . ":get")->add($midLoggedAdmin);
         $app->post("", ContactController::class . ":post");
-        $app->put("/{idContact}", ContactController::class . ":put");
-        $app->delete("/{idContact}", ContactController::class . ":delete");
+        $app->put("/{idContact}", ContactController::class . ":put")->add($midLoggedAdmin);
+        $app->delete("/{idContact}", ContactController::class . ":delete")->add($midLoggedAdmin);
     }
 )->add($midCORS)->add($midJSON);
 
 
 $app->group(
     "/api/user",
-    function ($app) {
-        $app->get("", UserController::class . ":getAll");
-        $app->get("/{idUser}", UserController::class . ":get");
+    function ($app) use ($midLoggedAdmin, $midLoggedUser) {
+        $app->get("", UserController::class . ":getAll")->add($midLoggedAdmin);
+        $app->get("/{idUser}", UserController::class . ":get")->add($midLoggedAdmin);
         $app->post("", UserController::class . ":post");
-        $app->put("/{idUser}", UserController::class . ":put");
-        $app->delete("/{idUser}", UserController::class . ":delete");
+        $app->put("/{idUser}", UserController::class . ":put")->add($midLoggedUser);
+        $app->delete("/{idUser}", UserController::class . ":delete")->add($midLoggedAdmin);
     }
 )->add($midCORS)->add($midJSON);
 
@@ -192,7 +240,7 @@ $app->group(
         $app->get("/users/create", UserView::class . ":create");
         $app->get("/users/{idUser}", UserView::class . ":update");
     }
-)->add($midView);
+)->add($midView)->add($midIsAdmin);
 
 
 $app->group(
@@ -205,7 +253,7 @@ $app->group(
 
 $app->get("/api/{route}", OtherController::class . ":error")->add($midJSON);
 $app->get("/{route}", OtherView::class . ":error")->add($midView);
-$app->get("/admin/{route}", OtherView::class . ":administrativePanel")->add($midView);
+$app->get("/admin/{route}", OtherView::class . ":administrativePanel")->add($midView)->add($midIsAdmin);
 
 
 $app->run();
