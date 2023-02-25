@@ -62,3 +62,10 @@ CREATE VIEW vw_users_logs AS
            id_user, id_person, des_login, des_password, is_admin, dt_user_created_at, dt_user_changed_in
       FROM tb_users_logs
      INNER JOIN tb_users USING (id_user);
+
+
+DROP VIEW IF EXISTS vw_mails;
+
+CREATE VIEW vw_mails AS
+    SELECT id_mail, des_recipient_email, des_recipient_name, des_subject, des_content, des_files, is_sent, dt_mail_created_at, dt_mail_changed_in
+      FROM tb_mails;

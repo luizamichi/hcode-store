@@ -188,3 +188,11 @@ INSERT INTO
     tb_users_logs (id_log, id_user, des_log, des_device, des_user_agent, des_php_session_id, des_source_url, des_url, dt_log_created_at)
 VALUES
     (1, 1, 'Login', 'Desktop', 'Insomnia/2022.6.0', '769cukva9a9cbsocnasovmo01i', NULL, '/api/login', NOW());
+
+
+INSERT INTO
+    tb_mails (id_mail, des_recipient_email, des_recipient_name, des_subject, des_content, des_files, is_sent, dt_mail_created_at, dt_mail_changed_in)
+VALUES
+    (1, 'support@luizamichi.com.br', 'Support - Luiz Amichi', '[Hcode Store] Boas vindas', 'Olá, seja bem-vindo à Hcode Store.', NULL, 1, NOW(), NULL),
+    (2, 'eu@luizamichi.com.br', 'Luiz Amichi', '[Hcode Store] Boas vindas', 'Olá, seja bem-vindo à Hcode Store. Confira nossas ofertas em nosso site!', '/res/multiShop/img/product-1.jpg;/res/multiShop/img/product-2.jpg;/res/multiShop/img/product-3.jpg', 1, NOW(), NULL),
+    (3, 'dominio@luizamichi.com.br', 'Domínio - Luiz Amichi', '[Hcode Store] Confirmação de cadastro', 'Olá, precisamos confirmar que foi você mesmo que realizou o cadastro em nossa plataforma. Por favor, realize o login em nosso site para confirmarmos sua identidade.', NULL, 0, NOW(), NULL);

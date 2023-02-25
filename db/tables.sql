@@ -124,3 +124,19 @@ CREATE TABLE tb_users_logs (
     CONSTRAINT pk_tb_users_logs PRIMARY KEY (id_log),
     CONSTRAINT fk_tb_users_logs_to_tb_users FOREIGN KEY (id_user) REFERENCES tb_users (id_user) ON DELETE CASCADE
 ) COMMENT = 'Logs';
+
+
+DROP TABLE IF EXISTS tb_mails;
+
+CREATE TABLE tb_mails (
+    id_mail INT UNSIGNED AUTO_INCREMENT COMMENT 'PK do e-mail',
+    des_recipient_email VARCHAR(128) NOT NULL COMMENT 'E-mail do destinatário',
+    des_recipient_name VARCHAR(64) NOT NULL COMMENT 'Nome do destinatário do e-mail',
+    des_subject VARCHAR(256) NOT NULL COMMENT 'Assunto do e-mail',
+    des_content LONGTEXT NOT NULL COMMENT 'Conteúdo do e-mail',
+    des_files TEXT NULL COMMENT 'Arquivos anexados ao e-mail',
+    is_sent TINYINT NOT NULL DEFAULT 0 COMMENT 'E-mail foi enviado?',
+    dt_mail_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do e-mail',
+    dt_mail_changed_in TIMESTAMP NULL COMMENT 'Data da última alteração do e-mail',
+    CONSTRAINT pk_tb_mails PRIMARY KEY (id_mail)
+) COMMENT = 'E-mails';

@@ -1,0 +1,105 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-list"></i>
+            Lista de E-mails
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item active">E-mails</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>E-mail</th>
+                    <th>Nome</th>
+                    <th>Assunto</th>
+                    <th>Conteúdo</th>
+                    <th>Enviado?</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loop="$mails"}
+                  <tr>
+                    <td>{$value.id}</td>
+                    <td data-find="search">{$value.email}</td>
+                    <td data-find="search">{$value.name}</td>
+                    <td data-find="search">{$value.subject}</td>
+                    <td data-type="showContent">
+                      ...
+                      <div style="display: none;">{function="nl2br($value.content)"}</div>
+                    </td>
+                    <td>{if="$value.isSent"}Sim{else}Não{/if}</td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="6">
+                      <small>
+                        <span id="count">{function="count($mails)"}</span>
+                        <span id="countText">e-mails encontrados</span>
+                      </small>
+                    </td>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabel">Conteúdo do e-mail</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.title += " (Mails)";
+
+  window.addEventListener("load", () => {
+    $("#countText").text("e-mails encontrados");
+    if ($("#count").text() == 1) {
+      $("#countText").text("e-mail encontrado");
+    }
+
+    $("td[data-type='showContent']").click(function () {
+      $(".modal-body").html($(this).children().html());
+      $("#modal").modal("show");
+    });
+  });
+</script>

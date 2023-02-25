@@ -287,3 +287,41 @@ BEGIN
      WHERE id_log = pid_log;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_mail;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_mail (
+    IN pid_mail INT,
+    IN pdes_recipient_email VARCHAR(128),
+    IN pdes_recipient_name VARCHAR(64),
+    IN pdes_subject VARCHAR(256),
+    IN pdes_content LONGTEXT,
+    IN pdes_files TEXT,
+    IN pis_sent TINYINT
+)
+BEGIN
+    IF pid_mail > 0 THEN
+        UPDATE tb_mails
+           SET des_recipient_email = pdes_recipient_email,
+               des_recipient_name = pdes_recipient_name,
+               des_subject = pdes_subject,
+               des_content = pdes_content,
+               des_files = pdes_files,
+               is_sent = pis_sent,
+               dt_mail_changed_in = NOW()
+         WHERE id_mail = pid_mail;
+
+    ELSE
+        INSERT INTO tb_mails (des_recipient_email, des_recipient_name, des_subject, des_content, des_files, is_sent, dt_mail_created_at)
+                      VALUES (pdes_recipient_email, pdes_recipient_name, pdes_subject, pdes_content, pdes_files, pis_sent, NOW());
+
+        SET pid_mail = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_mails
+     WHERE id_mail = pid_mail;
+END $$
+DELIMITER ;

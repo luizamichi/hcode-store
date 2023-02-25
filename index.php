@@ -23,6 +23,7 @@ session_start();
 use Amichi\Controller\CityController;
 use Amichi\Controller\ContactController;
 use Amichi\Controller\CountryController;
+use Amichi\Controller\MailController;
 use Amichi\Controller\OtherController;
 use Amichi\Controller\StateController;
 use Amichi\Controller\StreetTypeController;
@@ -35,6 +36,7 @@ use Amichi\HttpException;
 use Amichi\View\CityView;
 use Amichi\View\ContactView;
 use Amichi\View\CountryView;
+use Amichi\View\MailView;
 use Amichi\View\OtherView;
 use Amichi\View\StateView;
 use Amichi\View\StreetTypeView;
@@ -216,6 +218,18 @@ $app->group(
 
 
 $app->group(
+    "/api/mail",
+    function ($app) {
+        $app->get("", MailController::class . ":getAll");
+        $app->get("/{idMail}", MailController::class . ":get");
+        $app->post("", MailController::class . ":post");
+        $app->put("/{idMail}", MailController::class . ":put");
+        $app->delete("/{idMail}", MailController::class . ":delete");
+    }
+)->add($midCORS)->add($midJSON)->add($midLoggedAdmin);
+
+
+$app->group(
     "/admin",
     function ($app) {
         $app->get("/login", UserView::class . ":login");
@@ -237,6 +251,7 @@ $app->group(
         $app->get("/streettypes", StreetTypeView::class . ":getAll");
 
         $app->get("/contacts", ContactView::class . ":getAll");
+        $app->get("/mails", MailView::class . ":getAll");
 
         $app->get("/users", UserView::class . ":getAll");
         $app->get("/users/create", UserView::class . ":create");
