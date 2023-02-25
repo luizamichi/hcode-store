@@ -69,3 +69,12 @@ DROP VIEW IF EXISTS vw_mails;
 CREATE VIEW vw_mails AS
     SELECT id_mail, des_recipient_email, des_recipient_name, des_subject, des_content, des_files, is_sent, dt_mail_created_at, dt_mail_changed_in
       FROM tb_mails;
+
+
+DROP VIEW IF EXISTS vw_users_passwords_recoveries;
+
+CREATE VIEW vw_users_passwords_recoveries AS
+    SELECT id_recovery, des_ip, des_security_key, dt_recovery_created_at, dt_recovery,
+           id_user, id_person, des_login, des_password, is_admin, dt_user_created_at, dt_user_changed_in
+      FROM tb_users_passwords_recoveries
+     INNER JOIN tb_users USING (id_user);

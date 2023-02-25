@@ -325,3 +325,21 @@ BEGIN
      WHERE id_mail = pid_mail;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_create_user_password_recovery;
+
+DELIMITER $$
+CREATE PROCEDURE sp_create_user_password_recovery (
+    IN pid_user INT,
+    IN pdes_ip VARCHAR(64)
+)
+BEGIN
+    INSERT INTO tb_users_passwords_recoveries (id_user, des_ip, des_security_key, dt_recovery_created_at)
+                                       VALUES (pid_user, pdes_ip, MD5(RAND()), NOW());
+
+    SELECT *
+      FROM vw_users_passwords_recoveries
+     WHERE id_recovery = LAST_INSERT_ID();
+END $$
+DELIMITER ;

@@ -17,7 +17,12 @@ use Amichi\DB\SQL;
 use Amichi\HttpException;
 use Amichi\Model\City;
 use Amichi\Model\Country;
+use Amichi\Model\Mail;
 use Amichi\Model\State;
+use Amichi\Model\User;
+use Amichi\Model\UserPasswordRecovery;
+use Amichi\PageMail;
+use Amichi\Trait\Encoder;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -32,6 +37,103 @@ use Psr\Http\Message\ResponseInterface as Response;
  */
 class OtherController extends Controller
 {
+    use Encoder;
+
+
+    /**
+     * Envia um e-mail para restauração de senha
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function forgot(Request $request, Response $response, array $args): Response
+    {
+        $email = self::string($request->getParsedBody()["email"], true, "email");
+        $user = User::loadFromEmail($email);
+
+        if (!$user) {
+            throw (new HttpException("Não foi possível solicitar a redefinição de senha, pois, o endereço de e-mail é inexistente.", 400))->json();
+        }
+
+        $userPasswordRecovery = UserPasswordRecovery::loadFromData(["idUser" => $user->id]);
+        $userPasswordRecovery->create();
+
+        $link = $_SERVER["HTTP_HOST"] . "/admin/resetpassword?";
+
+        $page = new PageMail();
+        $page->setTpl(
+            "forgot",
+            [
+                "name" => $user->name,
+                "link" => $link . http_build_query(
+                    [
+                        "code" => self::crypt($userPasswordRecovery->id),
+                        "sk" => self::crypt($userPasswordRecovery->securityKey)
+                    ]
+                )
+            ]
+        );
+
+        $mail = Mail::loadFromData(
+            [
+                "email" => $user->email,
+                "name" => $user->name,
+                "subject" => "[Hcode Store] Redefinição de senha",
+                "content" => $page->getTpl()
+            ]
+        );
+
+        $response->getBody()->write(json_encode($mail->send()));
+
+        return $response->withStatus(201);
+    }
+
+
+    /**
+     * Restaura a senha do usuário
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function resetPassword(Request $request, Response $response, array $args): Response
+    {
+        $errors = [];
+        $data = (array) $request->getParsedBody();
+
+        $userPasswordRecovery = UserPasswordRecovery::loadFromValidationKeys(self::string($data["code"]), self::string($data["sk"]));
+        $userPasswordRecovery?->validate($errors);
+
+        if (!$userPasswordRecovery || $errors) {
+            !empty($errors) ?: array_push($errors, "os códigos de verificação são inválidos");
+            $message = count($errors) === 1 ? "O seguinte erro foi encontrado" : "Os seguintes erros foram encontrados";
+            throw (new HttpException("Não foi possível restaurar a senha do usuário. $message: " . implode(", ", $errors) . ".", 400))->json();
+        }
+
+        UserPasswordRecovery::loadFromData($data)->validate($errors);
+
+        if ($errors) {
+            $message = count($errors) === 1 ? "O seguinte erro foi encontrado" : "Os seguintes erros foram encontrados";
+            throw (new HttpException("Não foi possível restaurar a senha do usuário {$userPasswordRecovery->idUser}. $message: " . implode(", ", $errors) . ".", 400))->json();
+        }
+
+        $userPasswordRecovery->password = self::string($data["password"]);
+
+        $response->getBody()->write(json_encode($userPasswordRecovery->update()));
+
+        return $response;
+    }
+
+
     /**
      * Executa uma consulta no banco de dados
      *

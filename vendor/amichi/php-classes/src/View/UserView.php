@@ -15,6 +15,7 @@ namespace Amichi\View;
 use Amichi\Controller;
 use Amichi\Model\User;
 use Amichi\Model\UserLog;
+use Amichi\Model\UserPasswordRecovery;
 use Amichi\PageAdmin;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -92,6 +93,10 @@ class UserView extends Controller
                 "logs" => array_map(
                     fn (UserLog $userLog): array => $userLog->array(),
                     UserLog::listFromUserId($user->id)
+                ),
+                "recoveries" => array_map(
+                    fn (UserPasswordRecovery $userPasswordRecovery): array => $userPasswordRecovery->array(),
+                    UserPasswordRecovery::listFromUserId($user->id)
                 )
             ]
         );

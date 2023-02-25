@@ -140,3 +140,17 @@ CREATE TABLE tb_mails (
     dt_mail_changed_in TIMESTAMP NULL COMMENT 'Data da última alteração do e-mail',
     CONSTRAINT pk_tb_mails PRIMARY KEY (id_mail)
 ) COMMENT = 'E-mails';
+
+
+DROP TABLE IF EXISTS tb_users_passwords_recoveries;
+
+CREATE TABLE tb_users_passwords_recoveries (
+    id_recovery INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK da recuperação de senha',
+    id_user INT UNSIGNED NOT NULL COMMENT 'Usuário',
+    des_ip VARCHAR(64) NOT NULL COMMENT 'IP do usuário',
+    des_security_key VARCHAR(32) NOT NULL COMMENT 'Chave de segurança',
+    dt_recovery_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data da solicitação',
+    dt_recovery TIMESTAMP NULL COMMENT 'Data da recuperação',
+    CONSTRAINT pk_tb_users_passwords_recoveries PRIMARY KEY (id_recovery),
+    CONSTRAINT fk_tb_users_passwords_recoveries_to_tb_users FOREIGN KEY (id_user) REFERENCES tb_users (id_user) ON DELETE CASCADE
+) COMMENT = 'Recuperações de senha';

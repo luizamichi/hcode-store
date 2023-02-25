@@ -14,6 +14,7 @@ namespace Amichi\View;
 
 use Amichi\Controller;
 use Amichi\HttpException;
+use Amichi\Model\UserPasswordRecovery;
 use Amichi\Page;
 use Amichi\PageAdmin;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -163,6 +164,65 @@ class OtherView extends Controller
 
         $response->getBody()->write($page->getTpl());
         return $response;
+    }
+
+
+    /**
+     * Retorna o template de recuperação de senha
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function forgot(Request $request, Response $response, array $args): Response
+    {
+        $page = new PageAdmin(
+            [
+                "header" => false,
+                "footer" => false
+            ]
+        );
+        $page->setTpl("forgot");
+
+        $response->getBody()->write($page->getTpl());
+        return $response;
+    }
+
+
+    /**
+     * Retorna o template de restauração de senha
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function resetPassword(Request $request, Response $response, array $args): Response
+    {
+        $params = $request->getQueryParams();
+        $userPasswordRecovery = UserPasswordRecovery::loadFromValidationKeys(self::string($params["code"]), self::string($params["sk"]));
+
+        if ($userPasswordRecovery?->validate()) {
+            $page = new PageAdmin(
+                [
+                    "header" => false,
+                    "footer" => false
+                ]
+            );
+            $page->setTpl("reset-password", ["userPasswordRecovery" => $userPasswordRecovery->array()]);
+
+            $response->getBody()->write($page->getTpl());
+            return $response;
+        } else {
+            return $response->withHeader("Location", "/admin")->withStatus(302);
+        }
     }
 
 

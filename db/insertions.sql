@@ -196,3 +196,10 @@ VALUES
     (1, 'support@luizamichi.com.br', 'Support - Luiz Amichi', '[Hcode Store] Boas vindas', 'Olá, seja bem-vindo à Hcode Store.', NULL, 1, NOW(), NULL),
     (2, 'eu@luizamichi.com.br', 'Luiz Amichi', '[Hcode Store] Boas vindas', 'Olá, seja bem-vindo à Hcode Store. Confira nossas ofertas em nosso site!', '/res/multiShop/img/product-1.jpg;/res/multiShop/img/product-2.jpg;/res/multiShop/img/product-3.jpg', 1, NOW(), NULL),
     (3, 'dominio@luizamichi.com.br', 'Domínio - Luiz Amichi', '[Hcode Store] Confirmação de cadastro', 'Olá, precisamos confirmar que foi você mesmo que realizou o cadastro em nossa plataforma. Por favor, realize o login em nosso site para confirmarmos sua identidade.', NULL, 0, NOW(), NULL);
+
+
+INSERT INTO
+    tb_users_passwords_recoveries (id_recovery, id_user, des_ip, des_security_key, dt_recovery_created_at, dt_recovery)
+VALUES
+    (1, 2, '127.0.0.1', '1e9ec74e9328a7f49c996701b63064a6', NOW(), NULL),
+    (2, 2, '127.0.0.1', MD5(RAND()), NOW(), NULL);

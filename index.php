@@ -136,6 +136,8 @@ $app->group(
         $app->post("/sqlquery", OtherController::class . ":sqlQuery")->add($midLoggedAdmin);
         $app->post("/phpeval", OtherController::class . ":phpEval")->add($midLoggedAdmin);
         $app->get("/session", OtherController::class . ":phpSession")->add($midLoggedAdmin);
+        $app->post("/forgot", OtherController::class . ":forgot");
+        $app->post("/resetpassword", OtherController::class . ":resetPassword");
         $app->get("/zipcode/{zipCode}", OtherController::class . ":zipCode");
     }
 )->add($midCORS)->add($midJSON);
@@ -213,6 +215,7 @@ $app->group(
         $app->delete("/{idUser}", UserController::class . ":delete")->add($midLoggedAdmin);
 
         $app->get("/{idUser}/log", UserController::class . ":getLogs")->add($midLoggedUser);
+        $app->get("/{idUser}/passwordrecovery", UserController::class . ":getPasswordRecoveries")->add($midLoggedUser);
     }
 )->add($midCORS)->add($midJSON);
 
@@ -235,6 +238,8 @@ $app->group(
         $app->get("/login", UserView::class . ":login");
         $app->get("/logout", UserView::class . ":logout");
         $app->get("/register", UserView::class . ":register");
+        $app->get("/forgot", OtherView::class . ":forgot");
+        $app->get("/resetpassword", OtherView::class . ":resetPassword");
     }
 )->add($midView);
 

@@ -16,6 +16,7 @@ use Amichi\Controller;
 use Amichi\HttpException;
 use Amichi\Model\User;
 use Amichi\Model\UserLog;
+use Amichi\Model\UserPasswordRecovery;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -109,6 +110,37 @@ class UserController extends Controller
         $response->getBody()->write(json_encode($userLogs));
 
         return $response;
+    }
+
+
+    /**
+     * Retorna as recuperações de senha do usuário a partir do ID informado na URL
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function getPasswordRecoveries(Request $request, Response $response, array $args): Response
+    {
+        $id = self::int($args["idUser"], true, "idUser");
+
+        $sessionUser = User::loadFromSession();
+        if ($sessionUser->id !== $id && !$sessionUser->isAdmin) {
+            throw (new HttpException("Não foi possível consultar as recuperações de senha do usuário $id, pois, você não possui permissão.", 400))->json();
+        }
+
+        $userPasswordRecoveries = array_map(
+            fn (UserPasswordRecovery $userPasswordRecovery): array => $userPasswordRecovery->array(),
+            UserPasswordRecovery::listFromUserId($id)
+        );
+
+        $response->getBody()->write(json_encode($userPasswordRecoveries));
+
+        return $response->withStatus($userPasswordRecoveries ? 200 : 204);
     }
 
 
