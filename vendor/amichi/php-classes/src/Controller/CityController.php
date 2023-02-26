@@ -14,6 +14,7 @@ namespace Amichi\Controller;
 
 use Amichi\Controller;
 use Amichi\HttpException;
+use Amichi\Model\Address;
 use Amichi\Model\City;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -185,6 +186,18 @@ class CityController extends Controller
 
         if (!$city) {
             throw (new HttpException("Não foi possível remover a cidade $id, pois, é inexistente.", 400))->json();
+        }
+
+        $addresses = Address::listFromCityId($id);
+
+        if (!empty($addresses)) {
+            $message = count($addresses) === 1 ? "ao endereço" : "aos endereços";
+            $addressesIds = array_map(
+                fn (Address $address): int => $address->id,
+                $addresses
+            );
+
+            throw (new HttpException("Não foi possível remover a cidade $id, pois, está vinculada $message " . implode(", ", $addressesIds) . ".", 400))->json();
         }
 
         $response->getBody()->write(json_encode($city->delete()));

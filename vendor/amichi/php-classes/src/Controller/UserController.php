@@ -14,6 +14,7 @@ namespace Amichi\Controller;
 
 use Amichi\Controller;
 use Amichi\HttpException;
+use Amichi\Model\Address;
 use Amichi\Model\User;
 use Amichi\Model\UserLog;
 use Amichi\Model\UserPasswordRecovery;
@@ -307,6 +308,11 @@ class UserController extends Controller
             throw (new HttpException("Não foi possível remover o usuário $id, pois, é inexistente.", 400))->json();
         }
 
+        $address = Address::loadFromUserId($id);
+        if ($address) {
+            throw (new HttpException("Não foi possível remover o usuário $id, pois, está vinculado ao endereço {$address->id}.", 400))->json();
+        }
+
         $response->getBody()->write(json_encode($user->delete()));
 
         $sessionUser = User::loadFromSession();
@@ -374,5 +380,32 @@ class UserController extends Controller
         }
 
         return $response;
+    }
+
+
+    /**
+     * Retorna o endereço do usuário a partir do ID informado na URL
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function getAddress(Request $request, Response $response, array $args): Response
+    {
+        $id = self::int($args["idUser"], true, "idUser");
+
+        $sessionUser = User::loadFromSession();
+        if ($sessionUser->id !== $id && !$sessionUser->isAdmin) {
+            throw (new HttpException("Não foi possível consultar o endereço do usuário $id, pois, você não possui permissão.", 400))->json();
+        }
+
+        $address = Address::loadFromUserId($id);
+        $response->getBody()->write(json_encode($address));
+
+        return $response->withStatus($address ? 200 : 204);
     }
 }

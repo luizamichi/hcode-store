@@ -14,6 +14,7 @@ namespace Amichi\Controller;
 
 use Amichi\Controller;
 use Amichi\HttpException;
+use Amichi\Model\Address;
 use Amichi\Model\StreetType;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -161,6 +162,18 @@ class StreetTypeController extends Controller
 
         if (!$streetType) {
             throw (new HttpException("Não foi possível remover o tipo de logradouro $id, pois, é inexistente.", 400))->json();
+        }
+
+        $addresses = Address::listFromStreetTypeId($id);
+
+        if (!empty($addresses)) {
+            $message = count($addresses) === 1 ? "ao endereço" : "aos endereços";
+            $addressesIds = array_map(
+                fn (Address $address): int => $address->id,
+                $addresses
+            );
+
+            throw (new HttpException("Não foi possível remover o tipo de logradouro $id, pois, está vinculado $message " . implode(", ", $addressesIds) . ".", 400))->json();
         }
 
         $response->getBody()->write(json_encode($streetType->delete()));

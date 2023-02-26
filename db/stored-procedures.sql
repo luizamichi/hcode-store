@@ -343,3 +343,47 @@ BEGIN
      WHERE id_recovery = LAST_INSERT_ID();
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_address;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_address (
+    IN pid_address INT,
+    IN pid_person INT,
+    IN pid_city INT,
+    IN pid_street_type INT,
+    IN pdes_address VARCHAR(128),
+    IN pdes_number VARCHAR(8),
+    IN pdes_district VARCHAR(32),
+    IN pdes_complement VARCHAR(32),
+    IN pdes_reference VARCHAR(32),
+    IN pnum_zip_code BIGINT
+)
+BEGIN
+    IF pid_address > 0 THEN
+        UPDATE tb_addresses
+           SET id_person = pid_person,
+               id_city = pid_city,
+               id_street_type = pid_street_type,
+               des_address = pdes_address,
+               des_number = pdes_number,
+               des_district = pdes_district,
+               des_complement = pdes_complement,
+               des_reference = pdes_reference,
+               num_zip_code = pnum_zip_code,
+               dt_address_changed_in = NOW()
+         WHERE id_address = pid_address;
+
+    ELSE
+        INSERT INTO tb_addresses (id_person, id_city, id_street_type, des_address, des_number, des_district, des_complement, des_reference, num_zip_code, dt_address_created_at)
+                          VALUES (pid_person, pid_city, pid_street_type, pdes_address, pdes_number, pdes_district, pdes_complement, pdes_reference, pnum_zip_code, NOW());
+
+        SET pid_address = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_addresses
+     WHERE id_address = pid_address;
+END $$
+DELIMITER ;

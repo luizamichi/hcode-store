@@ -203,3 +203,18 @@ INSERT INTO
 VALUES
     (1, 2, '127.0.0.1', '1e9ec74e9328a7f49c996701b63064a6', NOW(), NULL),
     (2, 2, '127.0.0.1', MD5(RAND()), NOW(), NULL);
+
+
+INSERT INTO
+    tb_addresses (id_address, id_person, id_city, id_street_type, des_address, des_number, des_district, des_complement, des_reference, num_zip_code, dt_address_created_at, dt_address_changed_in)
+VALUES
+    (1, 5, 1, 4, 'Paraná', '296', 'Centro', 'Comércio', 'Correios', 69945000, NOW(), NULL),
+    (2, 9, 2, 33, 'Dom Giocondo Maria Grotte', '230', 'Centro', 'Casa', 'Casa bege', 69935970, NOW(), NULL),
+    (3, 4, 5, 33, 'Ocimar Tessinari', '07', 'Conquista', 'Comércio', 'Distribuidora de bebidas', 69931970, NOW(), NULL),
+    (4, 2, 6, 33, 'Rego Barros', '73', 'Centro', 'Apartamento', 'Prédio em construção', 69980970, NOW(), NULL),
+    (5, 7, 8, 4, 'Plácido de Castro', '871', 'Centro', 'Casa', 'Ao lado do salão de beleza', 69960970, NOW(), NULL),
+    (6, 3, 9, 33, 'Romildo Magalhães', 'S/N', 'Centro', 'Casa', 'Casa do portão vermelho', 69975970, NOW(), NULL),
+    (7, 1, 22, 33, '24 de Janeiro', '270', 'Centro', 'Comércio', 'Esquina', 69930000, NOW(), NULL),
+    (8, 8, 18, 33, 'Coronel José Ferreira', '1498', 'Centro', 'Comércio', 'Correios', 69955000, NOW(), NULL),
+    (9, 6, 14, 33, 'Margaridas', '131', 'Centro', 'Comércio', 'Próximo a lanchonete', 69927000, NOW(), NULL),
+    (10, 10, 13, 4, 'Diamantino Augusto de Macedo', '580', 'Centro', 'Hotel', 'Perto das casas coloridas', 69928000, NOW(), NULL);

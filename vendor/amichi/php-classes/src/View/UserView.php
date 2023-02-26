@@ -13,9 +13,12 @@
 namespace Amichi\View;
 
 use Amichi\Controller;
+use Amichi\Model\Address;
+use Amichi\Model\StreetType;
 use Amichi\Model\User;
 use Amichi\Model\UserLog;
 use Amichi\Model\UserPasswordRecovery;
+use Amichi\Page;
 use Amichi\PageAdmin;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -240,6 +243,42 @@ class UserView extends Controller
             ]
         );
         $page->setTpl("register", ["email" => self::string($request->getQueryParams()["email"])]);
+
+        $response->getBody()->write($page->getTpl());
+        return $response;
+    }
+
+
+    /**
+     * Retorna o template da página de perfil
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function webView(Request $request, Response $response, array $args): Response
+    {
+        $user = User::loadFromSession()?->refresh();
+        if (!$user) {
+            return $response->withHeader("Location", "/")->withStatus(302);
+        }
+
+        $page = new Page();
+        $page->setTpl(
+            "profile",
+            [
+                "user" => $user?->array(),
+                "address" => Address::loadFromUserId($user?->id ?? 0)?->array(),
+                "streetTypes" => array_map(
+                    fn (StreetType $streetType): array => $streetType->array(),
+                    StreetType::listAll(sortBy: "name")
+                )
+            ]
+        );
 
         $response->getBody()->write($page->getTpl());
         return $response;

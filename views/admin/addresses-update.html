@@ -1,0 +1,334 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-pencil-alt"></i>
+            Alteração de Endereço
+          </h1>
+          <div>
+            <small>Endereço cadastrado em {function="formatDate($address.dateRegister)"}.</small>
+            {if="$address.dateLastChange != null"}
+            <small>Endereço alterado em {function="formatDate($address.dateLastChange)"}.</small>
+            {/if}
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/admin/addresses">Endereços</a>
+            </li>
+            <li class="breadcrumb-item active">Novo</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <form id="editAddress">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="idPerson">Usuário *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="idPerson">
+                        <i class="fas fa-user"></i>
+                      </label>
+                    </div>
+                    <select class="custom-select select2" id="idPerson" name="idPerson">
+                      <option disabled selected>Selecione um usuário</option>
+                      {loop="$users"}
+                      <option value="{$value.idPerson}">{$value.name}</option>
+                      {/loop}
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="zipCode">CEP *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-mail-bulk"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" data-inputmask="'mask': '99.999-999'" data-mask id="zipCode" name="zipCode" placeholder="Digite o CEP" type="text" value="{$address.zipCode}" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="cityName">Cidade *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-city"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" id="idCity" name="idCity" type="hidden" value="{$address.idCity}" />
+                    <input class="form-control" id="cityName" name="cityName" readonly type="text" value="{$address.city.name} / {$address.city.state.uf}" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="idStreetType">Tipo de logradouro</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="idStreetType">
+                        <i class="fas fa-map-marked-alt"></i>
+                      </label>
+                    </div>
+                    <select class="custom-select select2" id="idStreetType" name="idStreetType">
+                      <option disabled selected>
+                        Selecione um tipo de logradouro
+                      </option>
+                      {loop="$streetTypes"}
+                      <option value="{$value.id}">{$value.name}</option>
+                      {/loop}
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="publicPlace">Logradouro *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-map-marker-alt"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" id="publicPlace" name="publicPlace" placeholder="Digite o logradouro" type="text" value="{$address.publicPlace}" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="number">Número *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-location-arrow"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" id="number" name="number" placeholder="Digite o número" type="text" value="{$address.number}" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="district">Bairro</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-map-pin"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" id="district" name="district" placeholder="Digite o bairro" type="text" value="{$address.district}" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="complement">Complemento *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-warehouse"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" id="complement" name="complement" placeholder="Digite o complemento" type="text" value="{$address.complement}" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="reference">Referência</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-compass"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" id="reference" name="reference" placeholder="Digite a referência" type="text" value="{$address.reference}" />
+                  </div>
+                </div>
+
+                <div>
+                  <button type="submit" class="btn btn-dark">Salvar</button>
+                  <button id="resetButton" type="reset" class="btn btn-outline-dark">Limpar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.title += " (Change Address)";
+
+  window.addEventListener("load", () => {
+    $(".select2").select2();
+    $("[data-mask]").inputmask();
+
+    $("#idPerson").val("{$address.idPerson}").change();
+    '{if="$address.idStreetType != null"}'
+    $("#idStreetType").val("{$address.idStreetType}").change();
+    '{/if}'
+
+    $("#zipCode").focusout(function () {
+      let zipCode = $(this).val().replace(/[^\d]/g, "");
+      if (zipCode.length === 8) {
+        $.ajax({
+          url: "/api/zipcode/" + zipCode,
+          dataType: "json",
+          success: function (data) {
+            if (!data.erro) {
+              $("#idCity").val(data.city.id ?? $("#idCity").val());
+              $("#cityName").val(data.city.name + " / " + data.city.state.uf);
+              $("#publicPlace").val(data.address);
+              $("#district").val(data.district);
+              $("#complement").val(data.complement ?? $("#complement").val());
+            }
+          },
+        });
+      }
+    });
+
+    $.validator.methods.zipCode = function (value, element) {
+      return this.optional(element) || /^\d{2}\.\d{3}\-\d{3}$/.test(value);
+    };
+
+    $.validator.setDefaults({
+      submitHandler: function () {
+        $.ajax({
+          type: "put",
+          url: "/api/address/{$address.id}",
+          dataType: "json",
+          data: $("#editAddress").serialize(),
+          beforeSend: () => {
+            $("button, input, select").attr("disabled", true);
+          },
+          complete: () => {
+            $("button, input, select").attr("disabled", false);
+          },
+          success: (response) => {
+            alert("Endereço " + response.id + " alterado com sucesso.");
+          },
+          error: (xhr, status, error) => {
+            let json = xhr.responseJSON ?? {};
+            alert(json.message ?? "Não foi possível alterar o endereço.");
+          },
+        });
+      },
+    });
+
+    $("#editAddress").validate({
+      rules: {
+        idPerson: {
+          required: true,
+        },
+        zipCode: {
+          zipCode: true,
+          required: true,
+          minlength: 10,
+          maxlength: 10,
+        },
+        idCity: {
+          required: true,
+        },
+        publicPlace: {
+          required: true,
+          minlength: 6,
+          maxlength: 128,
+        },
+        number: {
+          required: true,
+          minlength: 1,
+          maxlength: 8,
+        },
+        district: {
+          minlength: 4,
+          maxlength: 32,
+        },
+        complement: {
+          required: true,
+          minlength: 4,
+          maxlength: 32,
+        },
+        reference: {
+          minlength: 4,
+          maxlength: 32,
+        }
+      },
+      messages: {
+        idPerson: {
+          required: "Por favor, insira um usuário",
+        },
+        zipCode: {
+          zipCode: "Por favor, insira um CEP válido",
+          required: "Por favor, insira um CEP",
+          minlength: "Por favor, insira um CEP com tamanho válido",
+          maxlength: "Por favor, insira um CEP com tamanho válido",
+        },
+        idCity: {
+          required: "Por favor, insira um CEP válido para localizar a cidade",
+        },
+        publicPlace: {
+          required: "Por favor, insira um logradouro",
+          minlength:
+            "Por favor, insira um logradouro com no mínimo 6 caracteres",
+          maxlength:
+            "Por favor, insira um logradouro com no máximo 128 caracteres",
+        },
+        number: {
+          required: "Por favor, insira um número",
+          minlength: "Por favor, insira um número com no mínimo 1 caracter",
+          maxlength: "Por favor, insira um número com no máximo 8 caracteres",
+        },
+        district: {
+          minlength: "Por favor, insira um bairro com no mínimo 4 caracteres",
+          maxlength: "Por favor, insira um bairro com no máximo 32 caracteres",
+        },
+        complement: {
+          required: "Por favor, insira um complemento",
+          minlength:
+            "Por favor, insira um complemento com no mínimo 4 caracteres",
+          maxlength:
+            "Por favor, insira um complemento com no máximo 32 caracteres",
+        },
+        reference: {
+          minlength:
+            "Por favor, insira uma referência com no mínimo 4 caracteres",
+          maxlength:
+            "Por favor, insira uma referência com no máximo 32 caracteres",
+        }
+      },
+      errorElement: "span",
+      errorPlacement: function (error, element) {
+        error.addClass("invalid-feedback");
+        element.closest(".form-group").append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass("is-invalid");
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass("is-invalid");
+      },
+    });
+
+    $("#resetButton").click(() => $("#idPerson").val("{$address.idPerson}").trigger("change"));
+    '{if="$address.idStreetType != null"}'
+    $("#resetButton").click(() => $("#idStreetType").val("{$address.idStreetType}").trigger("change"));
+    '{else}'
+    $("#resetButton").click(() => $("#idStreetType").val("Selecione um tipo de logradouro").trigger("change"));
+    '{/if}'
+  });
+</script>

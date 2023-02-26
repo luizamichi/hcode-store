@@ -20,6 +20,7 @@ session_name(getenv("PHP_SESSION_NAME") ?: "Ecommerce");
 session_start();
 
 
+use Amichi\Controller\AddressController;
 use Amichi\Controller\CityController;
 use Amichi\Controller\ContactController;
 use Amichi\Controller\CountryController;
@@ -33,6 +34,7 @@ use Amichi\Model\User;
 
 use Amichi\HttpException;
 
+use Amichi\View\AddressView;
 use Amichi\View\CityView;
 use Amichi\View\ContactView;
 use Amichi\View\CountryView;
@@ -215,6 +217,7 @@ $app->group(
         $app->put("/{idUser}", UserController::class . ":put")->add($midLoggedUser);
         $app->delete("/{idUser}", UserController::class . ":delete")->add($midLoggedAdmin);
 
+        $app->get("/{idUser}/address", UserController::class . ":getAddress")->add($midLoggedUser);
         $app->get("/{idUser}/log", UserController::class . ":getLogs")->add($midLoggedUser);
         $app->get("/{idUser}/passwordrecovery", UserController::class . ":getPasswordRecoveries")->add($midLoggedUser);
         $app->put("/{idUser}/password", UserController::class . ":updatePassword")->add($midLoggedAdmin);
@@ -232,6 +235,18 @@ $app->group(
         $app->delete("/{idMail}", MailController::class . ":delete");
     }
 )->add($midCORS)->add($midJSON)->add($midLoggedAdmin);
+
+
+$app->group(
+    "/api/address",
+    function ($app) use ($midLoggedAdmin, $midLoggedUser) {
+        $app->get("", AddressController::class . ":getAll")->add($midLoggedAdmin);
+        $app->get("/{idAddress}", AddressController::class . ":get")->add($midLoggedAdmin);
+        $app->post("", AddressController::class . ":post")->add($midLoggedUser);
+        $app->put("/{idAddress}", AddressController::class . ":put")->add($midLoggedUser);
+        $app->delete("/{idAddress}", AddressController::class . ":delete")->add($midLoggedAdmin);
+    }
+)->add($midCORS)->add($midJSON);
 
 
 $app->group(
@@ -265,14 +280,19 @@ $app->group(
         $app->get("/users/create", UserView::class . ":create");
         $app->get("/users/{idUser}", UserView::class . ":update");
         $app->get("/users/{idUser}/logs", UserView::class . ":getLogs");
+
+        $app->get("/addresses", AddressView::class . ":getAll");
+        $app->get("/addresses/create", AddressView::class . ":create");
+        $app->get("/addresses/{idAddress}", AddressView::class . ":update");
     }
 )->add($midView)->add($midIsAdmin);
 
 
 $app->group(
     "",
-    function ($app) {
+    function ($app) use ($midIsUser) {
         $app->get("/contact", ContactView::class . ":webView");
+        $app->get("/profile", UserView::class . ":webView")->add($midIsUser);
     }
 )->add($midView);
 

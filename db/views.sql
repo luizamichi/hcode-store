@@ -78,3 +78,16 @@ CREATE VIEW vw_users_passwords_recoveries AS
            id_user, id_person, des_login, des_password, is_admin, dt_user_created_at, dt_user_changed_in
       FROM tb_users_passwords_recoveries
      INNER JOIN tb_users USING (id_user);
+
+
+DROP VIEW IF EXISTS vw_addresses;
+
+CREATE VIEW vw_addresses AS
+    SELECT id_address, des_address, des_number, des_district, des_complement, des_reference, num_zip_code, dt_address_created_at, dt_address_changed_in,
+           id_person, des_person, des_email, des_cpf, num_phone, bin_photo,
+           id_city, id_state, num_ibge_city, des_city, num_ddd, dt_city_created_at,
+           id_street_type, des_street_type, des_acronym
+      FROM tb_addresses
+     INNER JOIN tb_persons USING (id_person)
+     INNER JOIN tb_cities USING (id_city)
+      LEFT OUTER JOIN tb_street_types USING (id_street_type);

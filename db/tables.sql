@@ -154,3 +154,26 @@ CREATE TABLE tb_users_passwords_recoveries (
     CONSTRAINT pk_tb_users_passwords_recoveries PRIMARY KEY (id_recovery),
     CONSTRAINT fk_tb_users_passwords_recoveries_to_tb_users FOREIGN KEY (id_user) REFERENCES tb_users (id_user) ON DELETE CASCADE
 ) COMMENT = 'Recuperações de senha';
+
+
+DROP TABLE IF EXISTS tb_addresses;
+
+CREATE TABLE tb_addresses (
+    id_address INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do endereço',
+    id_person INT UNSIGNED NOT NULL COMMENT 'Pessoa que mora no endereço',
+    id_city INT UNSIGNED NOT NULL COMMENT 'Cidade do endereço',
+    id_street_type INT UNSIGNED NULL COMMENT 'Tipo do logradouro',
+    des_address VARCHAR(128) NOT NULL COMMENT 'Logradouro do endereço',
+    des_number VARCHAR(8) NOT NULL DEFAULT 'S/N' COMMENT 'Número do endereço',
+    des_district VARCHAR(32) NULL COMMENT 'Bairro do endereço',
+    des_complement VARCHAR(32) NOT NULL COMMENT 'Complemento do endereço',
+    des_reference VARCHAR(32) NULL COMMENT 'Referência do endereço',
+    num_zip_code bigint(8) UNSIGNED ZEROFILL NOT NULL COMMENT 'Código postal do endereço',
+    dt_address_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do endereço',
+    dt_address_changed_in TIMESTAMP NULL COMMENT 'Data da última alteração do endereço',
+    CONSTRAINT pk_tb_addresses PRIMARY KEY (id_address),
+    CONSTRAINT fk_tb_addresses_to_tb_persons FOREIGN KEY (id_person) REFERENCES tb_persons (id_person) ON DELETE NO ACTION,
+    CONSTRAINT fk_tb_addresses_to_tb_cities FOREIGN KEY (id_city) REFERENCES tb_cities (id_city) ON DELETE NO ACTION,
+    CONSTRAINT fk_tb_addresses_to_tb_street_types FOREIGN KEY (id_street_type) REFERENCES tb_street_types (id_street_type) ON DELETE NO ACTION,
+    CONSTRAINT uk_tb_addresses_id_person UNIQUE KEY (id_person)
+) COMMENT = 'Endereços';

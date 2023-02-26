@@ -1,0 +1,191 @@
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <div class="col-12">
+      <nav class="breadcrumb bg-light mb-30">
+        <a class="breadcrumb-item text-dark" href="/">Início</a>
+        <span class="breadcrumb-item active">Minha conta</span>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Profile Start -->
+<div class="container-fluid">
+  <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
+    <span class="bg-secondary pr-3">Minha conta</span>
+  </h2>
+  <div class="row px-xl-5">
+    <div class="col-lg-5 mb-5">
+      <div class="bg-light p-30">
+        <h4>Dados</h4>
+        <form id="editUser">
+          <div class="control-group">
+            <input type="hidden" id="idUser" name="idUser" value="{$user.id}" />
+            <input type="text" class="form-control" id="name" name="name" placeholder="Nome" required value="{$user.name}" />
+          </div>
+          <p class="help-block text-danger"></p>
+          <div class="control-group">
+            <input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" data-inputmask="'mask': '999.999.999-99'" data-mask value="{$user.cpf}" />
+          </div>
+          <p class="help-block text-danger"></p>
+          <div class="control-group">
+            <input type="email" class="form-control" id="email" name="email" placeholder="E-mail" required value="{$user.email}" />
+          </div>
+          <p class="help-block text-danger"></p>
+          <div class="control-group">
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="Telefone" data-inputmask="'mask': '(99) 99999-9999'" data-mask value="{$user.phone}" />
+          </div>
+          <p class="help-block text-danger"></p>
+          <div>
+            <button class="btn btn-primary py-2 px-4" type="submit">Salvar</button>
+            <a class="btn btn-secondary py-2 px-4" href="/admin/changepassword">Alterar senha</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-lg-7 mb-5">
+      <div class="bg-light p-30 mb-30">
+        <h4>Endereço</h4>
+        <form id="changeAddress">
+          <div class="control-group">
+            <input type="hidden" id="idAddress" name="id" value="{function="getValue($address.id)"}" />
+            <input type="hidden" id="idPerson" name="idPerson" value="{function="getValue($user.idPerson)"}" />
+            <input type="text" class="form-control" id="zipCode" name="zipCode" placeholder="CEP" data-inputmask="'mask': '99.999-999'" data-mask required value="{function="getValue($address.zipCode)"}" />
+          </div>
+          <p class="help-block text-danger"></p>
+          <div class="control-group">
+            <input type="hidden" id="idCity" name="idCity" value="{function="getValue($address.idCity)"}" />
+            <input type="text" class="form-control" id="cityName" name="cityName" readonly value="{function="getValue($address.city.name)"} / {function="getValue($address.city.state.uf)"}" />
+          </div>
+          <p class="help-block text-danger"></p>
+          <div class="control-group">
+            <select class="custom-select" id="idStreetType" name="idStreetType">
+              <option disabled selected>Selecione um tipo de logradouro</option>
+              {loop="$streetTypes"}
+              <option value="{$value.id}">{$value.name}</option>
+              {/loop}
+            </select>
+          </div>
+          <p class="help-block text-danger"></p>
+          <div class="control-group">
+            <input type="text" class="form-control" id="publicPlace" name="publicPlace" required placeholder="Logradouro" value="{function="getValue($address.publicPlace)"}" />
+          </div>
+          <p class="help-block text-danger"></p>
+          <div class="control-group">
+            <input type="text" class="form-control" id="number" name="number" required placeholder="Número" value="{function="getValue($address.number)"}" />
+          </div>
+          <p class="help-block text-danger"></p>
+          <div class="control-group">
+            <input type="text" class="form-control" id="district" name="district" required placeholder="Bairro" value="{function="getValue($address.district)"}" />
+          </div>
+          <p class="help-block text-danger"></p>
+          <div class="control-group">
+            <input type="text" class="form-control" id="complement" name="complement" required placeholder="Complemento" value="{function="getValue($address.complement)"}" />
+          </div>
+          <p class="help-block text-danger"></p>
+          <div class="control-group">
+            <input type="text" class="form-control" id="reference" name="reference" placeholder="Referência" value="{function="getValue($address.reference)"}" />
+          </div>
+          <p class="help-block text-danger"></p>
+          <div>
+            <button class="btn btn-primary py-2 px-4" type="submit">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Profile End -->
+
+<script>
+  document.title += " (My Account)";
+
+  window.addEventListener("load", () => {
+    $("[data-mask]").inputmask();
+
+    '{if="getValue($address.idStreetType) != null"}'
+    $("#idStreetType").val('{function="getValue($address.idStreetType)"}').change();
+    '{/if}'
+
+    $("#cityName").val() === " / " && $("#cityName").val("");
+
+    $("#zipCode").focusout(function () {
+      let zipCode = $(this).val().replace(/[^\d]/g, "");
+      if (zipCode.length === 8) {
+        $.ajax({
+          url: "/api/zipcode/" + zipCode,
+          dataType: "json",
+          success: function (data) {
+            if (!data.erro) {
+              $("#idCity").val(data.city.id ?? $("#idCity").val());
+              $("#cityName").val(data.city.name + " / " + data.city.state.uf);
+              $("#publicPlace").val(data.address);
+              $("#district").val(data.district);
+              $("#complement").val(data.complement ?? $("#complement").val());
+            }
+          }
+        });
+      }
+    });
+
+    $("#editUser").submit(function (event) {
+      event.preventDefault();
+
+      $.ajax({
+        type: "put",
+        url: "/api/user/" + $("#idUser").val(),
+        dataType: "json",
+        data: $("#editUser").serialize(),
+        beforeSend: () => {
+          $("button, input, select").attr("disabled", true);
+        },
+        complete: () => {
+          $("button, input, select").attr("disabled", false);
+        },
+        success: (response) => {
+          alert("Dados alterados com sucesso.");
+        },
+        error: (xhr, status, error) => {
+          let json = xhr.responseJSON ?? {};
+          alert(json.message ?? "Não foi possível alterar os dados.");
+        }
+      });
+    });
+
+    $("#changeAddress").submit(function (event) {
+      event.preventDefault();
+      let id = parseInt($("#idAddress").val());
+      let method = "post";
+      let url = "/api/address"
+
+      if (id > 0) {
+        method = "put";
+        url += "/" + id;
+      }
+
+      $.ajax({
+        type: method,
+        url: url,
+        dataType: "json",
+        data: $("#changeAddress").serialize(),
+        beforeSend: () => {
+          $("button, input, select").attr("disabled", true);
+        },
+        complete: () => {
+          $("button, input, select").attr("disabled", false);
+        },
+        success: (response) => {
+          alert("Endereço alterado com sucesso.");
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          let json = xhr.responseJSON ?? {};
+          alert(json.message ?? "Não foi possível alterar o endereço.");
+        }
+      });
+    });
+  });
+</script>
