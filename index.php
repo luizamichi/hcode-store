@@ -138,6 +138,7 @@ $app->group(
         $app->get("/session", OtherController::class . ":phpSession")->add($midLoggedAdmin);
         $app->post("/forgot", OtherController::class . ":forgot");
         $app->post("/resetpassword", OtherController::class . ":resetPassword");
+        $app->put("/changepassword", OtherController::class . ":changePassword")->add($midLoggedUser);
         $app->get("/zipcode/{zipCode}", OtherController::class . ":zipCode");
     }
 )->add($midCORS)->add($midJSON);
@@ -216,6 +217,7 @@ $app->group(
 
         $app->get("/{idUser}/log", UserController::class . ":getLogs")->add($midLoggedUser);
         $app->get("/{idUser}/passwordrecovery", UserController::class . ":getPasswordRecoveries")->add($midLoggedUser);
+        $app->put("/{idUser}/password", UserController::class . ":updatePassword")->add($midLoggedAdmin);
     }
 )->add($midCORS)->add($midJSON);
 
@@ -234,12 +236,13 @@ $app->group(
 
 $app->group(
     "/admin",
-    function ($app) {
+    function ($app) use ($midIsUser) {
         $app->get("/login", UserView::class . ":login");
         $app->get("/logout", UserView::class . ":logout");
         $app->get("/register", UserView::class . ":register");
         $app->get("/forgot", OtherView::class . ":forgot");
         $app->get("/resetpassword", OtherView::class . ":resetPassword");
+        $app->get("/changepassword", OtherView::class . ":changePassword")->add($midIsUser);
     }
 )->add($midView);
 

@@ -252,6 +252,42 @@ class UserController extends Controller
 
 
     /**
+     * Altera a senha do usuário informada no corpo da requisição a partir do ID informado na URL
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function updatePassword(Request $request, Response $response, array $args): Response
+    {
+        $errors = [];
+        $data = (array) $request->getParsedBody();
+        $id = self::int($args["idUser"], true, "idUser");
+
+        $user = User::loadFromId($id);
+        if (!$user) {
+            throw (new HttpException("Não foi possível alterar a senha do usuário $id, pois, é inexistente.", 400))->json();
+        }
+
+        $user->password = $data["password"] ?? "";
+        $user->validate($errors);
+
+        if ($errors) {
+            $message = count($errors) === 1 ? "O seguinte erro foi encontrado" : "Os seguintes erros foram encontrados";
+            throw (new HttpException("Não foi possível alterar a senha do usuário $id. $message: " . implode(", ", $errors) . ".", 400))->json();
+        }
+
+        $response->getBody()->write(json_encode($user->updatePassword($user->password)));
+
+        return $response->withStatus(200);
+    }
+
+
+    /**
      * Remove o usuário a partir do ID informado na URL
      *
      * @param Request  $request  Requisição

@@ -135,6 +135,52 @@ class OtherController extends Controller
 
 
     /**
+     * Altera a senha do usuário da sessão
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function changePassword(Request $request, Response $response, array $args): Response
+    {
+        $errors = [];
+        $data = (array) $request->getParsedBody();
+        $user = User::loadFromSession();
+
+        if (!$user) {
+            throw (new HttpException("Não foi possível alterar a senha do usuário, pois, não está autenticado.", 400))->json();
+        }
+
+        $oldPassword = $data["password"] ?? "";
+        $newPassword = $data["newPassword"] ?? "";
+
+        if (!password_verify($oldPassword, $user->password)) {
+            throw (new HttpException("Não foi possível alterar a senha do usuário, pois, a senha atual está incorreta.", 400))->json();
+        }
+
+        if (password_verify($newPassword, $user->password)) {
+            throw (new HttpException("Não foi possível alterar a senha do usuário, pois, a nova senha é igual a senha anterior.", 400))->json();
+        }
+
+        $user->password = $newPassword;
+        $user->validate($errors);
+
+        if ($errors) {
+            $message = count($errors) === 1 ? "O seguinte erro foi encontrado" : "Os seguintes erros foram encontrados";
+            throw (new HttpException("Não foi possível alterar a senha do usuário {$user->id}. $message: " . implode(", ", $errors) . ".", 400))->json();
+        }
+
+        $response->getBody()->write(json_encode($user->updatePassword($newPassword)->saveInSession()));
+
+        return $response;
+    }
+
+
+    /**
      * Executa uma consulta no banco de dados
      *
      * @param Request  $request  Requisição

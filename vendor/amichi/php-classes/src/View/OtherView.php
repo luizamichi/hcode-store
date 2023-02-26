@@ -227,6 +227,32 @@ class OtherView extends Controller
 
 
     /**
+     * Retorna o template de alteração de senha
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function changePassword(Request $request, Response $response, array $args): Response
+    {
+        $page = new PageAdmin(
+            [
+                "header" => false,
+                "footer" => false
+            ]
+        );
+        $page->setTpl("change-password");
+
+        $response->getBody()->write($page->getTpl());
+        return $response;
+    }
+
+
+    /**
      * Retorna o template de erro
      *
      * @param Request  $request  Requisição
