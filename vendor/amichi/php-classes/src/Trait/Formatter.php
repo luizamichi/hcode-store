@@ -102,4 +102,17 @@ trait Formatter
     {
         return $this->_mask($cnpj, "##.###.###/####-##");
     }
+
+
+    /**
+     * Formata um telefone celular
+     *
+     * @param string $phone Número do celular
+     *
+     * @return string
+     */
+    private function _phone(string $phone): string
+    {
+        return $this->_mask($phone, "(##) #####-####");
+    }
 }

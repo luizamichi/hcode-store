@@ -49,3 +49,5 @@ putenv("ENTERPRISE_ZIP_CODE=86047622"); // CEP
 putenv("ENTERPRISE_CITY=Londrina"); // Cidade
 putenv("ENTERPRISE_FU=PR"); // Estado (UF)
 putenv("ENTERPRISE_LOGO=/res/multiShop/img/hcode.png"); // Logotipo
+putenv("ENTERPRISE_PHONE=44998665521"); // Telefone
+putenv("ENTERPRISE_MAIL=contato@luizamichi.com.br"); // E-mail

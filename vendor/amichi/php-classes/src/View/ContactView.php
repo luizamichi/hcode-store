@@ -16,6 +16,7 @@ use Amichi\Controller;
 use Amichi\Model\Contact;
 use Amichi\Page;
 use Amichi\PageAdmin;
+use Amichi\Trait\Formatter;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -30,6 +31,9 @@ use Psr\Http\Message\ResponseInterface as Response;
  */
 class ContactView extends Controller
 {
+    use Formatter;
+
+
     /**
      * Retorna o template da lista de todos os contatos do banco de dados
      *
@@ -78,8 +82,21 @@ class ContactView extends Controller
      */
     public static function webView(Request $request, Response $response, array $args): Response
     {
+        $phone = (new self)->_phone(getenv("ENTERPRISE_PHONE"));
+
         $page = new Page();
-        $page->setTpl("contact");
+        $page->setTpl(
+            "contact",
+            [
+                "address" => getenv("ENTERPRISE_ADDRESS"),
+                "city" => getenv("ENTERPRISE_CITY"),
+                "uf" => getenv("ENTERPRISE_FU"),
+                "zipCode" => getenv("ENTERPRISE_ZIP_CODE"),
+                "mail" => getenv("ENTERPRISE_MAIL"),
+                "phone" => $phone ? "+55 $phone" : "",
+                "url" => urlencode(getenv("ENTERPRISE_ADDRESS") . " - " . getenv("ENTERPRISE_CITY") . ", " . getenv("ENTERPRISE_FU") . ", " . getenv("ENTERPRISE_ZIP_CODE"))
+            ]
+        );
 
         $response->getBody()->write($page->getTpl());
         return $response;
