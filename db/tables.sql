@@ -177,3 +177,25 @@ CREATE TABLE tb_addresses (
     CONSTRAINT fk_tb_addresses_to_tb_street_types FOREIGN KEY (id_street_type) REFERENCES tb_street_types (id_street_type) ON DELETE NO ACTION,
     CONSTRAINT uk_tb_addresses_id_person UNIQUE KEY (id_person)
 ) COMMENT = 'Endereços';
+
+
+DROP TABLE IF EXISTS tb_products;
+
+CREATE TABLE tb_products (
+    id_product INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do produto',
+    des_product VARCHAR(64) NOT NULL COMMENT 'Nome do produto',
+    des_description TEXT NULL COMMENT 'Descrição do produto',
+    bin_image LONGBLOB NULL COMMENT 'Imagem do produto',
+    vl_price DECIMAL(10, 2) NOT NULL COMMENT 'Preço do produto',
+    vl_width DECIMAL(10, 2) NOT NULL COMMENT 'Largura do produto',
+    vl_height DECIMAL(10, 2) NOT NULL COMMENT 'Altura do produto',
+    vl_length DECIMAL(10, 2) NOT NULL COMMENT 'Comprimento do produto',
+    vl_weight DECIMAL(10, 2) NOT NULL COMMENT 'Peso do produto',
+    num_quantity_stock INT UNSIGNED NOT NULL COMMENT 'Quantidade em estoque',
+    is_national TINYINT DEFAULT 1 NOT NULL COMMENT 'Produto é nacional?',
+    des_slug VARCHAR(256) NOT NULL COMMENT 'Identificador único do produto (utilizado na URL)',
+    dt_product_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do produto',
+    dt_product_changed_in TIMESTAMP NULL COMMENT 'Data da última alteração do produto',
+    CONSTRAINT pk_tb_products PRIMARY KEY (id_product),
+    CONSTRAINT uk_tb_products_des_slug UNIQUE KEY (des_slug)
+) COMMENT = 'Produtos';

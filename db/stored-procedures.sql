@@ -387,3 +387,49 @@ BEGIN
      WHERE id_address = pid_address;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_product;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_product (
+    IN pid_product INT,
+    IN pdes_product VARCHAR(64),
+    IN pdes_description TEXT,
+    IN pbin_image LONGBLOB,
+    IN pvl_price DECIMAL(10, 2),
+    IN pvl_width DECIMAL(10, 2),
+    IN pvl_height DECIMAL(10, 2),
+    IN pvl_length DECIMAL(10, 2),
+    IN pvl_weight DECIMAL(10, 2),
+    IN pnum_quantity_stock INT,
+    IN pis_national TINYINT,
+    IN pdes_slug VARCHAR(256)
+)
+BEGIN
+    IF pid_product > 0 THEN
+        UPDATE tb_products
+           SET des_product = pdes_product,
+               des_description = pdes_description,
+               vl_price = pvl_price,
+               vl_width = pvl_width,
+               vl_height = pvl_height,
+               vl_length = pvl_length,
+               vl_weight = pvl_weight,
+               num_quantity_stock = pnum_quantity_stock,
+               is_national = pis_national,
+               des_slug = pdes_slug,
+               dt_product_changed_in = NOW()
+         WHERE id_product = pid_product;
+    ELSE
+        INSERT INTO tb_products (des_product, des_description, bin_image, vl_price, vl_width, vl_height, vl_length, vl_weight, num_quantity_stock, is_national, des_slug, dt_product_created_at)
+                         VALUES (pdes_product, pdes_description, pbin_image, pvl_price, pvl_width, pvl_height, pvl_length, pvl_weight, pnum_quantity_stock, pis_national, pdes_slug, NOW());
+
+        SET pid_product = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_products
+     WHERE id_product = pid_product;
+END $$
+DELIMITER ;

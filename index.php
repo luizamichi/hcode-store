@@ -26,6 +26,7 @@ use Amichi\Controller\ContactController;
 use Amichi\Controller\CountryController;
 use Amichi\Controller\MailController;
 use Amichi\Controller\OtherController;
+use Amichi\Controller\ProductController;
 use Amichi\Controller\StateController;
 use Amichi\Controller\StreetTypeController;
 use Amichi\Controller\UserController;
@@ -40,6 +41,7 @@ use Amichi\View\ContactView;
 use Amichi\View\CountryView;
 use Amichi\View\MailView;
 use Amichi\View\OtherView;
+use Amichi\View\ProductView;
 use Amichi\View\StateView;
 use Amichi\View\StreetTypeView;
 use Amichi\View\UserView;
@@ -250,6 +252,18 @@ $app->group(
 
 
 $app->group(
+    "/api/product",
+    function ($app) use ($midLoggedAdmin) {
+        $app->get("", ProductController::class . ":getAll");
+        $app->get("/{idProduct}", ProductController::class . ":get");
+        $app->post("", ProductController::class . ":post")->add($midLoggedAdmin);
+        $app->put("/{idProduct}", ProductController::class . ":put")->add($midLoggedAdmin);
+        $app->delete("/{idProduct}", ProductController::class . ":delete")->add($midLoggedAdmin);
+    }
+)->add($midCORS)->add($midJSON);
+
+
+$app->group(
     "/admin",
     function ($app) use ($midIsUser) {
         $app->get("/login", UserView::class . ":login");
@@ -284,6 +298,10 @@ $app->group(
         $app->get("/addresses", AddressView::class . ":getAll");
         $app->get("/addresses/create", AddressView::class . ":create");
         $app->get("/addresses/{idAddress}", AddressView::class . ":update");
+
+        $app->get("/products", ProductView::class . ":getAll");
+        $app->get("/products/create", ProductView::class . ":create");
+        $app->get("/products/{idProduct}", ProductView::class . ":update");
     }
 )->add($midView)->add($midIsAdmin);
 
@@ -293,6 +311,8 @@ $app->group(
     function ($app) use ($midIsUser) {
         $app->get("/contact", ContactView::class . ":webView");
         $app->get("/profile", UserView::class . ":webView")->add($midIsUser);
+        $app->get("/products", ProductView::class . ":webList");
+        $app->get("/products/{slugProduct}", ProductView::class . ":webView");
     }
 )->add($midView);
 

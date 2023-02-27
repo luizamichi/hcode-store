@@ -91,3 +91,11 @@ CREATE VIEW vw_addresses AS
      INNER JOIN tb_persons USING (id_person)
      INNER JOIN tb_cities USING (id_city)
       LEFT OUTER JOIN tb_street_types USING (id_street_type);
+
+
+DROP VIEW IF EXISTS vw_products;
+
+CREATE VIEW vw_products AS
+    SELECT id_product, des_product, des_description, bin_image, vl_price, vl_width, vl_height, vl_length, vl_weight,
+           num_quantity_stock, is_national, des_slug, dt_product_created_at, dt_product_changed_in
+      FROM tb_products;

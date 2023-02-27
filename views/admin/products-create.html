@@ -1,0 +1,313 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-plus-circle"></i>
+            Cadastro de Produto
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/admin/products">Produtos</a>
+            </li>
+            <li class="breadcrumb-item active">Novo</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <form enctype="multipart/form-data" id="addProduct" method="post">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="name">Nome *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-info-circle"></i>
+                      </span>
+                    </div>
+                    <input autofocus class="form-control" id="name" name="name" placeholder="Digite o nome" type="text" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="slug">Slug *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-link"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" id="slug" name="slug" placeholder="Digite o slug" type="text" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="description">Descrição</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-file-alt"></i>
+                      </span>
+                    </div>
+                    <textarea class="form-control" id="description" name="description" placeholder="Digite a descrição" rows="3"></textarea>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="price">Preço (R$) *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-dollar-sign"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" data-inputmask="'mask': '9{1,10}.99'" data-mask id="price" name="price" placeholder="Digite o preço" step="0.01" type="number" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="width">Largura (m) *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-arrows-alt-h"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" data-inputmask="'mask': '9{1,10}.99'" data-mask id="width" name="width" placeholder="Digite a largura" step="0.01" type="number" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="height">Altura (m) *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-arrows-alt-v"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" data-inputmask="'mask': '9{1,10}.99'" data-mask id="height" name="height" placeholder="Digite a altura" step="0.01" type="number" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="length">Comprimento (m) *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-expand-alt"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" data-inputmask="'mask': '9{1,10}.99'" data-mask id="length" name="length" placeholder="Digite o comprimento" step="0.01" type="number" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="weight">Peso (kg) *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-weight"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" data-inputmask="'mask': '9{1,10}.99'" data-mask id="weight" name="weight" placeholder="Digite o peso" step="0.01" type="number" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="stockQuantity">Quantidade em estoque *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-calculator"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" data-inputmask="'mask': '9{1,5}'" data-mask id="stockQuantity" name="stockQuantity" placeholder="Digite a quantidade em estoque" step="1" type="number" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="image">Imagem</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-camera"></i>
+                      </span>
+                    </div>
+                    <div class="custom-file">
+                      <input class="custom-file-input" id="image" name="image" type="file" />
+                      <label class="custom-file-label" for="image">Escolher arquivo</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-check mb-2">
+                  <input type="checkbox" class="form-check-input" id="isNational" name="isNational" value="true" />
+                  <label class="form-check-label" for="isNational">Nacional</label>
+                </div>
+
+                <div>
+                  <button type="submit" class="btn btn-dark">Cadastrar</button>
+                  <button id="resetButton" type="reset" class="btn btn-outline-dark">Limpar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.title += " (Register Product)";
+
+  window.addEventListener("load", () => {
+    bsCustomFileInput.init();
+    $("[data-mask]").inputmask();
+
+    $.validator.setDefaults({
+      submitHandler: function () {
+        $.ajax({
+          type: "post",
+          url: "/api/product",
+          dataType: "json",
+          contentType: false,
+          processData: false,
+          data: new FormData(document.getElementById("addProduct")),
+          beforeSend: () => {
+            $("button, input, textarea").attr("disabled", true);
+          },
+          complete: () => {
+            $("button, input, textarea").attr("disabled", false);
+          },
+          success: (response) => {
+            alert("Produto " + response.id + " cadastrado com sucesso.");
+          },
+          error: (xhr, status, error) => {
+            let json = xhr.responseJSON ?? {};
+            alert(json.message ?? "Não foi possível cadastrar o produto.");
+          }
+        });
+      }
+    });
+
+    $("#addProduct").validate({
+      rules: {
+        name: {
+          required: true,
+          minlength: 4,
+          maxlength: 64
+        },
+        slug: {
+          required: true,
+          minlength: 2,
+          maxlength: 256
+        },
+        description: {
+          minlength: 16,
+          maxlength: 65535
+        },
+        price: {
+          required: true,
+          min: 0.01
+        },
+        width: {
+          required: true,
+          min: 0.01
+        },
+        height: {
+          required: true,
+          min: 0.01
+        },
+        length: {
+          required: true,
+          min: 0.01
+        },
+        weight: {
+          required: true,
+          min: 0.01
+        },
+        stockQuantity: {
+          required: true,
+          min: 0,
+          max: 99999
+        }
+      },
+      messages: {
+        name: {
+          required: "Por favor, insira um nome",
+          minlength: "Por favor, insira um nome com no mínimo 4 caracteres",
+          maxlength: "Por favor, insira um nome com no máximo 64 caracteres"
+        },
+        slug: {
+          required: "Por favor, insira um slug",
+          minlength: "Por favor, insira um slug com no mínimo 2 caracteres",
+          maxlength: "Por favor, insira um slug com no máximo 256 caracteres"
+        },
+        description: {
+          minlength: "Por favor, insira uma descrição com no mínimo 16 caracteres",
+          maxlength: "Por favor, insira uma descrição com no máximo 65.535 caracteres"
+        },
+        price: {
+          required: "Por favor, insira um preço",
+          min: "Por favor, insira um preço maior que 0",
+          step: "Por favor, insira um preço com duas casas decimais"
+        },
+        width: {
+          required: "Por favor, insira uma largura",
+          min: "Por favor, insira uma largura maior que 0",
+          step: "Por favor, insira uma largura com duas casas decimais"
+        },
+        height: {
+          required: "Por favor, insira uma altura",
+          min: "Por favor, insira uma altura maior que 0",
+          step: "Por favor, insira uma altura com duas casas decimais"
+        },
+        length: {
+          required: "Por favor, insira um comprimento",
+          min: "Por favor, insira um comprimento maior que 0",
+          step: "Por favor, insira um comprimento com duas casas decimais"
+        },
+        weight: {
+          required: "Por favor, insira um peso",
+          min: "Por favor, insira um peso maior que 0",
+          step: "Por favor, insira um peso com duas casas decimais"
+        },
+        stockQuantity: {
+          required: "Por favor, insira a quantidade em estoque",
+          min: "Por favor, insira uma quantidade em estoque maior que 0",
+          step: "Por favor, insira uma quantidade em estoque inteira"
+        }
+      },
+      errorElement: "span",
+      errorPlacement: function (error, element) {
+        error.addClass("invalid-feedback");
+        element.closest(".form-group").append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass("is-invalid");
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass("is-invalid");
+      }
+    });
+
+    $("#name").blur(function () {
+      $("#slug").val($(this).val().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replaceAll(" ", "-"));
+    });
+  });
+</script>

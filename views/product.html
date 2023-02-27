@@ -1,0 +1,98 @@
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <div class="col-12">
+      <nav class="breadcrumb bg-light mb-30" aria-label="Submenu">
+        <a class="breadcrumb-item text-dark" href="/">Início</a>
+        <a class="breadcrumb-item text-dark" href="/products">Produtos</a>
+        <span class="breadcrumb-item active">{$product.name}</span>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Shop Detail Start -->
+<div class="container-fluid pb-5">
+  <div class="row px-xl-5">
+    <div class="col-lg-5 mb-30">
+      <div id="product-carousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner bg-light">
+          <div class="carousel-item active">
+            {if="$product.image"}
+            <img class="w-100 h-100" src="data:image/png;base64,{$product.image}" alt="{$product.name}" />
+            {else}
+            <img class="w-100 h-100" src="/res/multiShop/img/package.png" alt="Produto sem imagem" />
+            {/if}
+          </div>
+        </div>
+        <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
+          <i class="fa fa-2x fa-angle-left text-dark"></i>
+        </a>
+        <a class="carousel-control-next" href="#product-carousel" data-slide="next">
+          <i class="fa fa-2x fa-angle-right text-dark"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="col-lg-7 h-auto mb-30">
+      <div class="h-100 bg-light p-30">
+        <h3>{$product.name}</h3>
+        <h3 class="font-weight-semi-bold mb-4">R$ {function="formatPrice($product.price)"}</h3>
+        <p class="mb-4">{$product.description}</p>
+        <div class="d-flex align-items-center mb-4 pt-2">
+          <div class="input-group quantity mr-3" style="width: 130px;">
+            <div class="input-group-btn">
+              <button class="btn btn-primary btn-minus">
+                <i class="fa fa-minus"></i>
+              </button>
+            </div>
+            <input type="number" id="quantity" class="form-control bg-secondary border-0 text-center" value="1" min="1" />
+            <div class="input-group-btn">
+              <button class="btn btn-primary btn-plus">
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          <a class="btn btn-primary px-3" id="addProduct" href="/api/cart/{function="getCartId()"}/product/{$product.id}">
+            <i class="fa fa-shopping-cart mr-1"></i> Adicionar
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Shop Detail End -->
+
+<script>
+  document.title += " (Product)";
+
+  window.addEventListener("load", () => {
+    $("#addProduct").click(function (event) {
+      event.preventDefault();
+      let url = $(this).attr("href");
+
+      $.ajax({
+        type: "post",
+        url: url,
+        dataType: "json",
+        data: {
+          quantity: $("#quantity").val()
+        },
+        beforeSend: () => {
+          $("button, input").attr("disabled", true);
+        },
+        complete: () => {
+          $("button, input").attr("disabled", false);
+        },
+        success: () => {
+          alert("Produto adicionado ao carrinho.");
+        },
+        error: (xhr, status, error) => {
+          let json = xhr.responseJSON ?? {};
+          alert(json.message ?? "Não foi possível adicionar o produto ao carrinho.");
+        }
+      });
+    });
+  });
+</script>

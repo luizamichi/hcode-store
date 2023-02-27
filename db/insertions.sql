@@ -218,3 +218,15 @@ VALUES
     (8, 8, 18, 33, 'Coronel José Ferreira', '1498', 'Centro', 'Comércio', 'Correios', 69955000, NOW(), NULL),
     (9, 6, 14, 33, 'Margaridas', '131', 'Centro', 'Comércio', 'Próximo a lanchonete', 69927000, NOW(), NULL),
     (10, 10, 13, 4, 'Diamantino Augusto de Macedo', '580', 'Centro', 'Hotel', 'Perto das casas coloridas', 69928000, NOW(), NULL);
+
+
+INSERT INTO
+    tb_products (id_product, des_product, des_description, bin_image, vl_price, vl_width, vl_height, vl_length, vl_weight, num_quantity_stock, is_national, des_slug, dt_product_created_at, dt_product_changed_in)
+VALUES
+    (1, 'Teclado Redragon Fizz K617 RGB', NULL, NULL, 200, 0.31, 0.13, 0.4, 0.49, 5, 0, 'redragon-fizz-rgb', NOW(), NULL),
+    (2, 'Iphone 12 Apple 64GB', NULL, NULL, 4230.45, 0.07, 0.14, 0.07, 0.16, 3, 1, 'iphone-12-apple-64gb', NOW(), NULL),
+    (3, 'Smartphone Motorola Moto G5 Plus', NULL, NULL, 1135.23, 0.15, 0.7, 0.7, 0.16, 7, 0, 'smartphone-motorola-moto-g5-plus', NOW(), NULL),
+    (4, 'Smartphone Moto Z Play', NULL, NULL, 1887.78, 0.14, 0.9, 0.11, 0.13, 4, 0, 'smartphone-moto-z-play', NOW(), NULL),
+    (5, 'Smartphone Samsung Galaxy J5 Pro', NULL, NULL, 1299, 0.14, 0.7, 0.8, 0.16, 1, 0, 'smartphone-samsung-galaxy-j5', NOW(), NULL),
+    (6, 'Smartphone Samsung Galaxy J7 Prime', NULL, NULL, 1149, 0.15, 0.7, 0.8, 0.16, 6, 0, 'smartphone-samsung-galaxy-j7', NOW(), NULL),
+    (7, 'Smartphone Samsung Galaxy J3 Dual', NULL, NULL, 679.9, 0.14, 0.7, 0.7, 0.14, 2, 0, 'smartphone-samsung-galaxy-j3', NOW(), NULL);

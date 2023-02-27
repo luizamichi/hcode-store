@@ -1,0 +1,134 @@
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <div class="col-12">
+      <nav class="breadcrumb bg-light mb-30" aria-label="Submenu">
+        <a class="breadcrumb-item text-dark" href="/">Início</a>
+        <span class="breadcrumb-item active">Produtos</span>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Shop Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <!-- Shop Product Start -->
+    <div class="col-lg-12 col-md-8">
+      <div class="row pb-3">
+        <div class="col-12 pb-1">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="ml-2">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Ordenação</button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a class="dropdown-item" href="/products?page={$page}&_sortBy=name">Nome</a>
+                  <a class="dropdown-item" href="/products?page={$page}&_sortBy=price">Preço</a>
+                  <a class="dropdown-item" href="/products?page={$page}&_sortBy=dateRegister">Novidade</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {loop="$products"}
+        <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+          <div class="product-item bg-light mb-4">
+            <div class="product-img position-relative overflow-hidden">
+              {if="$value.image"}
+              <img class="img-fluid w-100" src="data:image/png;base64,{$value.image}" alt="{$value.name}" />
+              {else}
+              <img class="img-fluid w-100" src="/res/multiShop/img/package.png" alt="Produto sem imagem" />
+              {/if}
+              <div class="product-action">
+                <a class="btn btn-outline-dark btn-square" data-id="addProductToCart" href="/api/cart/{function="getCartId()"}/product/{$value.id}"><i class="fa fa-shopping-cart"></i></a>
+                <a class="btn btn-outline-dark btn-square" data-id="addProductToWishlist" href="/api/user/{function="getUserId()"}/product/{$value.id}"><i class="far fa-heart"></i></a>
+              </div>
+            </div>
+            <div class="text-center py-4">
+              <a class="h6 text-decoration-none text-truncate" href="/products/{$value.slug}">{$value.name}</a>
+              <div class="d-flex align-items-center justify-content-center mt-2">
+                <h5>R$ {function="formatPrice($value.price)"}</h5>
+                <h6 class="text-muted ml-2"><del>{function="formatPrice($value.price)"}</del></h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/loop}
+        <div class="col-12">
+          <nav aria-label="Paginação">
+            <ul class="pagination justify-content-center">
+              <li class="page-item {if="$page == 1"}disabled{/if}">
+                <a class="page-link" href="/products?page={$page - 1}&search={$search}">Anterior</a>
+              </li>
+              {loop="$pages"}
+              <li class="page-item {if="$value == $page"}active{/if}">
+                <a class="page-link" href="/products?page={$value}&search={$search}">{$value}</a>
+              </li>
+              {/loop}
+              <li class="page-item {if="$page == max($pages)"}disabled{/if}">
+                <a class="page-link" href="/products?page={$page + 1}&search={$search}">Próximo</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <!-- Shop Product End -->
+  </div>
+</div>
+<!-- Shop End -->
+
+<script>
+  document.title += " (Products)";
+
+  window.addEventListener("load", () => {
+    $("[data-id='addProductToCart']").click(function (event) {
+      event.preventDefault();
+      let url = $(this).attr("href");
+
+      $.ajax({
+        type: "post",
+        url: url,
+        dataType: "json",
+        beforeSend: () => {
+          $("button, input").attr("disabled", true);
+        },
+        complete: () => {
+          $("button, input").attr("disabled", false);
+        },
+        success: () => {
+          alert("Produto adicionado ao carrinho.");
+        },
+        error: (xhr, status, error) => {
+          let json = xhr.responseJSON ?? {};
+          alert(json.message ?? "Não foi possível adicionar o produto ao carrinho.");
+        }
+      });
+    });
+
+    $("[data-id='addProductToWishlist']").click(function (event) {
+      event.preventDefault();
+      let url = $(this).attr("href");
+
+      $.ajax({
+        type: "post",
+        url: url,
+        dataType: "json",
+        beforeSend: () => {
+          $("button, input").attr("disabled", true);
+        },
+        complete: () => {
+          $("button, input").attr("disabled", false);
+        },
+        success: () => {
+          alert("Produto adicionado à lista de desejos.");
+        },
+        error: (xhr, status, error) => {
+          let json = xhr.responseJSON ?? {};
+          alert(json.message ?? "Não foi possível adicionar o produto à lista de desejos.");
+        }
+      });
+    });
+  });
+</script>
