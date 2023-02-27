@@ -433,3 +433,35 @@ BEGIN
      WHERE id_product = pid_product;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_category;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_category (
+    IN pid_category INT,
+    IN pdes_category VARCHAR(32),
+    IN pdes_nickname VARCHAR(256),
+    IN pfk_category INT
+)
+BEGIN
+    IF pid_category > 0 THEN
+        UPDATE tb_categories
+           SET des_category = pdes_category,
+               des_nickname = pdes_nickname,
+               fk_category = pfk_category,
+               dt_category_changed_in = NOW()
+         WHERE id_category = pid_category;
+
+    ELSE
+        INSERT INTO tb_categories (des_category, des_nickname, fk_category, dt_category_created_at)
+                           VALUES (pdes_category, pdes_nickname, pfk_category, NOW());
+
+        SET pid_category = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_categories
+     WHERE id_category = pid_category;
+END $$
+DELIMITER ;

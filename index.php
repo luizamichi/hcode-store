@@ -21,6 +21,7 @@ session_start();
 
 
 use Amichi\Controller\AddressController;
+use Amichi\Controller\CategoryController;
 use Amichi\Controller\CityController;
 use Amichi\Controller\ContactController;
 use Amichi\Controller\CountryController;
@@ -36,6 +37,7 @@ use Amichi\Model\User;
 use Amichi\HttpException;
 
 use Amichi\View\AddressView;
+use Amichi\View\CategoryView;
 use Amichi\View\CityView;
 use Amichi\View\ContactView;
 use Amichi\View\CountryView;
@@ -264,6 +266,18 @@ $app->group(
 
 
 $app->group(
+    "/api/category",
+    function ($app) use ($midLoggedAdmin) {
+        $app->get("", CategoryController::class . ":getAll");
+        $app->get("/{idCategory}", CategoryController::class . ":get");
+        $app->post("", CategoryController::class . ":post")->add($midLoggedAdmin);
+        $app->put("/{idCategory}", CategoryController::class . ":put")->add($midLoggedAdmin);
+        $app->delete("/{idCategory}", CategoryController::class . ":delete")->add($midLoggedAdmin);
+    }
+)->add($midCORS)->add($midJSON);
+
+
+$app->group(
     "/admin",
     function ($app) use ($midIsUser) {
         $app->get("/login", UserView::class . ":login");
@@ -302,6 +316,10 @@ $app->group(
         $app->get("/products", ProductView::class . ":getAll");
         $app->get("/products/create", ProductView::class . ":create");
         $app->get("/products/{idProduct}", ProductView::class . ":update");
+
+        $app->get("/categories", CategoryView::class . ":getAll");
+        $app->get("/categories/create", CategoryView::class . ":create");
+        $app->get("/categories/{idCategory}", CategoryView::class . ":update");
     }
 )->add($midView)->add($midIsAdmin);
 
@@ -309,6 +327,7 @@ $app->group(
 $app->group(
     "",
     function ($app) use ($midIsUser) {
+        $app->get("/categories", CategoryView::class . ":webList");
         $app->get("/contact", ContactView::class . ":webView");
         $app->get("/profile", UserView::class . ":webView")->add($midIsUser);
         $app->get("/products", ProductView::class . ":webList");

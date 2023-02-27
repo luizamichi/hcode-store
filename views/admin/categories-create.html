@@ -1,0 +1,162 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-plus-circle"></i>
+            Cadastro de Categoria
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/admin/categories">Categorias</a>
+            </li>
+            <li class="breadcrumb-item active">Novo</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <form id="addCategory" method="post">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="name">Nome *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-info-circle"></i>
+                      </span>
+                    </div>
+                    <input autofocus class="form-control" id="name" name="name" placeholder="Digite o nome" type="text" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="slug">Slug *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-link"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" id="slug" name="slug" placeholder="Digite o slug" type="text" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="idSuper">Categoria mãe</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="idSuper">
+                        <i class="fas fa-cubes"></i>
+                      </label>
+                    </div>
+                    <select class="custom-select select2" id="idSuper" name="idSuper">
+                      <option disabled selected>Selecione uma categoria</option>
+                      {loop="$categories"}
+                      <option value="{$value.id}">{$value.name}</option>
+                      {/loop}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <button type="submit" class="btn btn-dark">Cadastrar</button>
+                  <button id="resetButton" type="reset" class="btn btn-outline-dark">Limpar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.title += " (Register Category)";
+
+  window.addEventListener("load", () => {
+    $(".select2").select2();
+
+    $.validator.setDefaults({
+      submitHandler: function () {
+        $.ajax({
+          type: "post",
+          url: "/api/category",
+          data: $("#addCategory").serialize(),
+          dataType: "json",
+          beforeSend: () => {
+            $("button, input, select").attr("disabled", true);
+          },
+          complete: () => {
+            $("button, input, select").attr("disabled", false);
+          },
+          success: (response) => {
+            alert("Categoria " + response.id + " cadastrada com sucesso.");
+          },
+          error: (xhr, status, error) => {
+            let json = xhr.responseJSON ?? {};
+            alert(json.message ?? "Não foi possível cadastrar a categoria.");
+          }
+        });
+      }
+    });
+
+    $("#addCategory").validate({
+      rules: {
+        name: {
+          required: true,
+          minlength: 2,
+          maxlength: 32
+        },
+        slug: {
+          required: true,
+          minlength: 2,
+          maxlength: 256
+        }
+      },
+      messages: {
+        name: {
+          required: "Por favor, insira um nome",
+          minlength: "Por favor, insira um nome com no mínimo 2 caracteres",
+          maxlength: "Por favor, insira um nome com no máximo 32 caracteres"
+        },
+        slug: {
+          required: "Por favor, insira um slug",
+          minlength: "Por favor, insira um slug com no mínimo 2 caracteres",
+          maxlength: "Por favor, insira um slug com no máximo 256 caracteres"
+        }
+      },
+      errorElement: "span",
+      errorPlacement: function (error, element) {
+        error.addClass("invalid-feedback");
+        element.closest(".form-group").append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass("is-invalid");
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass("is-invalid");
+      }
+    });
+
+    $("#name").blur(function () {
+      $("#slug").val($(this).val().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replaceAll(" ", "-"));
+    });
+
+    $("#resetButton").click(() => $("#idSuper").val("Selecione uma categoria").trigger("change"));
+  });
+</script>

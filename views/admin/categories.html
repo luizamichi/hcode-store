@@ -1,0 +1,132 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-list"></i>
+            Lista de Categorias
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item active">Categorias</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <a class="btn btn-dark mb-3" href="/admin/categories/create">Cadastrar</a>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>Slug</th>
+                    <th>Categoria mãe</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loop="$categories"}
+                  <tr data-id="{$value.id}">
+                    <td>{$value.id}</td>
+                    <td data-find="search">{$value.name}</td>
+                    <td data-find="search">{$value.slug}</td>
+                    <td>
+                      {if="$value.idSuper"}
+                      <a href="/admin/categories/{$value.idSuper}">{$value.super.name}</a>
+                      {/if}
+                    </td>
+                    <td>
+                      <a class="btn btn-default btn-xs" href="/admin/categories/{$value.id}/products">
+                        <i class="fa fa-archive"></i>
+                        Produtos
+                      </a>
+                      <a class="btn btn-primary btn-xs" href="/admin/categories/{$value.id}">
+                        <i class="fa fa-edit"></i>
+                        Alterar
+                      </a>
+                      <button class="btn btn-danger btn-xs" data-id="{$value.id}" data-type="delete" data-url="/api/category/{$value.id}" type="submit">
+                        <i class="fa fa-trash"></i>
+                        Excluir
+                      </button>
+                    </td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="5">
+                      <small>
+                        <span id="count">{function="count($categories)"}</span>
+                        <span id="countText">categorias encontradas</span>
+                      </small>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.title += " (Categories)";
+
+  window.addEventListener("load", () => {
+    $("#count").change(function () {
+      $("#countText").text("categorias encontradas");
+      if ($("#count").text() == 1) {
+        $("#countText").text("categoria encontrada");
+      }
+    });
+
+    $("#count").trigger("change");
+
+    $("button[data-type='delete']").click(function () {
+      let id = $(this).data("id");
+      let url = $(this).data("url");
+      let method = $(this).data("type");
+      if (confirm("Deseja remover a categoria " + id + "?")) {
+        $.ajax({
+          type: method,
+          url: url,
+          dataType: "json",
+          data: {},
+          beforeSend: () => {
+            $("a, button").attr("disabled", true).toggleClass("disabled");
+          },
+          complete: () => {
+            $("a, button").attr("disabled", false).toggleClass("disabled");
+          },
+          success: (response) => {
+            alert("Categoria " + id + " removida com sucesso.");
+            $("[data-id=" + id + "]").remove();
+            $("#count").text($("#count").text() - 1).trigger("change");
+          },
+          error: (xhr, status, error) => {
+            let json = xhr.responseJSON ?? {};
+            alert(json.message ?? "Não foi possível remover a categoria " + id + ".");
+          }
+        });
+      }
+    });
+  });
+</script>

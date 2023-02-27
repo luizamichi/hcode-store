@@ -199,3 +199,19 @@ CREATE TABLE tb_products (
     CONSTRAINT pk_tb_products PRIMARY KEY (id_product),
     CONSTRAINT uk_tb_products_des_slug UNIQUE KEY (des_slug)
 ) COMMENT = 'Produtos';
+
+
+DROP TABLE IF EXISTS tb_categories;
+
+CREATE TABLE tb_categories (
+    id_category INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK da categoria',
+    des_category VARCHAR(32) NOT NULL COMMENT 'Descrição da categoria',
+    des_nickname VARCHAR(256) NOT NULL COMMENT 'Identificador único da categoria (utilizado na URL)',
+    fk_category INT UNSIGNED NULL COMMENT 'Categoria mãe',
+    dt_category_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro da categoria',
+    dt_category_changed_in TIMESTAMP NULL COMMENT 'Data da última alteração da categoria',
+    CONSTRAINT pk_tb_categories PRIMARY KEY (id_category),
+    CONSTRAINT fk_tb_categories_to_tb_categories FOREIGN KEY (fk_category) REFERENCES tb_categories (id_category) ON DELETE SET NULL,
+    CONSTRAINT uk_tb_categories_des_category UNIQUE KEY (des_category),
+    CONSTRAINT uk_tb_categories_des_nickname UNIQUE KEY (des_nickname)
+) COMMENT = 'Categorias';

@@ -230,3 +230,15 @@ VALUES
     (5, 'Smartphone Samsung Galaxy J5 Pro', NULL, NULL, 1299, 0.14, 0.7, 0.8, 0.16, 1, 0, 'smartphone-samsung-galaxy-j5', NOW(), NULL),
     (6, 'Smartphone Samsung Galaxy J7 Prime', NULL, NULL, 1149, 0.15, 0.7, 0.8, 0.16, 6, 0, 'smartphone-samsung-galaxy-j7', NOW(), NULL),
     (7, 'Smartphone Samsung Galaxy J3 Dual', NULL, NULL, 679.9, 0.14, 0.7, 0.7, 0.14, 2, 0, 'smartphone-samsung-galaxy-j3', NOW(), NULL);
+
+
+INSERT INTO
+    tb_categories (id_category, des_category, des_nickname, fk_category, dt_category_created_at, dt_category_changed_in)
+VALUES
+    (1, 'Informática', 'informatica', NULL, NOW(), NULL),
+    (2, 'Eletrodoméstico', 'eletrodomestico', NULL, NOW(), NULL),
+    (3, 'Vestuário', 'vestuario', NULL, NOW(), NULL),
+    (4, 'Cosmético', 'cosmetico', NULL, NOW(), NULL),
+    (5, 'Smartphone', 'smartphone', NULL, NOW(), NULL),
+    (6, 'Android', 'android', 5, NOW(), NULL),
+    (7, 'iOS', 'ios', 5, NOW(), NULL);

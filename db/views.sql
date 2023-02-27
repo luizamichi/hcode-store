@@ -99,3 +99,12 @@ CREATE VIEW vw_products AS
     SELECT id_product, des_product, des_description, bin_image, vl_price, vl_width, vl_height, vl_length, vl_weight,
            num_quantity_stock, is_national, des_slug, dt_product_created_at, dt_product_changed_in
       FROM tb_products;
+
+
+DROP VIEW IF EXISTS vw_categories;
+
+CREATE VIEW vw_categories AS
+    SELECT c.id_category, c.des_category, c.des_nickname, c.dt_category_created_at, c.dt_category_changed_in,
+           c.fk_category, s.des_category des_super_category, s.des_nickname des_super_nickname, s.fk_category fk_super_category, s.dt_category_created_at dt_super_category_created_at, s.dt_category_changed_in dt_super_category_changed_in
+      FROM tb_categories c
+      LEFT OUTER JOIN tb_categories s ON c.fk_category = s.id_category;
