@@ -100,6 +100,31 @@
                       </span>
                     </div>
                     <input class="form-control" id="password" name="password" placeholder="Digite a senha" type="password" />
+                    <div class="input-group-append">
+                      <div class="input-group-text" id="view-password">
+                        <i class="fas fas fa-eye-slash"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="row m-0">
+                    <div class="col-auto text-muted" id="uppercase">
+                      <i class="far fa-times-circle"></i> Letra maiúscula
+                    </div>
+                    <div class="col-auto text-muted" id="lowercase">
+                      <i class="far fa-times-circle"></i> Letra minúscula
+                    </div>
+                    <div class="col-auto text-muted" id="number">
+                      <i class="far fa-times-circle"></i> Número
+                    </div>
+                    <div class="col-auto text-muted" id="special-char">
+                      <i class="far fa-times-circle"></i> Caracter especial (ex.: @, #, *, !)
+                    </div>
+                    <div class="col-auto text-muted" id="length">
+                      <i class="far fa-times-circle"></i> 6 caracteres
+                    </div>
                   </div>
                 </div>
 
@@ -143,6 +168,53 @@
     bsCustomFileInput.init();
     $("[data-mask]").inputmask();
 
+    $("#view-password").mousedown(() => {
+      $("#password").attr("type", "text");
+      $("#view-password").html('<i class="fas fa-eye" id="view-password"></i>');
+      $("#view-password").toggleClass("bg-light");
+    }).on("mouseup mouseleave", () => {
+      $("#password").attr("type", "password");
+      $("#view-password").html('<i class="fas fas fa-eye-slash" id="view-password"></i>');
+      $("#view-password").toggleClass("bg-light");
+    });
+
+    $("#password").keyup(() => {
+      if ($("#password").val().toLowerCase() === $("#password").val()) { // Contém um caracter maiúsculo
+        $("#uppercase").html('<i class="far fa-times-circle"></i> <del>Letra maiúscula</del>').addClass("text-muted");
+      }
+      else {
+        $("#uppercase").html('<i class="far fa-check-circle"></i> Letra maiúscula').removeClass("text-muted");
+      }
+
+      if ($("#password").val().toUpperCase() === $("#password").val()) { // Contém um caracter minúsculo
+        $("#lowercase").html('<i class="far fa-times-circle"></i> <del>Letra minúscula</del>').addClass("text-muted");
+      }
+      else {
+        $("#lowercase").html('<i class="far fa-check-circle"></i> Letra minúscula').removeClass("text-muted");
+      }
+
+      if (!/\d/.test($("#password").val())) { // Contém um número
+        $("#number").html('<i class="far fa-times-circle"></i> <del>Número</del>').addClass("text-muted");
+      }
+      else {
+        $("#number").html('<i class="far fa-check-circle"></i> Número').removeClass("text-muted");
+      }
+
+      if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test($("#password").val())) { // Contém um caracter especial
+        $("#special-char").html('<i class="far fa-times-circle"></i> <del>Caracter especial (ex.: @, #, *, !)</del>').addClass("text-muted");
+      }
+      else {
+        $("#special-char").html('<i class="far fa-check-circle"></i> Caracter especial (ex.: @, #, *, !)').removeClass("text-muted");
+      }
+
+      if ($("#password").val().length >= 6) { // Contém o tamanho mínimo
+        $("#length").html('<i class="far fa-check-circle"></i> 6 caracteres').removeClass("text-muted");
+      }
+      else {
+        $("#length").html('<i class="far fa-times-circle"></i> <del>6 caracteres</del>').addClass("text-muted");
+      }
+    });
+
     $.validator.setDefaults({
       submitHandler: function () {
         $.ajax({
@@ -177,6 +249,13 @@
       return this.optional(element) || /^\(\d{2}\)\s\d{5}\-\d{4}$/.test(value);
     }
 
+    $.validator.methods.passwordStrength = function (value, element) {
+      return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value) // Contém um caracter especial
+        && /\d/.test(value) // Contém um número
+        && value.toLowerCase() !== value // Contém um caracter maiúsculo
+        && value.toUpperCase() !== value; //Contém um caracter minúsculo
+    }
+
     $("#addUser").validate({
       rules: {
         name: {
@@ -205,6 +284,7 @@
           maxlength: 15
         },
         password: {
+          passwordStrength: true,
           required: true,
           minlength: 6,
           maxlength: 256
@@ -237,6 +317,7 @@
           maxlength: "Por favor, insira um telefone com tamanho válido"
         },
         password: {
+          passwordStrength: "Por favor, insira uma senha forte",
           required: "Por favor, insira uma senha",
           minlength: "Por favor, insira uma senha com no mínimo 6 caracteres",
           maxlength: "Por favor, insira uma senha com no máximo 256 caracteres"
