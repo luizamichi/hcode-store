@@ -215,3 +215,14 @@ CREATE TABLE tb_categories (
     CONSTRAINT uk_tb_categories_des_category UNIQUE KEY (des_category),
     CONSTRAINT uk_tb_categories_des_nickname UNIQUE KEY (des_nickname)
 ) COMMENT = 'Categorias';
+
+
+DROP TABLE IF EXISTS tb_products_categories;
+
+CREATE TABLE tb_products_categories (
+    id_product INT UNSIGNED NOT NULL COMMENT 'Produto',
+    id_category INT UNSIGNED NOT NULL COMMENT 'Categoria',
+    CONSTRAINT pk_tb_products_categories PRIMARY KEY (id_product, id_category),
+    CONSTRAINT fk_tb_products_categories_to_tb_products FOREIGN KEY (id_product) REFERENCES tb_products (id_product) ON DELETE CASCADE,
+    CONSTRAINT fk_tb_products_categories_to_tb_categories FOREIGN KEY (id_category) REFERENCES tb_categories (id_category) ON DELETE CASCADE
+) COMMENT = 'Produtos x Categorias';

@@ -14,6 +14,8 @@ namespace Amichi\View;
 
 use Amichi\Controller;
 use Amichi\HttpException;
+use Amichi\Model\Category;
+use Amichi\Model\Product;
 use Amichi\Model\UserPasswordRecovery;
 use Amichi\Page;
 use Amichi\PageAdmin;
@@ -31,6 +33,39 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class OtherView extends Controller
 {
+    /**
+     * Retorna o template da página inicial do website
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function mainPage(Request $request, Response $response, array $args): Response
+    {
+        $page = new Page();
+        $page->setTpl(
+            "index",
+            [
+                "categories" => array_map(
+                    fn (Category $category): array => $category->array(),
+                    Category::listAll(4)
+                ),
+                "products" => array_map(
+                    fn (Product $product): array => $product->array(),
+                    Product::listAll(8)
+                )
+            ]
+        );
+
+        $response->getBody()->write($page->getTpl());
+        return $response;
+    }
+
+
     /**
      * Retorna o template da página inicial do painel administrativo
      *

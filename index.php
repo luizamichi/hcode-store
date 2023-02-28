@@ -270,9 +270,12 @@ $app->group(
     function ($app) use ($midLoggedAdmin) {
         $app->get("", CategoryController::class . ":getAll");
         $app->get("/{idCategory}", CategoryController::class . ":get");
+        $app->get("/{idCategory}/product", CategoryController::class . ":getProducts");
         $app->post("", CategoryController::class . ":post")->add($midLoggedAdmin);
+        $app->post("/{idCategory}/product/{idProduct}", CategoryController::class . ":postProduct")->add($midLoggedAdmin);
         $app->put("/{idCategory}", CategoryController::class . ":put")->add($midLoggedAdmin);
         $app->delete("/{idCategory}", CategoryController::class . ":delete")->add($midLoggedAdmin);
+        $app->delete("/{idCategory}/product/{idProduct}", CategoryController::class . ":deleteProduct")->add($midLoggedAdmin);
     }
 )->add($midCORS)->add($midJSON);
 
@@ -320,6 +323,7 @@ $app->group(
         $app->get("/categories", CategoryView::class . ":getAll");
         $app->get("/categories/create", CategoryView::class . ":create");
         $app->get("/categories/{idCategory}", CategoryView::class . ":update");
+        $app->get("/categories/{idCategory}/products", CategoryView::class . ":getProducts");
     }
 )->add($midView)->add($midIsAdmin);
 
@@ -327,7 +331,9 @@ $app->group(
 $app->group(
     "",
     function ($app) use ($midIsUser) {
+        $app->get("/", OtherView::class . ":mainPage");
         $app->get("/categories", CategoryView::class . ":webList");
+        $app->get("/categories/{slugCategory}", CategoryView::class . ":webView");
         $app->get("/contact", ContactView::class . ":webView");
         $app->get("/profile", UserView::class . ":webView")->add($midIsUser);
         $app->get("/products", ProductView::class . ":webList");

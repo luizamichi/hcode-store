@@ -108,3 +108,13 @@ CREATE VIEW vw_categories AS
            c.fk_category, s.des_category des_super_category, s.des_nickname des_super_nickname, s.fk_category fk_super_category, s.dt_category_created_at dt_super_category_created_at, s.dt_category_changed_in dt_super_category_changed_in
       FROM tb_categories c
       LEFT OUTER JOIN tb_categories s ON c.fk_category = s.id_category;
+
+
+DROP VIEW IF EXISTS vw_products_categories;
+
+CREATE VIEW vw_products_categories AS
+     SELECT p.id_product, p.des_product, p.des_description, p.bin_image, p.vl_price, p.vl_width, p.vl_height, p.vl_length, p.vl_weight, p.num_quantity_stock, p.is_national, p.des_slug, p.dt_product_created_at, p.dt_product_changed_in,
+            c.id_category, c.des_category, c.des_nickname, c.fk_category, c.dt_category_created_at, c.dt_category_changed_in
+       FROM tb_products_categories
+      INNER JOIN tb_products p USING (id_product)
+      INNER JOIN tb_categories c USING (id_category);

@@ -115,6 +115,26 @@ class Category extends Model implements JsonSerializable
 
 
     /**
+     * Salva o relacionamento do produto com a categoria
+     *
+     * @param int $idProduct ID do produto
+     *
+     * @return self
+     */
+    public function postProduct(int $idProduct): self
+    {
+        $query = "INSERT INTO tb_products_categories (id_product, id_category) VALUES (:pid_product, :pid_category)";
+
+        $stmt = (new SQL())->prepare($query);
+        $stmt->bindValue("pid_product", $idProduct, \PDO::PARAM_INT);
+        $stmt->bindValue("pid_category", $this->id, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $this;
+    }
+
+
+    /**
      * Remove o objeto no banco de dados
      *
      * @return self
@@ -124,6 +144,26 @@ class Category extends Model implements JsonSerializable
         $query = "DELETE FROM tb_categories WHERE id_category = :pid_category";
 
         $stmt = (new SQL())->prepare($query);
+        $stmt->bindValue("pid_category", $this->id, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $this;
+    }
+
+
+    /**
+     * Remove o relacionamento do produto com a categoria
+     *
+     * @param int $idProduct ID do produto
+     *
+     * @return self
+     */
+    public function deleteProduct(int $idProduct): self
+    {
+        $query = "DELETE FROM tb_products_categories WHERE id_product = :pid_product AND id_category = :pid_category";
+
+        $stmt = (new SQL())->prepare($query);
+        $stmt->bindValue("pid_product", $idProduct, \PDO::PARAM_INT);
         $stmt->bindValue("pid_category", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -289,6 +329,38 @@ class Category extends Model implements JsonSerializable
         $category->dateLastChange = $arguments["dateLastChange"] ?? null;
 
         return $category;
+    }
+
+
+    /**
+     * Retorna todos os produtos que estão ou não relacionados à categoria
+     *
+     * @param bool $related Relacionado ou não
+     *
+     * @return array[Product]
+     */
+    public function getProducts(bool $related = true): array
+    {
+        if ($related) {
+            $query = "SELECT p.*
+                        FROM tb_products p
+                       INNER JOIN tb_products_categories pc ON p.id_product = pc.id_product
+                       WHERE pc.id_category = :pid_category";
+        } else {
+            $query = "SELECT distinct p.*
+                        FROM tb_products p
+                        LEFT JOIN tb_products_categories pc ON p.id_product = pc.id_product
+                       WHERE pc.id_category IS NULL
+                          OR pc.id_category <> :pid_category
+                         AND p.id_product NOT IN (SELECT c.id_product
+                                                    FROM tb_products_categories c
+                                                   WHERE c.id_category = :pid_category)";
+        }
+
+        return array_map(
+            fn (object $row): Product => Product::translate($row),
+            (new SQL())->send($query, ["pid_category" => $this->id])->fetchAll()
+        );
     }
 
 

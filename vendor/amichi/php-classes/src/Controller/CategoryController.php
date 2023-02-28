@@ -15,6 +15,7 @@ namespace Amichi\Controller;
 use Amichi\Controller;
 use Amichi\HttpException;
 use Amichi\Model\Category;
+use Amichi\Model\Product;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -173,6 +174,118 @@ class CategoryController extends Controller
         }
 
         $response->getBody()->write(json_encode($category->delete()));
+
+        return $response;
+    }
+
+
+    /**
+     * Retorna os produtos da categoria a partir do ID informado na URL
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function getProducts(Request $request, Response $response, array $args): Response
+    {
+        $products = array_map(
+            fn (Product $product): array => $product->array(),
+            (array) Category::loadFromId(self::int($args["idCategory"], true, "idCategory"))?->getProducts()
+        );
+
+        $response->getBody()->write(json_encode($products));
+
+        return $response;
+    }
+
+
+    /**
+     * Salva o produto na categoria informada na URL da requisição no banco de dados
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function postProduct(Request $request, Response $response, array $args): Response
+    {
+        $idCategory = self::int($args["idCategory"], true, "idCategory");
+        $idProduct = self::int($args["idProduct"], true, "idProduct");
+
+        $category = Category::loadFromId($idCategory);
+        if (!$category) {
+            throw (new HttpException("Não foi possível cadastrar o produto $idProduct na categoria $idCategory, pois, a categoria é inexistente.", 400))->json();
+        }
+
+        $product = Product::loadFromId($idProduct);
+        if (!$product) {
+            throw (new HttpException("Não foi possível cadastrar o produto $idProduct na categoria $idCategory, pois, o produto é inexistente.", 400))->json();
+        }
+
+        $products = $category->getProducts();
+        if (in_array($idProduct, array_map(fn (Product $product): int => $product->id, $products))) {
+            throw (new HttpException("Não foi possível cadastrar o produto $idProduct na categoria $idCategory, pois, o produto já está relacionado.", 400))->json();
+        }
+
+        $response->getBody()->write(
+            json_encode(
+                [
+                    "category" => $category->postProduct($idProduct),
+                    "product" => $product
+                ]
+            )
+        );
+
+        return $response->withStatus(201);
+    }
+
+
+    /**
+     * Remove o produto da categoria informada na URL da requisição no banco de dados
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function deleteProduct(Request $request, Response $response, array $args): Response
+    {
+        $idCategory = self::int($args["idCategory"], true, "idCategory");
+        $idProduct = self::int($args["idProduct"], true, "idProduct");
+
+        $category = Category::loadFromId($idCategory);
+        if (!$category) {
+            throw (new HttpException("Não foi possível remover o produto $idProduct da categoria $idCategory, pois, a categoria é inexistente.", 400))->json();
+        }
+
+        $product = Product::loadFromId($idProduct);
+        if (!$product) {
+            throw (new HttpException("Não foi possível remover o produto $idProduct da categoria $idCategory, pois, o produto é inexistente.", 400))->json();
+        }
+
+        $products = $category->getProducts(false);
+        if (in_array($idProduct, array_map(fn (Product $product): int => $product->id, $products))) {
+            throw (new HttpException("Não foi possível remover o produto $idProduct na categoria $idCategory, pois, o produto não está relacionado.", 400))->json();
+        }
+
+        $response->getBody()->write(
+            json_encode(
+                [
+                    "category" => $category->deleteProduct($idProduct),
+                    "product" => $product
+                ]
+            )
+        );
 
         return $response;
     }

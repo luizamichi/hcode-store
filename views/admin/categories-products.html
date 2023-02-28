@@ -1,0 +1,215 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-exchange-alt"></i>
+            Produtos da Categoria {$category.name}
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/admin/categories">Categorias</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/admin/categories/{$category.id}">{$category.name}</a>
+            </li>
+            <li class="breadcrumb-item active">Produtos</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-times"></i>
+                Produtos não relacionados
+              </h3>
+            </div>
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Produto</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="productsNotRelated">
+                  {loop="$productsNotRelated"}
+                  <tr id="{$value.id}">
+                    <td>{$value.id}</td>
+                    <td data-find="search">{$value.name}</td>
+                    <td>
+                      <button class="btn btn-primary btn-xs" data-category="{$category.id}" data-id="{$value.id}" data-type="add" data-url="/api/category/{$category.id}/product/{$value.id}">
+                        Adicionar
+                        <i class="fas fa-arrow-right"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="3">
+                      <small>
+                        <span id="countNotRelated">{function="count($productsNotRelated)"}</span>
+                        <span id="countTextNotRelated">produtos não relacionados</span>
+                      </small>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-check"></i>
+                Produtos relacionados
+              </h3>
+            </div>
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Produto</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="productsRelated">
+                  {loop="$productsRelated"}
+                  <tr id="{$value.id}">
+                    <td>{$value.id}</td>
+                    <td data-find="search">{$value.name}</td>
+                    <td>
+                      <button class="btn btn-danger btn-xs" data-category="{$category.id}" data-id="{$value.id}" data-type="remove" data-url="/api/category/{$category.id}/product/{$value.id}">
+                        <i class="fas fa-arrow-left"></i>
+                        Remover
+                      </button>
+                    </td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="3">
+                      <small>
+                        <span id="countRelated">{function="count($productsRelated)"}</span>
+                        <span id="countTextRelated">produtos relacionados</span>
+                      </small>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.title += " (Category Products)";
+
+  window.addEventListener("load", () => {
+    $("#countRelated").change(function () {
+      $("#countTextRelated").text("produtos relacionados");
+      if ($("#countRelated").text() == 1) {
+        $("#countTextRelated").text("produto relacionado");
+      }
+    });
+
+    $("#countRelated").trigger("change");
+
+    $("#countNotRelated").change(function () {
+      $("#countTextNotRelated").text("produtos não relacionados");
+      if ($("#countNotRelated").text() == 1) {
+        $("#countTextNotRelated").text("produto não relacionado");
+      }
+    });
+
+    $("#countNotRelated").trigger("change");
+
+    $("button[data-type='add']").click(function () {
+      let idProduct = $(this).data("id");
+      let idCategory = $(this).data("category");
+      let url = $(this).data("url");
+      if (confirm("Deseja adicionar o produto " + idProduct + " à categoria " + idCategory + "?")) {
+        $.ajax({
+          type: "post",
+          url: url,
+          dataType: "json",
+          data: {},
+          beforeSend: () => {
+            $("a, button").attr("disabled", true).toggleClass("disabled");
+          },
+          complete: () => {
+            $("a, button").attr("disabled", false).toggleClass("disabled");
+          },
+          success: (response) => {
+            alert("Produto " + idProduct + " adicionado com sucesso à categoria " + idCategory + ".");
+            $("button[data-id=" + idProduct + "]").removeClass("btn-primary").addClass("btn-success").data("type", "remove").html("<i class='fas fa-check'></i> Adicionado").unbind();
+            $("#" + idProduct).appendTo("#productsRelated");
+            $("#countNotRelated").text($("#countNotRelated").text() - 1).trigger("change");
+            $("#countRelated").text(parseFloat($("#countRelated").text()) + 1).trigger("change");
+          },
+          error: (xhr, status, error) => {
+            let json = xhr.responseJSON ?? {};
+            alert(json.message ?? "Não foi possível adicionar o produto à categoria.");
+          }
+        });
+      }
+    });
+
+    $("button[data-type='remove']").click(function () {
+      let idProduct = $(this).data("id");
+      let idCategory = $(this).data("category");
+      let url = $(this).data("url");
+      if (confirm("Deseja remover o produto " + idProduct + " da categoria " + idCategory + "?")) {
+        $.ajax({
+          type: "delete",
+          url: url,
+          dataType: "json",
+          data: {},
+          beforeSend: () => {
+            $("a, button").attr("disabled", true).toggleClass("disabled");
+          },
+          complete: () => {
+            $("a, button").attr("disabled", false).toggleClass("disabled");
+          },
+          success: (response) => {
+            alert("Produto " + idProduct + " removido com sucesso da categoria " + idCategory + ".");
+            $("button[data-id=" + idProduct + "]").removeClass("btn-danger").addClass("btn-success").data("type", "add").html("Removido <i class='fas fa-times'></i>").unbind();
+            $("#" + idProduct).appendTo("#productsNotRelated");
+            $("#countRelated").text($("#countRelated").text() - 1).trigger("change");
+            $("#countNotRelated").text(parseFloat($("#countNotRelated").text()) + 1).trigger("change");
+          },
+          error: (xhr, status, error) => {
+            let json = xhr.responseJSON ?? {};
+            alert(json.message ?? "Não foi possível remover o produto da categoria.");
+          }
+        });
+      }
+    });
+  });
+</script>

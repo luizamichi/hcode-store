@@ -14,6 +14,7 @@ namespace Amichi\View;
 
 use Amichi\Controller;
 use Amichi\Model\Category;
+use Amichi\Model\Product;
 use Amichi\Page;
 use Amichi\PageAdmin;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -56,6 +57,46 @@ class CategoryView extends Controller
                         self::int($params["_offset"]),
                         self::string($params["_sortBy"])
                     )
+                )
+            ]
+        );
+
+        $response->getBody()->write($page->getTpl());
+        return $response;
+    }
+
+
+    /**
+     * Retorna o template da lista de todos os produtos da categoria
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function getProducts(Request $request, Response $response, array $args): Response
+    {
+        $category = Category::loadFromId(self::int($args["idCategory"]));
+
+        if (!$category) {
+            return $response->withHeader("Location", "/admin/categories")->withStatus(302);
+        }
+
+        $page = new PageAdmin();
+        $page->setTpl(
+            "categories-products",
+            [
+                "category" => $category->array(),
+                "productsRelated" => array_map(
+                    fn (Product $product): array => $product->array(),
+                    $category->getProducts()
+                ),
+                "productsNotRelated" => array_map(
+                    fn (Product $product): array => $product->array(),
+                    $category->getProducts(false)
                 )
             ]
         );
@@ -167,6 +208,42 @@ class CategoryView extends Controller
                 "page" => $pageNumber,
                 "pages" => range(1, ceil($count / $limit)),
                 "count" => $count
+            ]
+        );
+
+        $response->getBody()->write($page->getTpl());
+        return $response;
+    }
+
+
+    /**
+     * Retorna o template da página de produtos da categoria
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function webView(Request $request, Response $response, array $args): Response
+    {
+        $category = Category::loadFromSlug(self::string($args["slugCategory"]));
+
+        if (!$category) {
+            return $response->withHeader("Location", "/categories")->withStatus(302);
+        }
+
+        $page = new Page();
+        $page->setTpl(
+            "category",
+            [
+                "category" => $category->array(),
+                "products" => array_map(
+                    fn (Product $product): array => $product->array(),
+                    $category->getProducts()
+                )
             ]
         );
 

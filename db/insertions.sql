@@ -242,3 +242,21 @@ VALUES
     (5, 'Smartphone', 'smartphone', NULL, NOW(), NULL),
     (6, 'Android', 'android', 5, NOW(), NULL),
     (7, 'iOS', 'ios', 5, NOW(), NULL);
+
+
+INSERT INTO
+    tb_products_categories (id_product, id_category)
+VALUES
+    (1, 1),
+    (2, 5),
+    (2, 7),
+    (3, 5),
+    (3, 6),
+    (4, 5),
+    (4, 6),
+    (5, 5),
+    (5, 6),
+    (6, 5),
+    (6, 6),
+    (7, 5),
+    (7, 6);
