@@ -118,3 +118,14 @@ CREATE VIEW vw_products_categories AS
        FROM tb_products_categories
       INNER JOIN tb_products p USING (id_product)
       INNER JOIN tb_categories c USING (id_category);
+
+
+DROP VIEW IF EXISTS vw_wishlist;
+
+CREATE VIEW vw_wishlist AS
+    SELECT dt_product_added_at,
+           id_user, des_login, des_password, is_admin, dt_user_created_at, dt_user_changed_in, id_person, des_person, des_email, des_cpf, num_phone, bin_photo,
+           id_product, des_product, des_description, bin_image, vl_price, vl_width, vl_height, vl_length, vl_weight, num_quantity_stock, is_national, des_slug, dt_product_created_at, dt_product_changed_in
+      FROM tb_wishlist
+     INNER JOIN tb_users USING (id_user)
+     INNER JOIN tb_products USING (id_product);

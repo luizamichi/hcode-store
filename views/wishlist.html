@@ -1,0 +1,105 @@
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <div class="col-12">
+      <nav class="breadcrumb bg-light mb-30" aria-label="Submenu">
+        <a class="breadcrumb-item text-dark" href="/">Início</a>
+        <span class="breadcrumb-item active">Lista de desejos</span>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Shop Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <!-- Shop Wishlist Start -->
+    <div class="col-lg-12 col-md-8">
+      <div class="row pb-3">
+        {loop="$products"}
+        <div id="product-{$value.id}" class="col-lg-4 col-md-6 col-sm-6 pb-1">
+          <div class="product-item bg-light mb-4">
+            <div class="product-img position-relative overflow-hidden">
+              {if="$value.image"}
+              <img class="img-fluid w-100" src="data:image/png;base64,{$value.image}" alt="{$value.name}" />
+              {else}
+              <img class="img-fluid w-100" src="/res/multiShop/img/package.png" alt="Produto sem imagem" />
+              {/if}
+              <div class="product-action">
+                <a class="btn btn-outline-dark btn-square" data-id="addProductToCart" href="/api/cart/{function="getCartId()"}/product/{$value.id}"><i class="fa fa-shopping-cart"></i></a>
+                <a class="btn btn-outline-dark btn-square" id="{$value.id}" data-id="removeProductFromWishlist" href="/api/user/{function="getUserId()"}/product/{$value.id}"><i class="fas fa-minus-circle"></i></a>
+              </div>
+            </div>
+            <div class="text-center py-4">
+              <a class="h6 text-decoration-none text-truncate" href="/products/{$value.slug}">{$value.name}</a>
+              <div class="d-flex align-items-center justify-content-center mt-2">
+                <h5>R$ {$value.price}</h5>
+                <h6 class="text-muted ml-2"><del>{$value.price}</del></h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/loop}
+      </div>
+    </div>
+    <!-- Shop Wishlist End -->
+  </div>
+</div>
+<!-- Shop End -->
+
+<script>
+  document.title += " (Wishlist)";
+
+  window.addEventListener("load", () => {
+    $("[data-id='addProductToCart']").click(function (event) {
+      event.preventDefault();
+      let url = $(this).attr("href");
+
+      $.ajax({
+        type: "post",
+        url: url,
+        dataType: "json",
+        beforeSend: () => {
+          $("button, input").attr("disabled", true);
+        },
+        complete: () => {
+          $("button, input").attr("disabled", false);
+        },
+        success: () => {
+          alert("Produto adicionado ao carrinho.");
+        },
+        error: (xhr, status, error) => {
+          let json = xhr.responseJSON ?? {};
+          alert(json.message ?? "Não foi possível adicionar o produto ao carrinho.");
+        }
+      });
+    });
+
+    $("[data-id='removeProductFromWishlist']").click(function (event) {
+      event.preventDefault();
+      let id = $(this).attr("id");
+      let url = $(this).attr("href");
+
+      $.ajax({
+        type: "delete",
+        url: url,
+        dataType: "json",
+        beforeSend: () => {
+          $("button, input").attr("disabled", true);
+        },
+        complete: () => {
+          $("button, input").attr("disabled", false);
+        },
+        success: () => {
+          alert("Produto removido da lista de desejos.");
+          $("#product-" + id).remove();
+        },
+        error: (xhr, status, error) => {
+          let json = xhr.responseJSON ?? {};
+          alert(json.message ?? "Não foi possível remover o produto da lista de desejos.");
+        }
+      });
+    });
+  });
+</script>

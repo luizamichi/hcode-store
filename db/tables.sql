@@ -226,3 +226,15 @@ CREATE TABLE tb_products_categories (
     CONSTRAINT fk_tb_products_categories_to_tb_products FOREIGN KEY (id_product) REFERENCES tb_products (id_product) ON DELETE CASCADE,
     CONSTRAINT fk_tb_products_categories_to_tb_categories FOREIGN KEY (id_category) REFERENCES tb_categories (id_category) ON DELETE CASCADE
 ) COMMENT = 'Produtos x Categorias';
+
+
+DROP TABLE IF EXISTS tb_wishlist;
+
+CREATE TABLE tb_wishlist (
+    id_user INT UNSIGNED NOT NULL COMMENT 'Usuário',
+    id_product INT UNSIGNED NOT NULL COMMENT 'Produto',
+    dt_product_added_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de adição do produto à lista de desejos',
+    CONSTRAINT pk_tb_wishlist PRIMARY KEY (id_user, id_product),
+    CONSTRAINT fk_tb_wishlist_to_tb_users FOREIGN KEY (id_user) REFERENCES tb_users (id_user) ON DELETE CASCADE,
+    CONSTRAINT fk_tb_wishlist_to_tb_products FOREIGN KEY (id_product) REFERENCES tb_products (id_product) ON DELETE CASCADE
+) COMMENT = 'Lista de desejos';

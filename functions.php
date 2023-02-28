@@ -12,6 +12,7 @@
  */
 
 use Amichi\Model\User;
+use Amichi\Model\Wishlist;
 
 /**
  * Retorna o valor da variável
@@ -127,7 +128,7 @@ function getCountCartProducts(): int
  */
 function getCountWishlist(): int
 {
-    return random_int(0, 100);
+    return count(Wishlist::listFromUserId(getUserId()));
 }
 
 

@@ -31,6 +31,7 @@ use Amichi\Controller\ProductController;
 use Amichi\Controller\StateController;
 use Amichi\Controller\StreetTypeController;
 use Amichi\Controller\UserController;
+use Amichi\Controller\WishlistController;
 
 use Amichi\Model\User;
 
@@ -47,6 +48,7 @@ use Amichi\View\ProductView;
 use Amichi\View\StateView;
 use Amichi\View\StreetTypeView;
 use Amichi\View\UserView;
+use Amichi\View\WishlistView;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -222,6 +224,9 @@ $app->group(
         $app->delete("/{idUser}", UserController::class . ":delete")->add($midLoggedAdmin);
 
         $app->get("/{idUser}/address", UserController::class . ":getAddress")->add($midLoggedUser);
+        $app->get("/{idUser}/product", WishlistController::class . ":getByUser")->add($midLoggedUser);
+        $app->post("/{idUser}/product/{idProduct}", WishlistController::class . ":post")->add($midLoggedUser);
+        $app->delete("/{idUser}/product/{idProduct}", WishlistController::class . ":delete")->add($midLoggedUser);
         $app->get("/{idUser}/log", UserController::class . ":getLogs")->add($midLoggedUser);
         $app->get("/{idUser}/passwordrecovery", UserController::class . ":getPasswordRecoveries")->add($midLoggedUser);
         $app->put("/{idUser}/password", UserController::class . ":updatePassword")->add($midLoggedAdmin);
@@ -338,6 +343,7 @@ $app->group(
         $app->get("/profile", UserView::class . ":webView")->add($midIsUser);
         $app->get("/products", ProductView::class . ":webList");
         $app->get("/products/{slugProduct}", ProductView::class . ":webView");
+        $app->get("/wishlist", WishlistView::class . ":webView")->add($midIsUser);
     }
 )->add($midView);
 
