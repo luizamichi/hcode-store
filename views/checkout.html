@@ -1,0 +1,103 @@
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <div class="col-12">
+      <nav class="breadcrumb bg-light mb-30">
+        <a class="breadcrumb-item text-dark" href="/">Início</a>
+        <span class="breadcrumb-item active">Pedido</span>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Breadcrumb End -->
+
+{if="$order"}
+<!-- Checkout Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <div class="col-lg-7">
+      <h5 class="section-title position-relative text-uppercase mb-3">
+        <span class="bg-secondary pr-3">Pedido {$order.code}</span>
+      </h5>
+      <div class="bg-light p-30 mb-5">
+        <div class="embed-responsive embed-responsive-21by9">
+          <iframe id="bankpaymentslip" name="bankpaymentslip" title="Boleto bancário" class="embed-responsive-item" src="/api/order/{$order.id}/bankpaymentslip"></iframe>
+        </div>
+        <button class="btn btn-primary py-2 px-4 mt-3" id="print">Imprimir</button>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Descrição</span></h5>
+      <div class="bg-light p-30 mb-5">
+        <div class="border-bottom">
+          <h6 class="mb-3">Produtos</h6>
+          {loop="$order.cart.products"}
+          <div class="d-flex justify-content-between">
+            <p>{$value.name}</p>
+            <p>{$value.quantity} x R$ {function="formatPrice($value.price)"}</p>
+          </div>
+          {/loop}
+        </div>
+        <div class="border-bottom pt-3 pb-2">
+          <div class="d-flex justify-content-between mb-3">
+            <h6>Subtotal</h6>
+            <h6>R$ {function="formatPrice($order.cart.package.price)"}</h6>
+          </div>
+          <div class="d-flex justify-content-between">
+            <h6 class="font-weight-medium">Envio</h6>
+            <h6 class="font-weight-medium">R$ {function="formatPrice($order.cart.freightValue)"}</h6>
+          </div>
+        </div>
+        <div class="pt-2">
+          <div class="d-flex justify-content-between mt-2">
+            <h5>Total</h5>
+            <h5>R$ {function="formatPrice($order.totalValue)"}</h5>
+          </div>
+        </div>
+      </div>
+      <div class="mb-5">
+        <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Pagamento</span></h5>
+        <div class="bg-light p-30">
+          <div class="form-group">
+            <div class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input" name="payment" id="pagseguro">
+              <label class="custom-control-label" for="pagseguro">PagSeguro</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input" name="payment" id="paypal">
+              <label class="custom-control-label" for="paypal">PayPal</label>
+            </div>
+          </div>
+          <button class="btn btn-block btn-primary font-weight-bold py-3" id="btnPay">Pagar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Checkout End -->
+{/if}
+
+<script>
+  document.title += " (Checkout)";
+
+  window.addEventListener("load", () => {
+    $("#print").click(function () {
+      window.frames["bankpaymentslip"].focus();
+      window.frames["bankpaymentslip"].print();
+    });
+
+    $("#btnPay").click(function () {
+      if ($("#pagseguro").is(":checked")) {
+        window.location.href = "/orders/{$order.code}/pagseguro";
+      }
+      else if ($("#paypal").is(":checked")) {
+        window.location.href = "/orders/{$order.code}/paypal";
+      }
+      else {
+        alert("Selecione um dos métodos de pagamento para prosseguir, caso não deseje pagar via boleto.");
+      }
+    });
+  });
+</script>

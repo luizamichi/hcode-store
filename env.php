@@ -61,3 +61,13 @@ putenv("COURIER_ORIGIN_ZIP_CODE=86047622"); // CEP de origem
 putenv("COURIER_ORDER_FORMAT=1"); // Formato da encomenda (1: Formato caixa/pacote, 2: Formato rolo/prisma, 3: Envelope)
 putenv("COURIER_OWN_HAND=S"); // Serviço adicional mão própria
 putenv("COURIER_ORDER_RECEIPT_NOTICE=S"); // Aviso de recebimento (S: Sim, N: Não)
+
+
+// Dados bancários
+putenv("BANK_NAME=1"); // Instituição bancária (1: Banco do Brasil, 2: Banco de Brasília, 3: Bradesco, 4: Itaú, 5: Santander, 6: Unicred)
+putenv("BANK_SEQUENTIAL=1234567"); // Sequencial para gerar o NOSSO NÚMERO
+putenv("BANK_AGENCY=1724"); // Agência (até 4 dígitos)
+putenv("BANK_PORTFOLIO=18"); // Carteira
+putenv("BANK_ACCOUNT=10403005"); // Conta (até 8 dígitos)
+putenv("BANK_AGREEMENT=1234"); // Convênio (4, 6 ou 7 dígitos)
+putenv("BANK_EXPIRATION_DAYS=3"); // Dias para vencimento do boleto

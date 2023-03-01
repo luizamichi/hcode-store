@@ -306,3 +306,10 @@ VALUES
     (4, 'Pedido enviado', 4, NOW()),
     (5, 'Pedido entregue', 5, NOW()),
     (6, 'Pedido cancelado', 6, NOW());
+
+
+INSERT INTO
+    tb_orders (id_order, id_cart, id_user, id_status, id_address, vl_total, des_code, des_annotation, dt_order_created_at)
+VALUES
+    (1, 2, 2, 1, 7, 8231.02, UUID_SHORT(), NULL, NOW()),
+    (2, 5, 3, 6, 10, 0, UUID_SHORT(), NULL, NOW());

@@ -1,0 +1,266 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-book-open"></i>
+            Visualização de Pedido
+          </h1>
+          <div>
+            <small>Pedido efetuado em {function="formatDate($order.dateRegister)"}.</small>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/admin/orders">Pedidos</a>
+            </li>
+            <li class="breadcrumb-item active">Visualizar</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-check"></i>
+                Produtos
+              </h3>
+            </div>
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Produto</th>
+                    <th>Preço</th>
+                  </tr>
+                </thead>
+                <tbody id="products">
+                  {loop="$products"}
+                  <tr>
+                    <td>{$value.id}</td>
+                    <td data-find="search">{$value.name}</td>
+                    <td>{function="formatPrice($value.price)"}</td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="3">
+                      <small>
+                        <span id="count">{function="count($products)"}</span>
+                        <span id="countText">produtos</span>
+                      </small>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-shipping-fast"></i>
+                Pedido
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="col-12">
+                <form id="editOrder">
+                  <input id="idCart" name="idCart" type="hidden" value="{$order.cart.id}" />
+                  <input id="idUser" name="idUser" type="hidden" value="{$order.user.id}" />
+                  <input id="idAddress" name="idAddress" type="hidden" value="{$order.address.id}" />
+
+                  <div class="form-group">
+                    <label for="code">Código</label>
+                    <input class="form-control" id="code" name="code" readonly type="text" value="{$order.code}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="annotation">Anotação</label>
+                    <div class="input-group">
+                      <textarea class="form-control" id="annotation" name="annotation" readonly rows="2">{$order.annotation}</textarea>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="idStatus">Status</label>
+                    <div class="input-group">
+                      <select class="custom-select select2" id="idStatus" name="idStatus">
+                        <option disabled selected>Selecione um status</option>
+                        {loop="$status"}
+                        <option value="{$value.id}">{$value.description}</option>
+                        {/loop}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="totalValue">Valor total</label>
+                    <input class="form-control" data-inputmask="'mask': '9{1,10}.99'" data-mask id="totalValue" name="totalValue" readonly step="0.01" type="number" value="{$order.totalValue}" />
+                  </div>
+
+                  <div>
+                    <button type="submit" class="btn btn-dark">Alterar</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-user"></i>
+                Usuário
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="col-12">
+                <form id="viewUser" method="get">
+                  <div class="form-group">
+                    <label for="userName">Nome</label>
+                    <input class="form-control" id="userName" name="userName" readonly type="text" value="{$order.user.name}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="userCpf">CPF</label>
+                    <input class="form-control" data-inputmask="'mask': '999.999.999-99'" data-mask id="userCpf" name="userCpf" readonly type="text" value="{$order.user.cpf}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="userLogin">Login</label>
+                    <input class="form-control" id="userLogin" name="userLogin" readonly type="text" value="{$order.user.login}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="userEmail">E-mail</label>
+                    <input class="form-control" id="userEmail" name="userEmail" readonly type="email" value="{$order.user.email}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="userPhone">Telefone</label>
+                    <input class="form-control" data-inputmask="'mask': '(99) 99999-9999'" data-mask id="userPhone" name="userPhone" readonly type="tel" value="{$order.user.phone}" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-address-card"></i>
+                Endereço
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="col-12">
+                <form id="viewAddress" method="get">
+                  <div class="form-group">
+                    <label for="addressZipCode">CEP</label>
+                    <input class="form-control" data-inputmask="'mask': '99.999-999'" data-mask id="addressZipCode" name="addressZipCode" readonly type="text" value="{$order.address.zipCode}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="addressCity">Cidade</label>
+                    <input class="form-control" id="addressCity" name="addressCity" readonly type="text" value="{$order.address.city.name}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="addressStreetType">Tipo de logradouro</label>
+                    <input class="form-control" id="addressStreetType" name="addressStreetType" readonly type="text" value="{$order.address.streetType.name}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="addressPublicPlace">Logradouro</label>
+                    <input class="form-control" id="addressPublicPlace" name="addressPublicPlace" readonly type="text" value="{$order.address.publicPlace}, {$order.address.number}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="addresDistrict">Bairro</label>
+                    <input class="form-control" id="addresDistrict" name="addresDistrict" readonly type="text" value="{$order.address.district}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="addressComplement">Complemento</label>
+                    <input class="form-control" id="addressComplement" name="addressComplement" readonly type="text" value="{$order.address.complement}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="addressReference">Referência</label>
+                    <input class="form-control" id="addressReference" name="addressReference" readonly type="text" value="{$order.address.reference}" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.title += " (View Order)";
+
+  window.addEventListener("load", () => {
+    $(".select2").select2();
+    $("[data-mask]").inputmask();
+
+    $("#idStatus").val("{$order.status.id}").change();
+
+    $("#count").change(function () {
+      $("#countText").text("produtos");
+      if ($("#count").text() == 1) {
+        $("#countText").text("produto");
+      }
+    });
+
+    $("#editOrder").submit(function (event) {
+      event.preventDefault();
+
+      $.ajax({
+        type: "put",
+        url: "/api/order/{$order.id}",
+        data: $("#editOrder").serialize(),
+        dataType: "json",
+        beforeSend: () => {
+          $("button, input").attr("disabled", true);
+        },
+        complete: () => {
+          $("button, input").attr("disabled", false);
+        },
+        success: (response) => {
+          alert("Pedido " + response.id + " alterado com sucesso.");
+        },
+        error: (xhr, status, error) => {
+          let json = xhr.responseJSON ?? {};
+          alert(json.message ?? "Não foi possível alterar o pedido.");
+        }
+      });
+    });
+  });
+</script>

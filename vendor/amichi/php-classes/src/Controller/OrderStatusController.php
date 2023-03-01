@@ -14,6 +14,7 @@ namespace Amichi\Controller;
 
 use Amichi\Controller;
 use Amichi\HttpException;
+use Amichi\Model\Order;
 use Amichi\Model\OrderStatus;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -161,6 +162,13 @@ class OrderStatusController extends Controller
 
         if (!$orderStatus) {
             throw (new HttpException("Não foi possível remover o status de pedido $id, pois, é inexistente.", 400))->json();
+        }
+
+        $orders = Order::listFromStatusId($id);
+        if ($orders) {
+            $ordersIds = array_map(fn (Order $order): int => $order->id, $orders);
+            $message = count($orders) === 1 ? "ao pedido" : "aos pedidos";
+            throw (new HttpException("Não foi possível remover o status de pedido $id, pois, está vinculado $message " . implode(", ", $ordersIds) . ".", 400))->json();
         }
 
         $response->getBody()->write(json_encode($orderStatus->delete()));

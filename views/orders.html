@@ -1,0 +1,71 @@
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <div class="col-12">
+      <nav class="breadcrumb bg-light mb-30" aria-label="Submenu">
+        <a class="breadcrumb-item text-dark" href="/">Início</a>
+        <span class="breadcrumb-item active">Pedidos</span>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Orders Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    {loop="$orders"}
+    <div class="col-lg-12 table-responsive mb-5">
+      <h5 class="section-title position-relative mb-3">
+        <span class="bg-secondary pr-3">
+          Pedido {$value.code}
+          <small>({$value.status.description})</small>
+        </span>
+      </h5>
+      <table class="table table-light table-borderless table-hover text-center mb-0">
+        <caption></caption>
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Produto</th>
+            <th scope="col">Preço</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        <tbody class="align-middle">
+          {loop="$value.cart.products"}
+          <tr>
+            <td class="align-middle">
+              <a href="/products/{$value.slug}">
+                {if="$value.image"}
+                <img src="data:image/png;base64,{$value.image}" alt="{$value.name}" style="width: 50px;" />
+                {else}
+                <img src="/res/multiShop/img/package.png" alt="Produto sem imagem" style="width: 50px;" />
+                {/if}
+                {$value.name}
+              </a>
+            </td>
+            <td class="align-middle">R$ {function="formatPrice($value.price)"}</td>
+            <td class="align-middle">{$value.quantity}</td>
+            <td class="align-middle">R$ {function="formatPrice($value.totalPrice)"}</td>
+          </tr>
+          {/loop}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="col">Frete</th>
+            <th scope="col">R$ {function="formatPrice($value.cart.freightValue)"}</th>
+            <th scope="col">Total</th>
+            <th scope="col">R$ {function="formatPrice($value.totalValue)"}</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    {/loop}
+  </div>
+</div>
+<!-- Orders End -->
+
+<script>
+  document.title += " (Orders)";
+</script>

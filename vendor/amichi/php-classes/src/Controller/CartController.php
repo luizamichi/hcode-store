@@ -16,6 +16,7 @@ use Amichi\Controller;
 use Amichi\HttpException;
 use Amichi\Model\Address;
 use Amichi\Model\Cart;
+use Amichi\Model\Order;
 use Amichi\Model\Product;
 use Amichi\Model\User;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -195,6 +196,11 @@ class CartController extends Controller
             throw (new HttpException("Não foi possível inserir o produto $idProduct no carrinho $idCart, pois, o produto é inexistente.", 400))->json();
         }
 
+        $order = Order::loadFromCartId($idCart);
+        if ($order) {
+            throw (new HttpException("Não foi possível inserir o produto $idProduct no carrinho $idCart, pois, o carrinho se tornou um pedido.", 400))->json();
+        }
+
         for ($i = 0; $i < $quantity; $i++) { // Adiciona individualmente a quantidade de produtos
             $cart->postProduct($idProduct);
         }
@@ -256,6 +262,11 @@ class CartController extends Controller
             throw (new HttpException("Não foi possível alterar o carrinho $id. $message: " . implode(", ", $errors) . ".", 400))->json();
         }
 
+        $order = Order::loadFromCartId($id);
+        if ($order) {
+            throw (new HttpException("Não foi possível alterar o carrinho $id, pois, este se tornou um pedido.", 400))->json();
+        }
+
         $response->getBody()->write(json_encode($cart->save()->refresh()));
 
         return $response->withStatus(200);
@@ -280,6 +291,11 @@ class CartController extends Controller
 
         if (!$cart) {
             throw (new HttpException("Não foi possível remover o carrinho $id, pois, é inexistente.", 400))->json();
+        }
+
+        $order = Order::loadFromCartId($id);
+        if ($order) {
+            throw (new HttpException("Não foi possível remover o carrinho $id, pois, está vinculado ao pedido {$order->id}.", 400))->json();
         }
 
         $response->getBody()->write(json_encode($cart->delete()));
@@ -323,6 +339,11 @@ class CartController extends Controller
         $product = Product::loadFromId($idProduct);
         if (!$product) {
             throw (new HttpException("Não foi possível remover o produto $idProduct do carrinho $idCart, pois, o produto é inexistente.", 400))->json();
+        }
+
+        $order = Order::loadFromCartId($idCart);
+        if ($order) {
+            throw (new HttpException("Não foi possível remover o produto $idProduct do carrinho $idCart, pois, o carrinho se tornou um pedido.", 400))->json();
         }
 
         $response->getBody()->write(

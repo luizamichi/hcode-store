@@ -533,3 +533,38 @@ BEGIN
      WHERE id_status = pid_status;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_order;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_order (
+    IN pid_order INT,
+    IN pid_cart INT,
+    IN pid_user INT,
+    IN pid_status INT,
+    IN pid_address INT,
+    IN pvl_total DECIMAL(10, 2)
+)
+BEGIN
+    IF pid_order > 0 THEN
+        UPDATE tb_orders
+           SET id_cart = pid_cart,
+               id_status = pid_status,
+               id_address = pid_address,
+               vl_total = pvl_total,
+               des_annotation = CONCAT(COALESCE(des_annotation, ''), NOW(), ' -> STATUS: ', id_status, '|ADDRESS: ', id_address, '|TOTAL: ', vl_total, '\n')
+         WHERE id_order = pid_order;
+
+    ELSE
+        INSERT INTO tb_orders (id_cart, id_user, id_status, id_address, vl_total, des_code, des_annotation, dt_order_created_at)
+                       VALUES (pid_cart, pid_user, pid_status, pid_address, pvl_total, UUID_SHORT(), NULL, NOW());
+
+        SET pid_order = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_orders
+     WHERE id_order = pid_order;
+END $$
+DELIMITER ;

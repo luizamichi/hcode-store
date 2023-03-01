@@ -1,0 +1,98 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-list"></i>
+            Lista de Pedidos
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item active">Pedidos</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Pessoa</th>
+                    <th></th>
+                    <th>Status</th>
+                    <th>Endereço</th>
+                    <th>Cidade</th>
+                    <th>Data</th>
+                    <th>Total</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loop="$orders"}
+                  <tr data-id="{$value.id}">
+                    <td>{$value.id}</td>
+                    <td data-find="search"><a href="/admin/users/{$value.user.id}">{$value.user.name}</a></td>
+                    <td>{function="getStatusIcon($value.status.enum)"}</td>
+                    <td data-find="search">{$value.status.description}</td>
+                    <td data-find="search">{if="$value.address.streetType"}{$value.address.streetType.name}{/if} {$value.address.publicPlace}, {$value.address.number}</td>
+                    <td data-find="search"><a href="/admin/cities#{$value.address.city.id}">{$value.address.city.name} / {$value.address.city.state.uf}</a></td>
+                    <td>{function="formatDate($value.dateRegister)"}</td>
+                    <td>{function="formatPrice($value.totalValue)"}</td>
+                    <td>
+                      <a class="btn btn-secondary btn-xs" href="/admin/orders/{$value.id}">
+                        <i class="fas fa-eye"></i>
+                        Visualizar
+                      </a>
+                    </td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="9">
+                      <small>
+                        <span id="count">{function="count($orders)"}</span>
+                        <span id="countText">pedidos encontrados</span>
+                      </small>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.title += " (Orders)";
+
+  window.addEventListener("load", () => {
+    $("#count").change(function () {
+      $("#countText").text("pedidos encontrados");
+      if ($("#count").text() == 1) {
+        $("#countText").text("pedido encontrado");
+      }
+    });
+
+    $("#count").trigger("change");
+
+  });
+</script>

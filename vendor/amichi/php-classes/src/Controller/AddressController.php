@@ -15,6 +15,7 @@ namespace Amichi\Controller;
 use Amichi\Controller;
 use Amichi\HttpException;
 use Amichi\Model\Address;
+use Amichi\Model\Order;
 use Amichi\Model\User;
 use Amichi\Model\UserLog;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -198,6 +199,13 @@ class AddressController extends Controller
 
         if (!$address) {
             throw (new HttpException("Não foi possível remover o endereço $id, pois, é inexistente.", 400))->json();
+        }
+
+        $orders = Order::listFromAddressId($id);
+        if ($orders) {
+            $ordersIds = array_map(fn (Order $order): int => $order->id, $orders);
+            $message = count($orders) === 1 ? "ao pedido" : "aos pedidos";
+            throw (new HttpException("Não foi possível remover o endereço $id, pois, está vinculado $message " . implode(", ", $ordersIds) . ".", 400))->json();
         }
 
         $response->getBody()->write(json_encode($address->delete()));

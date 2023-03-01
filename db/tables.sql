@@ -284,3 +284,25 @@ CREATE TABLE tb_orders_status (
     CONSTRAINT uk_tb_orders_status_des_status UNIQUE KEY (des_status),
     CONSTRAINT uk_tb_orders_status_num_code UNIQUE KEY (num_code)
 ) COMMENT = 'Status de pedidos';
+
+
+DROP TABLE IF EXISTS tb_orders;
+
+CREATE TABLE tb_orders (
+    id_order INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do pedido',
+    id_cart INT UNSIGNED NOT NULL COMMENT 'Carrinho do pedido',
+    id_user INT UNSIGNED NOT NULL COMMENT 'Usuário que fez a compra',
+    id_status INT UNSIGNED NOT NULL COMMENT 'Status do pedido',
+    id_address INT UNSIGNED NOT NULL COMMENT 'Endereço do pedido',
+    vl_total DECIMAL(10, 2) NOT NULL COMMENT 'Valor total do pedido',
+    des_code VARCHAR(32) NOT NULL COMMENT 'Código do pedido',
+    des_annotation TEXT NULL COMMENT 'Anotação do pedido',
+    dt_order_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do pedido',
+    CONSTRAINT pk_tb_orders PRIMARY KEY (id_order),
+    CONSTRAINT fk_tb_orders_to_tb_carts FOREIGN KEY (id_cart) REFERENCES tb_carts (id_cart) ON DELETE NO ACTION,
+    CONSTRAINT fk_tb_orders_to_tb_users FOREIGN KEY (id_user) REFERENCES tb_users (id_user) ON DELETE NO ACTION,
+    CONSTRAINT fk_tb_orders_to_tb_orders_status FOREIGN KEY (id_status) REFERENCES tb_orders_status (id_status) ON DELETE NO ACTION,
+    CONSTRAINT fk_tb_orders_to_tb_addresses FOREIGN KEY (id_address) REFERENCES tb_addresses (id_address) ON DELETE NO ACTION,
+    CONSTRAINT uk_tb_orders_id_cart UNIQUE KEY (id_cart),
+    CONSTRAINT uk_tb_orders_des_code UNIQUE KEY (des_code)
+) COMMENT = 'Pedidos';

@@ -158,3 +158,18 @@ DROP VIEW IF EXISTS vw_orders_status;
 CREATE VIEW vw_orders_status AS
     SELECT id_status, des_status, num_code, dt_status_created_at
       FROM tb_orders_status;
+
+
+DROP VIEW IF EXISTS vw_orders;
+
+CREATE VIEW vw_orders AS
+    SELECT o.id_order, o.vl_total, o.des_code, o.des_annotation, o.dt_order_created_at,
+           c.id_cart, c.des_session_id, c.num_temporary_zip_code, c.vl_freight, c.des_type_freight, c.num_days, c.dt_cart_created_at,
+           u.id_user, u.id_person, u.des_login, u.des_password, u.is_admin, u.dt_user_created_at, u.dt_user_changed_in,
+           s.id_status, s.des_status, s.num_code, s.dt_status_created_at,
+           a.id_address, a.id_city, a.id_street_type, a.des_address, a.des_number, a.des_district, a.des_complement, a.des_reference, a.num_zip_code, a.dt_address_created_at, a.dt_address_changed_in
+      FROM tb_orders o
+     INNER JOIN tb_carts c ON o.id_cart = c.id_cart
+     INNER JOIN tb_users u ON o.id_user = u.id_user
+     INNER JOIN tb_orders_status s ON o.id_status = s.id_status
+     INNER JOIN tb_addresses a ON o.id_address = a.id_address;

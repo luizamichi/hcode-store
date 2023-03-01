@@ -27,6 +27,7 @@ use Amichi\Controller\CityController;
 use Amichi\Controller\ContactController;
 use Amichi\Controller\CountryController;
 use Amichi\Controller\MailController;
+use Amichi\Controller\OrderController;
 use Amichi\Controller\OrderStatusController;
 use Amichi\Controller\OtherController;
 use Amichi\Controller\ProductController;
@@ -47,6 +48,7 @@ use Amichi\View\ContactView;
 use Amichi\View\CountryView;
 use Amichi\View\MailView;
 use Amichi\View\OrderStatusView;
+use Amichi\View\OrderView;
 use Amichi\View\OtherView;
 use Amichi\View\ProductView;
 use Amichi\View\StateView;
@@ -228,6 +230,7 @@ $app->group(
         $app->delete("/{idUser}", UserController::class . ":delete")->add($midLoggedAdmin);
 
         $app->get("/{idUser}/address", UserController::class . ":getAddress")->add($midLoggedUser);
+        $app->get("/{idUser}/order", OrderController::class . ":getByUser")->add($midLoggedUser);
         $app->get("/{idUser}/product", WishlistController::class . ":getByUser")->add($midLoggedUser);
         $app->post("/{idUser}/product/{idProduct}", WishlistController::class . ":post")->add($midLoggedUser);
         $app->delete("/{idUser}/product/{idProduct}", WishlistController::class . ":delete")->add($midLoggedUser);
@@ -317,6 +320,19 @@ $app->group(
 
 
 $app->group(
+    "/api/order",
+    function ($app) use ($midLoggedAdmin, $midLoggedUser, $midJSON, $midView) {
+        $app->get("", OrderController::class . ":getAll")->add($midLoggedAdmin)->add($midJSON);
+        $app->get("/{idOrder}", OrderController::class . ":get")->add($midLoggedAdmin)->add($midJSON);
+        $app->get("/{idOrder}/bankpaymentslip", OrderController::class . ":getBankPaymentSlip")->add($midLoggedUser)->add($midView);
+        $app->post("", OrderController::class . ":post")->add($midLoggedAdmin)->add($midJSON);
+        $app->put("/{idOrder}", OrderController::class . ":put")->add($midLoggedAdmin)->add($midJSON);
+        $app->delete("/{idOrder}", OrderController::class . ":delete")->add($midLoggedAdmin)->add($midJSON);
+    }
+)->add($midCORS);
+
+
+$app->group(
     "/admin",
     function ($app) use ($midIsUser) {
         $app->get("/login", UserView::class . ":login");
@@ -365,6 +381,9 @@ $app->group(
         $app->get("/carts/{idCart}/products", CartView::class . ":getProducts");
 
         $app->get("/ordersstatus", OrderStatusView::class . ":getAll");
+
+        $app->get("/orders", OrderView::class . ":getAll");
+        $app->get("/orders/{idOrder}", OrderView::class . ":view");
     }
 )->add($midView)->add($midIsAdmin);
 
@@ -376,7 +395,9 @@ $app->group(
         $app->get("/cart", CartView::class . ":webView");
         $app->get("/categories", CategoryView::class . ":webList");
         $app->get("/categories/{slugCategory}", CategoryView::class . ":webView");
+        $app->get("/checkout", OrderView::class . ":webView")->add($midIsUser);
         $app->get("/contact", ContactView::class . ":webView");
+        $app->get("/orders", OrderView::class . ":webList")->add($midIsUser);
         $app->get("/profile", UserView::class . ":webView")->add($midIsUser);
         $app->get("/products", ProductView::class . ":webList");
         $app->get("/products/{slugProduct}", ProductView::class . ":webView");
