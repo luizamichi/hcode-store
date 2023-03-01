@@ -151,3 +151,10 @@ CREATE VIEW vw_carts_products AS
       FROM tb_carts_products
      INNER JOIN tb_carts USING (id_cart)
      INNER JOIN tb_products USING (id_product);
+
+
+DROP VIEW IF EXISTS vw_orders_status;
+
+CREATE VIEW vw_orders_status AS
+    SELECT id_status, des_status, num_code, dt_status_created_at
+      FROM tb_orders_status;

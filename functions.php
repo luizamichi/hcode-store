@@ -11,6 +11,7 @@
  * @link     https://github.com/luizamichi/hcode-store
  */
 
+use Amichi\Enumerated\OrderStatus as EnumeratedOrderStatus;
 use Amichi\Model\Cart;
 use Amichi\Model\User;
 use Amichi\Model\Wishlist;
@@ -143,12 +144,12 @@ function getCountWishlist(): int
 function getStatusIcon(string $enum): string
 {
     return match ($enum) {
-        "OPEN_ORDER" => "<i class=\"fas fa-play-circle\"></i>",
-        "AWAITING_PAYMENT" => "<i class=\"fas fa-clock\"></i>",
-        "PAYMENT_CONFIRMED" => "<i class=\"fas fa-thumbs-up\"></i>",
-        "ORDER_DISPATCHED" => "<i class=\"fab fa-telegram-plane\"></i>",
-        "ORDER_DELIVERED" => "<i class=\"fas fa-check-circle\"></i>",
-        "CANCELED_ORDER" => "<i class=\"fas fa-times-circle\"></i>",
+        EnumeratedOrderStatus::OPEN_ORDER->name => "<i class=\"fas fa-play-circle\"></i>",
+        EnumeratedOrderStatus::AWAITING_PAYMENT->name => "<i class=\"fas fa-clock\"></i>",
+        EnumeratedOrderStatus::PAYMENT_CONFIRMED->name => "<i class=\"fas fa-thumbs-up\"></i>",
+        EnumeratedOrderStatus::ORDER_DISPATCHED->name => "<i class=\"fab fa-telegram-plane\"></i>",
+        EnumeratedOrderStatus::ORDER_DELIVERED->name => "<i class=\"fas fa-check-circle\"></i>",
+        EnumeratedOrderStatus::CANCELED_ORDER->name => "<i class=\"fas fa-times-circle\"></i>",
         default => "<i class=\"fas fa-question-circle\"></i>"
     };
 }

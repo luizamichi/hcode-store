@@ -271,3 +271,16 @@ CREATE TABLE tb_carts_products (
     CONSTRAINT fk_tb_carts_products_to_tb_carts FOREIGN KEY (id_cart) REFERENCES tb_carts (id_cart) ON DELETE CASCADE,
     CONSTRAINT fk_tb_carts_products_to_tb_products FOREIGN KEY (id_product) REFERENCES tb_products (id_product) ON DELETE SET NULL
 ) COMMENT = 'Carrinhos x Produtos';
+
+
+DROP TABLE IF EXISTS tb_orders_status;
+
+CREATE TABLE tb_orders_status (
+    id_status INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do status de pedido',
+    des_status VARCHAR(32) NOT NULL COMMENT 'Descrição do status de pedido',
+    num_code TINYINT UNSIGNED NOT NULL COMMENT 'Código do status de pedido',
+    dt_status_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do status do pedido',
+    CONSTRAINT pk_tb_orders_status PRIMARY KEY (id_status),
+    CONSTRAINT uk_tb_orders_status_des_status UNIQUE KEY (des_status),
+    CONSTRAINT uk_tb_orders_status_num_code UNIQUE KEY (num_code)
+) COMMENT = 'Status de pedidos';

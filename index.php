@@ -27,6 +27,7 @@ use Amichi\Controller\CityController;
 use Amichi\Controller\ContactController;
 use Amichi\Controller\CountryController;
 use Amichi\Controller\MailController;
+use Amichi\Controller\OrderStatusController;
 use Amichi\Controller\OtherController;
 use Amichi\Controller\ProductController;
 use Amichi\Controller\StateController;
@@ -45,6 +46,7 @@ use Amichi\View\CityView;
 use Amichi\View\ContactView;
 use Amichi\View\CountryView;
 use Amichi\View\MailView;
+use Amichi\View\OrderStatusView;
 use Amichi\View\OtherView;
 use Amichi\View\ProductView;
 use Amichi\View\StateView;
@@ -303,6 +305,18 @@ $app->group(
 
 
 $app->group(
+    "/api/orderstatus",
+    function ($app) use ($midLoggedAdmin) {
+        $app->get("", OrderStatusController::class . ":getAll");
+        $app->get("/{idStatus}", OrderStatusController::class . ":get");
+        $app->post("", OrderStatusController::class . ":post")->add($midLoggedAdmin);
+        $app->put("/{idStatus}", OrderStatusController::class . ":put")->add($midLoggedAdmin);
+        $app->delete("/{idStatus}", OrderStatusController::class . ":delete")->add($midLoggedAdmin);
+    }
+)->add($midCORS)->add($midJSON);
+
+
+$app->group(
     "/admin",
     function ($app) use ($midIsUser) {
         $app->get("/login", UserView::class . ":login");
@@ -349,6 +363,8 @@ $app->group(
 
         $app->get("/carts", CartView::class . ":getAll");
         $app->get("/carts/{idCart}/products", CartView::class . ":getProducts");
+
+        $app->get("/ordersstatus", OrderStatusView::class . ":getAll");
     }
 )->add($midView)->add($midIsAdmin);
 

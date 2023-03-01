@@ -295,3 +295,14 @@ VALUES
     (10, 3, 3, 1135.23, NULL, NOW()),
     (11, 4, 5, 1299, NULL, NOW()),
     (12, 5, 5, 1299, NULL, NOW());
+
+
+INSERT INTO
+    tb_orders_status (id_status, des_status, num_code, dt_status_created_at)
+VALUES
+    (1, 'Em aberto', 1, NOW()),
+    (2, 'Aguardando pagamento', 2, NOW()),
+    (3, 'Pagamento confirmado', 3, NOW()),
+    (4, 'Pedido enviado', 4, NOW()),
+    (5, 'Pedido entregue', 5, NOW()),
+    (6, 'Pedido cancelado', 6, NOW());

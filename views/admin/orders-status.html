@@ -1,0 +1,80 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-list"></i>
+            Lista de Status de Pedidos
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item active">Status de Pedidos</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th></th>
+                    <th>Descrição</th>
+                    <th>Código</th>
+                    <th>Enumerado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loop="$ordersStatus"}
+                  <tr data-id="{$value.id}">
+                    <td>{$value.id}</td>
+                    <td>{function="getStatusIcon($value.enum)"}</td>
+                    <td data-find="search">{$value.description}</td>
+                    <td>{$value.code}</td>
+                    <td data-find="search">{$value.enum}</td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="5">
+                      <small>
+                        <span id="count">{function="count($ordersStatus)"}</span>
+                        <span id="countText">status de pedidos encontrados</span>
+                      </small>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.title += " (Orders Status)";
+
+  window.addEventListener("load", () => {
+    $("#countText").text("status de pedidos encontrados");
+    if ($("#count").text() == 1) {
+      $("#countText").text("status de pedido encontrado");
+    }
+  });
+</script>

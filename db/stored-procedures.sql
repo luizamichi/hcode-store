@@ -504,3 +504,32 @@ BEGIN
      WHERE id_cart = pid_cart;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_order_status;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_order_status (
+    IN pid_status INT,
+    IN pdes_status VARCHAR(32),
+    IN pnum_code TINYINT
+)
+BEGIN
+    IF pid_status > 0 THEN
+        UPDATE tb_orders_status
+           SET des_status = pdes_status,
+               num_code = pnum_code
+         WHERE id_status = pid_status;
+
+    ELSE
+        INSERT INTO tb_orders_status (des_status, num_code, dt_status_created_at)
+                              VALUES (pdes_status, pnum_code, NOW());
+
+        SET pid_status = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_orders_status
+     WHERE id_status = pid_status;
+END $$
+DELIMITER ;
