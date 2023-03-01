@@ -21,6 +21,7 @@ session_start();
 
 
 use Amichi\Controller\AddressController;
+use Amichi\Controller\CartController;
 use Amichi\Controller\CategoryController;
 use Amichi\Controller\CityController;
 use Amichi\Controller\ContactController;
@@ -38,6 +39,7 @@ use Amichi\Model\User;
 use Amichi\HttpException;
 
 use Amichi\View\AddressView;
+use Amichi\View\CartView;
 use Amichi\View\CategoryView;
 use Amichi\View\CityView;
 use Amichi\View\ContactView;
@@ -286,6 +288,21 @@ $app->group(
 
 
 $app->group(
+    "/api/cart",
+    function ($app) use ($midLoggedAdmin, $midLoggedUser) {
+        $app->get("", CartController::class . ":getAll")->add($midLoggedAdmin);
+        $app->get("/{idCart}", CartController::class . ":get")->add($midLoggedUser);
+        $app->get("/{idCart}/product", CartController::class . ":getProducts")->add($midLoggedUser);
+        $app->post("", CartController::class . ":post");
+        $app->post("/{idCart}/product/{idProduct}", CartController::class . ":postProduct");
+        $app->put("/{idCart}", CartController::class . ":put")->add($midLoggedUser);
+        $app->delete("/{idCart}", CartController::class . ":delete")->add($midLoggedAdmin);
+        $app->delete("/{idCart}/product/{idProduct}", CartController::class . ":deleteProduct");
+    }
+)->add($midCORS)->add($midJSON);
+
+
+$app->group(
     "/admin",
     function ($app) use ($midIsUser) {
         $app->get("/login", UserView::class . ":login");
@@ -329,6 +346,9 @@ $app->group(
         $app->get("/categories/create", CategoryView::class . ":create");
         $app->get("/categories/{idCategory}", CategoryView::class . ":update");
         $app->get("/categories/{idCategory}/products", CategoryView::class . ":getProducts");
+
+        $app->get("/carts", CartView::class . ":getAll");
+        $app->get("/carts/{idCart}/products", CartView::class . ":getProducts");
     }
 )->add($midView)->add($midIsAdmin);
 
@@ -337,6 +357,7 @@ $app->group(
     "",
     function ($app) use ($midIsUser) {
         $app->get("/", OtherView::class . ":mainPage");
+        $app->get("/cart", CartView::class . ":webView");
         $app->get("/categories", CategoryView::class . ":webList");
         $app->get("/categories/{slugCategory}", CategoryView::class . ":webView");
         $app->get("/contact", ContactView::class . ":webView");

@@ -129,3 +129,25 @@ CREATE VIEW vw_wishlist AS
       FROM tb_wishlist
      INNER JOIN tb_users USING (id_user)
      INNER JOIN tb_products USING (id_product);
+
+
+DROP VIEW IF EXISTS vw_carts;
+
+CREATE VIEW vw_carts AS
+    SELECT c.id_cart, c.des_session_id, c.num_temporary_zip_code, c.vl_freight, c.des_type_freight, c.num_days, c.dt_cart_created_at,
+           u.id_user, u.id_person, u.des_login, u.des_password, u.is_admin, u.dt_user_created_at, u.dt_user_changed_in,
+           a.id_address, a.id_city, a.id_street_type, a.des_address, a.des_number, a.des_district, a.des_complement, a.des_reference, a.num_zip_code, a.dt_address_created_at, a.dt_address_changed_in
+      FROM tb_carts c
+      LEFT OUTER JOIN tb_users u USING (id_user)
+      LEFT OUTER JOIN tb_addresses a USING (id_address);
+
+
+DROP VIEW IF EXISTS vw_carts_products;
+
+CREATE VIEW vw_carts_products AS
+    SELECT id_cart_product, vl_unit_price, dt_removed, dt_added_to_cart,
+           id_cart, des_session_id, id_user, id_address, num_temporary_zip_code, vl_freight, des_type_freight, num_days, dt_cart_created_at,
+           id_product, des_product, des_description, bin_image, vl_price, vl_width, vl_height, vl_length, vl_weight, num_quantity_stock, is_national, des_slug, dt_product_created_at, dt_product_changed_in
+      FROM tb_carts_products
+     INNER JOIN tb_carts USING (id_cart)
+     INNER JOIN tb_products USING (id_product);

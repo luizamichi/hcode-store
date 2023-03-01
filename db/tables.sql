@@ -238,3 +238,36 @@ CREATE TABLE tb_wishlist (
     CONSTRAINT fk_tb_wishlist_to_tb_users FOREIGN KEY (id_user) REFERENCES tb_users (id_user) ON DELETE CASCADE,
     CONSTRAINT fk_tb_wishlist_to_tb_products FOREIGN KEY (id_product) REFERENCES tb_products (id_product) ON DELETE CASCADE
 ) COMMENT = 'Lista de desejos';
+
+
+DROP TABLE IF EXISTS tb_carts;
+
+CREATE TABLE tb_carts (
+    id_cart INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do carrinho',
+    des_session_id VARCHAR(64) NOT NULL COMMENT 'ID da sessão',
+    id_user INT UNSIGNED NULL COMMENT 'Usuário do carrinho',
+    id_address INT UNSIGNED NULL COMMENT 'Endereço de entrega',
+    num_temporary_zip_code bigint(8) UNSIGNED ZEROFILL NULL COMMENT 'Código postal temporário do endereço de entrega',
+    vl_freight DECIMAL(10, 2) NULL COMMENT 'Valor do frete',
+    des_type_freight VARCHAR(32) NULL COMMENT 'Tipo do frete',
+    num_days INT UNSIGNED NULL COMMENT 'Dias para entrega',
+    dt_cart_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de criação do carrinho',
+    CONSTRAINT pk_tb_carts PRIMARY KEY (id_cart),
+    CONSTRAINT fk_tb_carts_to_tb_users FOREIGN KEY (id_user) REFERENCES tb_users (id_user) ON DELETE NO ACTION,
+    CONSTRAINT fk_tb_carts_to_tb_addresses FOREIGN KEY (id_address) REFERENCES tb_addresses (id_address) ON DELETE SET NULL
+) COMMENT = 'Carrinho de compras';
+
+
+DROP TABLE IF EXISTS tb_carts_products;
+
+CREATE TABLE tb_carts_products (
+    id_cart_product INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do carrinho x produto',
+    id_cart INT UNSIGNED NOT NULL COMMENT 'Carrinho',
+    id_product INT UNSIGNED NULL COMMENT 'Produto',
+    vl_unit_price DECIMAL(10, 2) NOT NULL DEFAULT 0.0 COMMENT 'Preço unitário do produto',
+    dt_removed TIMESTAMP NULL COMMENT 'Data de remoção do produto do carrinho',
+    dt_added_to_cart TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de inserção do produto no carrinho',
+    CONSTRAINT pk_tb_carts_products PRIMARY KEY (id_cart_product),
+    CONSTRAINT fk_tb_carts_products_to_tb_carts FOREIGN KEY (id_cart) REFERENCES tb_carts (id_cart) ON DELETE CASCADE,
+    CONSTRAINT fk_tb_carts_products_to_tb_products FOREIGN KEY (id_product) REFERENCES tb_products (id_product) ON DELETE SET NULL
+) COMMENT = 'Carrinhos x Produtos';

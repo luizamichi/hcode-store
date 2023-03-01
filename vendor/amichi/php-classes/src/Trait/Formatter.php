@@ -26,11 +26,11 @@ trait Formatter
     /**
      * Converte um valor decimal em ponto flutuante
      *
-     * @param string $decimal Valor decimal
+     * @param ?string $decimal Valor decimal
      *
      * @return float
      */
-    private function _decimalToFloat(string $decimal): float
+    private function _decimalToFloat(?string $decimal): float
     {
         $decimal = str_replace(".", "", $decimal);
         return (float) str_replace(",", ".", $decimal);

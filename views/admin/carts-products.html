@@ -1,0 +1,194 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fa fa-archive"></i>
+            Produtos do Carrinho {$cart.id}
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/admin/carts">Carrinhos</a>
+            </li>
+            <li class="breadcrumb-item">Carrinho {$cart.id}</li>
+            <li class="breadcrumb-item active">Produtos</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-check"></i>
+                Produtos relacionados
+              </h3>
+            </div>
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Produto</th>
+                    <th>Preço</th>
+                  </tr>
+                </thead>
+                <tbody id="productsAdded">
+                  {loop="$productsAdded"}
+                  <tr>
+                    <td>{$value.id}</td>
+                    <td data-find="search">{$value.name}</td>
+                    <td>{function="formatPrice($value.price)"}</td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="3">
+                      <small>
+                        <span id="countAdded">{function="count($productsAdded)"}</span>
+                        <span id="countTextAdded">produtos adicionados</span>
+                      </small>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-times"></i>
+                Produtos removidos
+              </h3>
+            </div>
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Produto</th>
+                    <th>Preço</th>
+                  </tr>
+                </thead>
+                <tbody id="productsRemoved">
+                  {loop="$productsRemoved"}
+                  <tr>
+                    <td>{$value.id}</td>
+                    <td data-find="search">{$value.name}</td>
+                    <td>{function="formatPrice($value.price)"}</td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="3">
+                      <small>
+                        <span id="countRemoved">{function="count($productsRemoved)"}</span>
+                        <span id="countTextRemoved">produtos removidos</span>
+                      </small>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-th-large"></i>
+                Pacote
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="col-12">
+                <form id="viewPackage" method="get">
+                  <div class="form-group">
+                    <label for="totalValue">Valor total</label>
+                    <input class="form-control" data-inputmask="'mask': '9{1,10}.99'" data-mask id="totalValue" name="totalValue" readonly step="0.01" type="number" value="{$cart.package.price}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="freightValue">Frete</label>
+                    <input class="form-control" data-inputmask="'mask': '9{1,10}.99'" data-mask id="freightValue" name="freightValue" readonly step="0.01" type="number" value="{$cart.freightValue}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="width">Largura</label>
+                    <input class="form-control" data-inputmask="'mask': '9{1,10}.99'" data-mask id="width" name="width" readonly step="0.01" type="number" value="{$cart.package.width}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="height">Altura</label>
+                    <input class="form-control" data-inputmask="'mask': '9{1,10}.99'" data-mask id="height" name="height" readonly step="0.01" type="number" value="{$cart.package.height}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="length">Comprimento</label>
+                    <input class="form-control" data-inputmask="'mask': '9{1,10}.99'" data-mask id="length" name="length" readonly step="0.01" type="number" value="{$cart.package.length}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="weight">Peso</label>
+                    <input class="form-control" data-inputmask="'mask': '9{1,10}.99'" data-mask id="weight" name="weight" readonly step="0.01" type="number" value="{$cart.package.weight}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="quantity">Quantidade de produtos</label>
+                    <input class="form-control" data-inputmask="'mask': '9{1,10}.99'" data-mask id="quantity" name="quantity" readonly step="0.01" type="number" value="{$cart.package.quantity}" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.title += " (Cart Products)";
+
+  window.addEventListener("load", () => {
+    $("#countAdded").change(function () {
+      $("#countTextAdded").text("produtos adicionados");
+      if ($("#countAdded").text() == 1) {
+        $("#countTextAdded").text("produto adicionado");
+      }
+    });
+
+    $("#countAdded").trigger("change");
+
+    $("#countRemoved").change(function () {
+      $("#countTextRemoved").text("produtos removidos");
+      if ($("#countRemoved").text() == 1) {
+        $("#countTextRemoved").text("produto removido");
+      }
+    });
+
+    $("#countRemoved").trigger("change");
+  });
+</script>

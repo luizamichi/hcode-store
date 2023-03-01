@@ -1,0 +1,90 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-list"></i>
+            Lista de Carrinhos
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item active">Carrinhos</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body table-responsive p-0">
+              <table class="table table-hover text-nowrap">
+                <caption></caption>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Usuário</th>
+                    <th>Sessão</th>
+                    <th>CEP</th>
+                    <th>Frete</th>
+                    <th>Prazo de entrega</th>
+                    <th>Data de criação</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loop="$carts"}
+                  <tr id="{$value.id}">
+                    <td>{$value.id}</td>
+                    <td data-find="search">{if="$value.user"}{$value.user.name}{/if}</td>
+                    <td>{$value.sessionId}</td>
+                    <td>{function="formatZipCode($value.temporaryZipCode)"}</td>
+                    <td>{function="formatPrice($value.freightValue)"}</td>
+                    <td>{$value.days}</td>
+                    <td>{function="formatDate($value.dateRegister)"}</td>
+                    <td>
+                      <a class="btn btn-default btn-xs" href="/admin/carts/{$value.id}/products">
+                        <i class="fa fa-archive"></i>
+                        Produtos
+                      </a>
+                    </td>
+                  </tr>
+                  {/loop}
+                </tbody>
+                <tfoot>
+                  <tr class="text-right">
+                    <td colspan="8">
+                      <small>
+                        <span id="count">{function="count($carts)"}</span>
+                        <span id="countText">carrinhos encontrados</span>
+                      </small>
+                    </td>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.title += " (Carts)";
+
+  window.addEventListener("load", () => {
+    $("#countText").text("carrinhos encontrados");
+    if ($("#count").text() == 1) {
+      $("#countText").text("carrinho encontrado");
+    }
+  });
+</script>

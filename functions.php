@@ -11,6 +11,7 @@
  * @link     https://github.com/luizamichi/hcode-store
  */
 
+use Amichi\Model\Cart;
 use Amichi\Model\User;
 use Amichi\Model\Wishlist;
 
@@ -84,7 +85,7 @@ function checkLogin(): bool
  */
 function getCartId(): int
 {
-    return random_int(1, 1000);
+    return Cart::loadFromSession()->id;
 }
 
 
@@ -117,7 +118,7 @@ function getUserName(): string
  */
 function getCountCartProducts(): int
 {
-    return random_int(0, 10);
+    return count(Cart::loadFromSession()->getProducts());
 }
 
 

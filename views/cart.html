@@ -1,0 +1,243 @@
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <div class="col-12">
+      <nav class="breadcrumb bg-light mb-30" aria-label="Submenu">
+        <a class="breadcrumb-item text-dark" href="/">Início</a>
+        <span class="breadcrumb-item active">Carrinho</span>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Cart Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <div class="col-lg-8 table-responsive mb-5">
+      <table class="table table-light table-borderless table-hover text-center mb-0">
+        <caption></caption>
+        <thead class="thead-dark">
+          <tr>
+            <th>Produto</th>
+            <th>Preço</th>
+            <th>Quantidade</th>
+            <th>Total</th>
+            <th>Remover</th>
+          </tr>
+        </thead>
+        <tbody class="align-middle">
+          {loop="$cart.products"}
+          <tr>
+            <td class="align-middle">
+              <a href="/products/{$value.slug}">
+                {if="$value.image"}
+                <img src="data:image/png;base64,{$value.image}" alt="{$value.name}" style="width: 50px;" />
+                {else}
+                <img src="/res/multiShop/img/package.png" alt="Produto sem imagem" style="width: 50px;" />
+                {/if}
+              </a>
+            </td>
+            <td class="align-middle">R$ {function="formatPrice($value.price)"}</td>
+            <td class="align-middle">
+              <div class="input-group quantity mx-auto" style="width: 100px;">
+                <div class="input-group-btn">
+                  <button class="btn btn-sm btn-primary btn-minus" data-id="decreaseProductToCart" data-href="/api/cart/{function="getCartId()"}/product/{$value.id}">
+                    <i class="fa fa-minus"></i>
+                  </button>
+                </div>
+                <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" readonly value="{$value.quantity}" />
+                <div class="input-group-btn">
+                  <button class="btn btn-sm btn-primary btn-plus" data-id="increaseProductToCart" data-href="/api/cart/{function="getCartId()"}/product/{$value.id}">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </td>
+            <td class="align-middle">R$ {function="formatPrice($value.totalPrice)"}</td>
+            <td class="align-middle">
+              <button class="btn btn-sm btn-danger" data-id="removeProductToCart" data-href="/api/cart/{function="getCartId()"}/product/{$value.id}">
+                <i class="fa fa-times"></i>
+              </button>
+            </td>
+          </tr>
+          {/loop}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-lg-4">
+      <form class="mb-30" id="calculateFreight">
+        <div class="input-group">
+          <input type="text" id="temporaryZipCode" name="temporaryZipCode" class="form-control border-0 p-4" data-inputmask="'mask': '99.999-999'" data-mask placeholder="CEP" value="{$cart.temporaryZipCode}" />
+          <div class="input-group-append">
+            <button class="btn btn-primary">Calcular</button>
+          </div>
+        </div>
+      </form>
+      <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Resumo</span></h5>
+      <div class="bg-light p-30 mb-5">
+        <div class="border-bottom pb-2">
+          <div class="d-flex justify-content-between mb-3">
+            <h6>Subtotal</h6>
+            <h6>R$ {function="formatPrice($cart.totalPrice)"}</h6>
+          </div>
+          <div class="d-flex justify-content-between">
+            <h6 class="font-weight-medium">Envio</h6>
+            <h6 class="font-weight-medium">R$ {function="formatPrice($cart.freightValue)"}</h6>
+          </div>
+        </div>
+        <div class="pt-2">
+          <div class="d-flex justify-content-between mt-2">
+            <h5>Total</h5>
+            <h5>R$ {function="formatPrice($cart.totalPrice + $cart.freightValue)"}</h5>
+          </div>
+          <a class="btn btn-block btn-primary font-weight-bold my-3 py-3" href="/checkout">Finalizar compra</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Cart End -->
+
+<script>
+  document.title += " (Cart)";
+
+  window.addEventListener("load", () => {
+    $("[data-mask]").inputmask();
+
+    $.validator.methods.zipCode = function (value, element) {
+      return this.optional(element) || /^\d{2}\.\d{3}\-\d{3}$/.test(value);
+    }
+
+    $.validator.setDefaults({
+      submitHandler: function () {
+        $.ajax({
+          type: "put",
+          url: "/api/cart/{$cart.id}",
+          dataType: "json",
+          data: $("#calculateFreight").serialize(),
+          beforeSend: () => {
+            $("a, button, input, select").attr("disabled", true);
+          },
+          complete: () => {
+            $("a, button, input, select").attr("disabled", false);
+          },
+          success: (response) => {
+            alert("Frete calculado.");
+            location.reload();
+          },
+          error: (xhr, status, error) => {
+            let json = xhr.responseJSON ?? {};
+            alert(json.message ?? "Não foi possível calcular o frete.");
+          }
+        });
+      }
+    });
+
+    $("#calculateFreight").validate({
+      rules: {
+        temporaryZipCode: {
+          zipCode: true,
+          minlength: 10,
+          maxlength: 10
+        }
+      },
+      messages: {
+        temporaryZipCode: {
+          zipCode: "Por favor, insira um CEP válido",
+          minlength: "Por favor, insira um CEP com tamanho válido",
+          maxlength: "Por favor, insira um CEP com tamanho válido"
+        }
+      },
+      errorElement: "span",
+      errorPlacement: function (error, element) {
+        error.addClass("invalid-feedback");
+        element.closest(".form-group").append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass("is-invalid");
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass("is-invalid");
+      }
+    });
+
+    $("[data-id='increaseProductToCart']").click(function (event) {
+      event.preventDefault();
+      let url = $(this).attr("data-href");
+
+      $.ajax({
+        type: "post",
+        url: url,
+        dataType: "json",
+        beforeSend: () => {
+          $("button, input").attr("disabled", true);
+        },
+        complete: () => {
+          $("button, input").attr("disabled", false);
+        },
+        success: () => {
+          alert("Produto incrementado ao carrinho.");
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          let json = xhr.responseJSON ?? {};
+          alert(json.message ?? "Não foi possível incrementar o produto ao carrinho.");
+        }
+      });
+    });
+
+    $("[data-id='decreaseProductToCart']").click(function (event) {
+      event.preventDefault();
+      let url = $(this).attr("data-href");
+
+      $.ajax({
+        type: "delete",
+        url: url,
+        dataType: "json",
+        beforeSend: () => {
+          $("button, input").attr("disabled", true);
+        },
+        complete: () => {
+          $("button, input").attr("disabled", false);
+        },
+        success: () => {
+          alert("Produto decrementado do carrinho.");
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          let json = xhr.responseJSON ?? {};
+          alert(json.message ?? "Não foi possível decrementar o produto do carrinho.");
+        }
+      });
+    });
+
+    $("[data-id='removeProductToCart']").click(function (event) {
+      event.preventDefault();
+      let url = $(this).attr("data-href");
+
+      $.ajax({
+        type: "delete",
+        url: url,
+        dataType: "json",
+        data: {
+          removeAll: true
+        },
+        beforeSend: () => {
+          $("button, input").attr("disabled", true);
+        },
+        complete: () => {
+          $("button, input").attr("disabled", false);
+        },
+        success: () => {
+          alert("Produto removido do carrinho.");
+          location.reload();
+        },
+        error: (xhr, status, error) => {
+          let json = xhr.responseJSON ?? {};
+          alert(json.message ?? "Não foi possível remover o produto do carrinho.");
+        }
+      });
+    });
+  });
+</script>

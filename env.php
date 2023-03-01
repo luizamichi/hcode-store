@@ -51,3 +51,13 @@ putenv("ENTERPRISE_FU=PR"); // Estado (UF)
 putenv("ENTERPRISE_LOGO=/res/multiShop/img/hcode.png"); // Logotipo
 putenv("ENTERPRISE_PHONE=44998665521"); // Telefone
 putenv("ENTERPRISE_MAIL=contato@luizamichi.com.br"); // E-mail
+
+
+// Serviço para cálculo do envio de encomendas pelos Correios
+putenv("COURIER_COMPANY_CODE="); // Código administrativo junto à ECT
+putenv("COURIER_PASSWORD="); // Senha para acesso ao serviço
+putenv("COURIER_SERVICE_CODE=40010"); // Código do serviço (40010: SEDEX Varejo, 40045: SEDEX a Cobrar Varejo, 40215: SEDEX 10 Varejo, 40290: SEDEX Hoje Varejo, 41106: PAC Varejo)
+putenv("COURIER_ORIGIN_ZIP_CODE=86047622"); // CEP de origem
+putenv("COURIER_ORDER_FORMAT=1"); // Formato da encomenda (1: Formato caixa/pacote, 2: Formato rolo/prisma, 3: Envelope)
+putenv("COURIER_OWN_HAND=S"); // Serviço adicional mão própria
+putenv("COURIER_ORDER_RECEIPT_NOTICE=S"); // Aviso de recebimento (S: Sim, N: Não)

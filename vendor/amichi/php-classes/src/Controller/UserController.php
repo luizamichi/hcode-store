@@ -15,6 +15,7 @@ namespace Amichi\Controller;
 use Amichi\Controller;
 use Amichi\HttpException;
 use Amichi\Model\Address;
+use Amichi\Model\Cart;
 use Amichi\Model\User;
 use Amichi\Model\UserLog;
 use Amichi\Model\UserPasswordRecovery;
@@ -311,6 +312,13 @@ class UserController extends Controller
         $address = Address::loadFromUserId($id);
         if ($address) {
             throw (new HttpException("Não foi possível remover o usuário $id, pois, está vinculado ao endereço {$address->id}.", 400))->json();
+        }
+
+        $carts = Cart::listFromUserId($id);
+        if ($carts) {
+            $cartsIds = array_map(fn (Cart $cart): int => $cart->id, $carts);
+            $message = count($carts) === 1 ? "ao carrinho" : "aos carrinhos";
+            throw (new HttpException("Não foi possível remover o usuário $id, pois, está vinculado $message " . implode(", ", $cartsIds) . ".", 400))->json();
         }
 
         $response->getBody()->write(json_encode($user->delete()));

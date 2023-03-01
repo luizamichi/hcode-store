@@ -268,3 +268,30 @@ VALUES
     (1, 1, NOW()),
     (2, 2, NOW()),
     (3, 3, NOW());
+
+
+INSERT INTO
+    tb_carts (id_cart, des_session_id, id_user, id_address, num_temporary_zip_code, vl_freight, des_type_freight, num_days, dt_cart_created_at)
+VALUES
+    (1, '9g2b4a2bfnnv279f232te9u7g0', NULL, NULL, NULL, NULL, NULL, NULL, NOW()),
+    (2, '2v0r2o3fvvvurtmdrr07v1opuo', 2, NULL, NULL, NULL, NULL, NULL, NOW()),
+    (3, 'oab5dlightjoldg159621hibqc', NULL, NULL, 87020250, 331.99, '1', 10, NOW()),
+    (4, 'vf9qrt3obtfijsk77arq0sj0id', NULL, NULL, 87020260, 113.16, '1', 5, NOW()),
+    (5, 'u1b87l8rjsiediu9rekathchq5', 3, NULL, 69928000, 114.5, '1', 3, NOW());
+
+
+INSERT INTO
+    tb_carts_products (id_cart_product, id_cart, id_product, vl_unit_price, dt_removed, dt_added_to_cart)
+VALUES
+    (1, 2, 3, 1135.23, NOW(), NOW()),
+    (2, 2, 3, 1135.23, NOW(), NOW()),
+    (3, 2, 7, 679.9, NOW(), NOW()),
+    (4, 2, 7, 679.9, NULL, NOW()),
+    (5, 2, 4, 1887.78, NULL, NOW()),
+    (6, 2, 4, 1887.78, NULL, NOW()),
+    (7, 2, 4, 1887.78, NULL, NOW()),
+    (8, 3, 3, 1135.23, NULL, NOW()),
+    (9, 3, 3, 1135.23, NULL, NOW()),
+    (10, 3, 3, 1135.23, NULL, NOW()),
+    (11, 4, 5, 1299, NULL, NOW()),
+    (12, 5, 5, 1299, NULL, NOW());

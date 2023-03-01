@@ -465,3 +465,42 @@ BEGIN
      WHERE id_category = pid_category;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_cart;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_cart (
+    IN pid_cart INT,
+    IN pdes_session_id VARCHAR(64),
+    IN pid_user INT,
+    IN pid_address INT,
+    IN pnum_temporary_zip_code BIGINT,
+    IN pvl_freight DECIMAL(10, 2),
+    IN pdes_type_freight VARCHAR(32),
+    IN pnum_days INT
+)
+BEGIN
+    IF pid_cart > 0 THEN
+        UPDATE tb_carts
+           SET des_session_id = pdes_session_id,
+               id_user = pid_user,
+               id_address = pid_address,
+               num_temporary_zip_code = pnum_temporary_zip_code,
+               vl_freight = pvl_freight,
+               des_type_freight = pdes_type_freight,
+               num_days = pnum_days
+         WHERE id_cart = pid_cart;
+
+    ELSE
+        INSERT INTO tb_carts (des_session_id, id_user, id_address, num_temporary_zip_code, vl_freight, des_type_freight, num_days, dt_cart_created_at)
+                      VALUES (pdes_session_id, pid_user, pid_address, pnum_temporary_zip_code, pvl_freight, pdes_type_freight, pnum_days, NOW());
+
+        SET pid_cart = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_carts
+     WHERE id_cart = pid_cart;
+END $$
+DELIMITER ;
