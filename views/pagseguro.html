@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>MultiShop | PagSeguro</title>
+
+  <link href="/res/multiShop/img/logo.png" rel="shortcut icon" type="image/x-icon" />
+</head>
+
+<body style="display: none;">
+  <!-- Declaração do formulário -->
+  <form method="post" action="https://pagseguro.uol.com.br/v2/checkout/payment.html">
+    <!-- Campos obrigatórios -->
+    <input name="receiverEmail" type="hidden" value="{function="getenv("PAGSEGURO_RECEIVER_EMAIL")"}" />
+    <input name="currency" type="hidden" value="BRL" />
+
+    <!-- Itens do pagamento (ao menos um item é obrigatório) -->
+    {loop="$order.cart.products"}
+    <input name="itemId{$counter + 1}" type="hidden" value="{$value.id}" />
+    <input name="itemDescription{$counter + 1}" type="hidden" value="{$value.name}" />
+    <input name="itemAmount{$counter + 1}" type="hidden" value="{$value.totalPrice}" />
+    <input name="itemQuantity{$counter + 1}" type="hidden" value="{$value.quantity}" />
+    <input name="itemWeight{$counter + 1}" type="hidden" value="{$value.weight * 100}" />
+    {/loop}
+
+    <!-- Código de referência do pagamento no seu sistema (opcional) -->
+    <input name="reference" type="hidden" value="{$order.code}" />
+
+    <!-- Informações de frete (opcionais) -->
+    <input name="shippingType" type="hidden" value="{function="getenv("PAGSEGURO_SHIPPING_TYPE")"}" />
+    <input name="shippingAddressPostalCode" type="hidden" value="{$order.address.zipCode}" />
+    <input name="shippingAddressStreet" type="hidden" value="{function="getValue($order.address.streetType.name)"} {$order.address.publicPlace}" />
+    <input name="shippingAddressNumber" type="hidden" value="{$order.address.number}" />
+    <input name="shippingAddressComplement" type="hidden" value="{$order.address.complement}" />
+    <input name="shippingAddressDistrict" type="hidden" value="{$order.address.district}" />
+    <input name="shippingAddressCity" type="hidden" value="{$order.address.city.name}" />
+    <input name="shippingAddressState" type="hidden" value="{$order.address.city.state.uf}" />
+    <input name="shippingAddressCountry" type="hidden" value="BRA" />
+
+    <!-- Dados do comprador (opcionais) -->
+    <input name="senderName" type="hidden" value="{$order.user.name}" />
+    <input name="senderAreaCode" type="hidden" value="{function="substr($order.user.phone, 0, 2)"}" />
+    <input name="senderPhone" type="hidden" value="{function="substr($order.user.phone, 2)"}" />
+    <input name="senderEmail" type="hidden" value="{$order.user.email}" />
+
+    <!-- Submit do formulário (obrigatório) -->
+    <input alt="Pague com PagSeguro" name="submit" type="image" src="https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/120x53-pagar.gif" />
+  </form>
+
+  <script>
+    document.forms[0].submit();
+  </script>
+</body>
+
+</html>

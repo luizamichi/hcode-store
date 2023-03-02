@@ -190,4 +190,68 @@ class OrderView extends Controller
         $response->getBody()->write($page->getTpl());
         return $response;
     }
+
+
+    /**
+     * Retorna o template da página de redirecionamento do PagSeguro
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function pagSeguro(Request $request, Response $response, array $args): Response
+    {
+        $order = Order::loadFromCode(self::string($args["codeOrder"]));
+
+        if (!$order || $order->user->id !== User::loadFromSession()?->id) {
+            return $response->withHeader("Location", "/checkout")->withStatus(302);
+        }
+
+        $page = new Page(
+            [
+                "header" => false,
+                "footer" => false
+            ]
+        );
+        $page->setTpl("pagseguro", ["order" => $order->array()]);
+
+        $response->getBody()->write($page->getTpl());
+        return $response;
+    }
+
+
+    /**
+     * Retorna o template da página de redirecionamento do PayPal
+     *
+     * @param Request  $request  Requisição
+     * @param Response $response Resposta
+     * @param array    $args     Argumentos da URL
+     *
+     * @static
+     *
+     * @return Response
+     */
+    public static function payPal(Request $request, Response $response, array $args): Response
+    {
+        $order = Order::loadFromCode(self::string($args["codeOrder"]));
+
+        if (!$order || $order->user->id !== User::loadFromSession()?->id) {
+            return $response->withHeader("Location", "/checkout")->withStatus(302);
+        }
+
+        $page = new Page(
+            [
+                "header" => false,
+                "footer" => false
+            ]
+        );
+        $page->setTpl("paypal", ["order" => $order->array()]);
+
+        $response->getBody()->write($page->getTpl());
+        return $response;
+    }
 }

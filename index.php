@@ -398,6 +398,8 @@ $app->group(
         $app->get("/checkout", OrderView::class . ":webView")->add($midIsUser);
         $app->get("/contact", ContactView::class . ":webView");
         $app->get("/orders", OrderView::class . ":webList")->add($midIsUser);
+        $app->get("/orders/{codeOrder}/pagseguro", OrderView::class . ":pagSeguro")->add($midIsUser);
+        $app->get("/orders/{codeOrder}/paypal", OrderView::class . ":payPal")->add($midIsUser);
         $app->get("/profile", UserView::class . ":webView")->add($midIsUser);
         $app->get("/products", ProductView::class . ":webList");
         $app->get("/products/{slugProduct}", ProductView::class . ":webView");

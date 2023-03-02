@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>MultiShop | PayPal</title>
+
+  <link href="/res/multiShop/img/logo.png" rel="shortcut icon" type="image/x-icon" />
+</head>
+
+<body style="display: none;">
+  <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+    <input name="cmd" type="hidden" value="_cart" />
+    <input name="upload" type="hidden" value="1" />
+    <input name="charset" type="hidden" value="utf-8" />
+    <input name="business" type="hidden" value="{function="getenv("PAYPAL_BUSINESS")"}" />
+
+    {loop="$order.cart.products"}
+    <input name="item_number_{$counter + 1}" type="hidden" value="{$value.id}" />
+    <input name="item_name_{$counter + 1}" type="hidden" value="{$value.name}" />
+    <input name="amount_{$counter + 1}" type="hidden" value="{$value.totalPrice}" />
+    <input name="quantity_{$counter + 1}" type="hidden" value="{$value.quantity}" />
+    {/loop}
+
+    <input name="currency_code" type="hidden" value="BRL" />
+    <input name="email" type="hidden" value="{$order.user.email}" />
+
+    <input alt="PayPal - A forma mais segura e fácil de pagar online" name="submit" type="image" src="https://www.paypalobjects.com/pt_BR/i/btn/btn_buynow_LG.gif" />
+  </form>
+
+  <script>
+    document.forms[0].submit();
+  </script>
+</body>
+
+</html>

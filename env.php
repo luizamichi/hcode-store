@@ -71,3 +71,12 @@ putenv("BANK_PORTFOLIO=18"); // Carteira
 putenv("BANK_ACCOUNT=10403005"); // Conta (até 8 dígitos)
 putenv("BANK_AGREEMENT=1234"); // Convênio (4, 6 ou 7 dígitos)
 putenv("BANK_EXPIRATION_DAYS=3"); // Dias para vencimento do boleto
+
+
+// Integração com o PagSeguro
+putenv("PAGSEGURO_RECEIVER_EMAIL=pagseguro@luizamichi.com.br"); // E-mail vinculado à conta do PagSeguro
+putenv("PAGSEGURO_SHIPPING_TYPE=1"); // Tipo do envio (1: Encomenda normal (PAC), 2: SEDEX, 3: Tipo de frete não especificado)
+
+
+// Integração com o PayPal
+putenv("PAYPAL_BUSINESS=paypal@luizamichi.com.br"); // E-mail vinculado à conta do PayPal
