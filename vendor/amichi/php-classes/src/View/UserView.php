@@ -14,6 +14,7 @@ namespace Amichi\View;
 
 use Amichi\Controller;
 use Amichi\Model\Address;
+use Amichi\Model\Cart;
 use Amichi\Model\StreetType;
 use Amichi\Model\User;
 use Amichi\Model\UserLog;
@@ -210,6 +211,8 @@ class UserView extends Controller
         $user = User::loadFromSession()?->clearSession();
 
         if ($user) {
+            Cart::clearSession();
+
             $userLog->idUser = $user->id;
             $userLog->description = "Logout";
             $userLog->save();

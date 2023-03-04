@@ -28,9 +28,11 @@ class HttpException extends \Exception
      *
      * @var bool $_environmentIsApi Ambiente de execução é API?
      * @var bool $_success          Sucesso na operação?
+     * @var bool $_debug            Modo de depuração?
      */
     private bool $_environmentIsApi;
     private bool $_success;
+    private bool $_debug;
 
 
     /**
@@ -49,6 +51,7 @@ class HttpException extends \Exception
 
         $this->_success = $success;
         $this->_environmentIsApi = getenv("APPLICATION_ENVIRONMENT") !== "view";
+        $this->_debug = getenv("PHP_DEBUG") === "true";
 
         if ($this->_environmentIsApi) {
             header("Content-type: application/json");
@@ -63,7 +66,7 @@ class HttpException extends \Exception
      */
     public function __toString(): string
     {
-        return json_encode($this->array());
+        return json_encode($this->array(!$this->_debug));
     }
 
 
@@ -109,7 +112,7 @@ class HttpException extends \Exception
                     "footer" => false
                 ]
             );
-            $page->setTpl("error", ["exception" => $this->array(false)]);
+            $page->setTpl("error", ["exception" => $this->array(!$this->_debug)]);
             exit($page->getTpl());
         }
 

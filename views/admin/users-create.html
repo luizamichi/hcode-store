@@ -180,38 +180,38 @@
 
     $("#password").keyup(() => {
       if ($("#password").val().toLowerCase() === $("#password").val()) { // Contém um caracter maiúsculo
-        $("#uppercase").html('<i class="far fa-times-circle"></i> <del>Letra maiúscula</del>').addClass("text-muted");
+        $("#uppercase").html('<i class="far fa-times-circle"></i> Letra maiúscula').addClass("text-muted");
       }
       else {
-        $("#uppercase").html('<i class="far fa-check-circle"></i> Letra maiúscula').removeClass("text-muted");
+        $("#uppercase").html('<i class="far fa-check-circle"></i> <del>Letra maiúscula</del>').removeClass("text-muted");
       }
 
       if ($("#password").val().toUpperCase() === $("#password").val()) { // Contém um caracter minúsculo
-        $("#lowercase").html('<i class="far fa-times-circle"></i> <del>Letra minúscula</del>').addClass("text-muted");
+        $("#lowercase").html('<i class="far fa-times-circle"></i> Letra minúscula').addClass("text-muted");
       }
       else {
-        $("#lowercase").html('<i class="far fa-check-circle"></i> Letra minúscula').removeClass("text-muted");
+        $("#lowercase").html('<i class="far fa-check-circle"></i> <del>Letra minúscula</del>').removeClass("text-muted");
       }
 
       if (!/\d/.test($("#password").val())) { // Contém um número
-        $("#number").html('<i class="far fa-times-circle"></i> <del>Número</del>').addClass("text-muted");
+        $("#number").html('<i class="far fa-times-circle"></i> Número').addClass("text-muted");
       }
       else {
-        $("#number").html('<i class="far fa-check-circle"></i> Número').removeClass("text-muted");
+        $("#number").html('<i class="far fa-check-circle"></i> <del>Número</del>').removeClass("text-muted");
       }
 
       if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test($("#password").val())) { // Contém um caracter especial
-        $("#special-char").html('<i class="far fa-times-circle"></i> <del>Caracter especial (ex.: @, #, *, !)</del>').addClass("text-muted");
+        $("#special-char").html('<i class="far fa-times-circle"></i> Caracter especial (ex.: @, #, *, !)').addClass("text-muted");
       }
       else {
-        $("#special-char").html('<i class="far fa-check-circle"></i> Caracter especial (ex.: @, #, *, !)').removeClass("text-muted");
+        $("#special-char").html('<i class="far fa-check-circle"></i> <del>Caracter especial (ex.: @, #, *, !)</del>').removeClass("text-muted");
       }
 
       if ($("#password").val().length >= 6) { // Contém o tamanho mínimo
-        $("#length").html('<i class="far fa-check-circle"></i> 6 caracteres').removeClass("text-muted");
+        $("#length").html('<i class="far fa-check-circle"></i> <del>6 caracteres</del>').removeClass("text-muted");
       }
       else {
-        $("#length").html('<i class="far fa-times-circle"></i> <del>6 caracteres</del>').addClass("text-muted");
+        $("#length").html('<i class="far fa-times-circle"></i> 6 caracteres').addClass("text-muted");
       }
     });
 

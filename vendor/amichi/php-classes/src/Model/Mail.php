@@ -119,7 +119,7 @@ class Mail extends Model implements JsonSerializable
         $query = "CALL sp_save_mail (:pid_mail, :pdes_recipient_email, :pdes_recipient_name,
                                      :pdes_subject, :pdes_content, :pdes_files, :pis_sent)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_mail", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pdes_recipient_email", $this->email, \PDO::PARAM_STR);
         $stmt->bindValue("pdes_recipient_name", $this->name, \PDO::PARAM_STR);
@@ -143,7 +143,7 @@ class Mail extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_mails WHERE id_mail = :pid_mail";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_mail", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -174,7 +174,7 @@ class Mail extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -199,7 +199,7 @@ class Mail extends Model implements JsonSerializable
                     FROM tb_mails
                    WHERE id_mail = :pid_mail";
 
-        $row = (new SQL())->send($query, ["pid_mail" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_mail" => $id])->fetch();
         return $row ? self::_translate($row) : null;
     }
 

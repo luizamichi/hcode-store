@@ -102,14 +102,17 @@ class Category extends Model implements JsonSerializable
     {
         $query = "CALL sp_save_category (:pid_category, :pdes_category, :pdes_nickname, :pfk_category)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_category", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pdes_category", $this->name, \PDO::PARAM_STR);
         $stmt->bindValue("pdes_nickname", $this->slug, \PDO::PARAM_STR);
         $stmt->bindValue("pfk_category", $this->idSuper, \PDO::PARAM_INT);
         $stmt->execute();
 
-        self::_translate($stmt->fetch(), $this);
+        $category = $stmt->fetch();
+        $stmt->closeCursor();
+
+        self::_translate($category, $this);
         return $this;
     }
 
@@ -125,7 +128,7 @@ class Category extends Model implements JsonSerializable
     {
         $query = "INSERT INTO tb_products_categories (id_product, id_category) VALUES (:pid_product, :pid_category)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_product", $idProduct, \PDO::PARAM_INT);
         $stmt->bindValue("pid_category", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
@@ -143,7 +146,7 @@ class Category extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_categories WHERE id_category = :pid_category";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_category", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -162,7 +165,7 @@ class Category extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_products_categories WHERE id_product = :pid_product AND id_category = :pid_category";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_product", $idProduct, \PDO::PARAM_INT);
         $stmt->bindValue("pid_category", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
@@ -194,7 +197,7 @@ class Category extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -217,7 +220,7 @@ class Category extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query, ["pfk_category" => $idSuper])->fetchAll()
+            (SQL::get())->send($query, ["pfk_category" => $idSuper])->fetchAll()
         );
     }
 
@@ -242,7 +245,7 @@ class Category extends Model implements JsonSerializable
                     FROM tb_categories
                    WHERE id_category = :pid_category";
 
-        $row = (new SQL())->send($query, ["pid_category" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_category" => $id])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -263,7 +266,7 @@ class Category extends Model implements JsonSerializable
                     FROM tb_categories
                    WHERE des_nickname = :pdes_nickname";
 
-        $row = (new SQL())->send($query, ["pdes_nickname" => $slug])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_nickname" => $slug])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -284,7 +287,7 @@ class Category extends Model implements JsonSerializable
                     FROM tb_categories
                    WHERE des_category = :pdes_category";
 
-        $row = (new SQL())->send($query, ["pdes_category" => $name])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_category" => $name])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -301,7 +304,7 @@ class Category extends Model implements JsonSerializable
         $query = "SELECT COUNT(*) quantity
                     FROM tb_categories";
 
-        $row = (new SQL())->send($query)->fetch();
+        $row = (SQL::get())->send($query)->fetch();
         return $row->quantity;
     }
 
@@ -359,7 +362,7 @@ class Category extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): Product => Product::translate($row),
-            (new SQL())->send($query, ["pid_category" => $this->id])->fetchAll()
+            (SQL::get())->send($query, ["pid_category" => $this->id])->fetchAll()
         );
     }
 

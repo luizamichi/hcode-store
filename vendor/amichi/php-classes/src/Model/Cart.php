@@ -146,7 +146,7 @@ class Cart extends Model implements JsonSerializable
         $query = "CALL sp_save_cart (:pid_cart, :pdes_session_id, :pid_user, :pid_address, :pnum_temporary_zip_code,
                                      :pvl_freight, :pdes_type_freight, :pnum_days)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_cart", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pdes_session_id", $this->sessionId, \PDO::PARAM_STR);
         $stmt->bindValue("pid_user", $this->idUser, \PDO::PARAM_INT);
@@ -157,7 +157,10 @@ class Cart extends Model implements JsonSerializable
         $stmt->bindValue("pnum_days", $this->days, \PDO::PARAM_INT);
         $stmt->execute();
 
-        self::_translate($stmt->fetch(), $this);
+        $cart = $stmt->fetch();
+        $stmt->closeCursor();
+
+        self::_translate($cart, $this);
         return $this;
     }
 
@@ -187,7 +190,7 @@ class Cart extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): Product => Product::translate($row),
-            (new SQL())->send($query, ["pid_cart" => $this->id])->fetchAll()
+            (SQL::get())->send($query, ["pid_cart" => $this->id])->fetchAll()
         );
     }
 
@@ -208,7 +211,7 @@ class Cart extends Model implements JsonSerializable
                      AND id_product = :pid_product
                      AND dt_removed IS " . ($related ? "NULL" : "NOT NULL");
 
-        $row = (new SQL())->send(
+        $row = (SQL::get())->send(
             $query,
             [
                 "pid_cart" => $this->id,
@@ -233,7 +236,7 @@ class Cart extends Model implements JsonSerializable
 
         $product = Product::loadFromId($idProduct);
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_cart", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pid_product", $idProduct, \PDO::PARAM_INT);
         $stmt->bindValue("pvl_unit_price", $product?->price, \PDO::PARAM_STR);
@@ -252,7 +255,7 @@ class Cart extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_carts WHERE id_cart = :pid_cart";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_cart", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -276,7 +279,7 @@ class Cart extends Model implements JsonSerializable
             $query = "UPDATE tb_carts_products SET dt_removed = NOW() WHERE id_cart = :pid_cart AND id_product = :pid_product AND dt_removed IS NULL LIMIT 1";
         }
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_cart", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pid_product", $idProduct, \PDO::PARAM_INT);
         $stmt->execute();
@@ -308,7 +311,7 @@ class Cart extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -333,7 +336,7 @@ class Cart extends Model implements JsonSerializable
                     FROM tb_carts
                    WHERE id_cart = :pid_cart";
 
-        $row = (new SQL())->send($query, ["pid_cart" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_cart" => $id])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -417,7 +420,7 @@ class Cart extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query, ["pid_user" => $idUser])->fetchAll()
+            (SQL::get())->send($query, ["pid_user" => $idUser])->fetchAll()
         );
     }
 
@@ -438,7 +441,7 @@ class Cart extends Model implements JsonSerializable
                     FROM tb_carts
                    WHERE des_session_id = :pdes_session_id";
 
-        $row = (new SQL())->send($query, ["pdes_session_id" => $sessionId ?? session_id()])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_session_id" => $sessionId ?? session_id()])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -472,7 +475,7 @@ class Cart extends Model implements JsonSerializable
                 $product->totalPrice = $row->vl_total;
                 return $product;
             },
-            (new SQL())->send($query, ["pid_cart" => $this->id])->fetchAll()
+            (SQL::get())->send($query, ["pid_cart" => $this->id])->fetchAll()
         );
 
         $this->totalPrice = array_reduce($this->products, fn (int $agg, Product $product): float => $product->totalPrice + $agg, 0) + $this->freightValue;
@@ -493,7 +496,7 @@ class Cart extends Model implements JsonSerializable
                    WHERE id_cart = :pid_cart
                      AND dt_removed IS NULL";
 
-        $row = (new SQL())->send($query, ["pid_cart" => $this->id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_cart" => $this->id])->fetch();
 
         $this->package = (object) [
             "price" => $row->vl_price,

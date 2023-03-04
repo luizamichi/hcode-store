@@ -101,7 +101,7 @@ class State extends Model implements JsonSerializable
     {
         $query = "CALL sp_save_state (:pid_state, :pid_country, :pnum_ibge_state, :pdes_state, :pdes_uf)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_state", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pid_country", $this->idCountry, \PDO::PARAM_INT);
         $stmt->bindValue("pnum_ibge_state", $this->ibgeCode, \PDO::PARAM_INT);
@@ -109,7 +109,10 @@ class State extends Model implements JsonSerializable
         $stmt->bindValue("pdes_uf", $this->uf, \PDO::PARAM_STR);
         $stmt->execute();
 
-        self::_translate($stmt->fetch(), $this);
+        $state = $stmt->fetch();
+        $stmt->closeCursor();
+
+        self::_translate($state, $this);
         return $this;
     }
 
@@ -123,7 +126,7 @@ class State extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_states WHERE id_state = :pid_state";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_state", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -154,7 +157,7 @@ class State extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -179,7 +182,7 @@ class State extends Model implements JsonSerializable
                     FROM tb_states
                    WHERE id_state = :pid_state";
 
-        $row = (new SQL())->send($query, ["pid_state" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_state" => $id])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -202,7 +205,7 @@ class State extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query, ["pid_country" => $idCountry])->fetchAll()
+            (SQL::get())->send($query, ["pid_country" => $idCountry])->fetchAll()
         );
     }
 
@@ -223,7 +226,7 @@ class State extends Model implements JsonSerializable
                     FROM tb_states
                    WHERE num_ibge_state = :pnum_ibge_state";
 
-        $row = (new SQL())->send($query, ["pnum_ibge_state" => $ibgeCode])->fetch();
+        $row = (SQL::get())->send($query, ["pnum_ibge_state" => $ibgeCode])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -246,7 +249,7 @@ class State extends Model implements JsonSerializable
                    WHERE des_uf = :pdes_uf
                      AND id_country = :pid_country";
 
-        $row = (new SQL())->send(
+        $row = (SQL::get())->send(
             $query,
             [
                 "pdes_uf" => $uf,

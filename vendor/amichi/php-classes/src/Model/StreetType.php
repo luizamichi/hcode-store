@@ -98,7 +98,7 @@ class StreetType extends Model implements JsonSerializable
     {
         $query = "CALL sp_save_street_type (:pid_street_type, :pdes_street_type, :pdes_acronym)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_street_type", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pdes_street_type", $this->name, \PDO::PARAM_STR);
         $stmt->bindValue("pdes_acronym", $this->acronym, \PDO::PARAM_STR);
@@ -118,7 +118,7 @@ class StreetType extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_street_types WHERE id_street_type = :pid_street_type";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_street_type", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -149,7 +149,7 @@ class StreetType extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -174,7 +174,7 @@ class StreetType extends Model implements JsonSerializable
                     FROM tb_street_types
                    WHERE id_street_type = :pid_street_type";
 
-        $row = (new SQL())->send($query, ["pid_street_type" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_street_type" => $id])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -195,7 +195,7 @@ class StreetType extends Model implements JsonSerializable
                     FROM tb_street_types
                    WHERE des_street_type = :pdes_street_type";
 
-        $row = (new SQL())->send($query, ["pdes_street_type" => $name])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_street_type" => $name])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -216,7 +216,7 @@ class StreetType extends Model implements JsonSerializable
                     FROM tb_street_types
                    WHERE des_acronym = :pdes_acronym";
 
-        $row = (new SQL())->send($query, ["pdes_acronym" => $acronym])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_acronym" => $acronym])->fetch();
         return $row ? self::_translate($row) : null;
     }
 

@@ -113,7 +113,7 @@ class Product extends Model implements JsonSerializable
                                         :pvl_width, :pvl_height, :pvl_length, :pvl_weight, :pnum_quantity_stock,
                                         :pis_national, :pdes_slug)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_product", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pdes_product", $this->name, \PDO::PARAM_STR);
         $stmt->bindValue("pdes_description", $this->description, \PDO::PARAM_STR);
@@ -142,7 +142,7 @@ class Product extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_products WHERE id_product = :pid_product";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_product", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -173,7 +173,7 @@ class Product extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -198,7 +198,7 @@ class Product extends Model implements JsonSerializable
                     FROM tb_products
                    WHERE id_product = :pid_product";
 
-        $row = (new SQL())->send($query, ["pid_product" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_product" => $id])->fetch();
         return $row ? self::translate($row) : null;
     }
 
@@ -219,7 +219,7 @@ class Product extends Model implements JsonSerializable
                     FROM tb_products
                    WHERE des_slug = :pdes_slug";
 
-        $row = (new SQL())->send($query, ["pdes_slug" => $slug])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_slug" => $slug])->fetch();
         return $row ? self::translate($row) : null;
     }
 
@@ -236,7 +236,7 @@ class Product extends Model implements JsonSerializable
         $query = "SELECT COUNT(*) quantity
                     FROM tb_products";
 
-        $row = (new SQL())->send($query)->fetch();
+        $row = (SQL::get())->send($query)->fetch();
         return $row->quantity;
     }
 

@@ -89,7 +89,7 @@ abstract class Person extends Model implements JsonSerializable
                     FROM tb_persons
                    WHERE id_person = :pid_person";
 
-        $row = (new SQL())->send($query, ["pid_person" => $idPerson])->fetch();
+        $row = (SQL::get())->send($query, ["pid_person" => $idPerson])->fetch();
         $row && $this->_translate($row);
     }
 
@@ -110,7 +110,7 @@ abstract class Person extends Model implements JsonSerializable
                     FROM tb_persons
                    WHERE des_email = :pdes_email";
 
-        $row = (new SQL())->send($query, ["pdes_email" => $email])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_email" => $email])->fetch();
         return $row ? $row->id_person : null;
     }
 
@@ -131,7 +131,7 @@ abstract class Person extends Model implements JsonSerializable
                     FROM tb_persons
                    WHERE des_cpf = :pdes_cpf";
 
-        $row = (new SQL())->send($query, ["pdes_cpf" => $cpf])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_cpf" => $cpf])->fetch();
         return $row ? $row->id_person : null;
     }
 

@@ -125,7 +125,7 @@ class Order extends Model implements JsonSerializable
             Cart::clearSession();
         }
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_order", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pid_cart", $this->idCart, \PDO::PARAM_INT);
         $stmt->bindValue("pid_user", $this->idUser, \PDO::PARAM_INT);
@@ -134,7 +134,10 @@ class Order extends Model implements JsonSerializable
         $stmt->bindValue("pvl_total", $this->totalValue, \PDO::PARAM_STR);
         $stmt->execute();
 
-        self::_translate($stmt->fetch(), $this);
+        $order = $stmt->fetch();
+        $stmt->closeCursor();
+
+        self::_translate($order, $this);
         return $this;
     }
 
@@ -148,7 +151,7 @@ class Order extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_orders WHERE id_order = :pid_order";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_order", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -179,7 +182,7 @@ class Order extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -204,7 +207,7 @@ class Order extends Model implements JsonSerializable
                     FROM tb_orders
                    WHERE id_order = :pid_order";
 
-        $row = (new SQL())->send($query, ["pid_order" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_order" => $id])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -225,7 +228,7 @@ class Order extends Model implements JsonSerializable
                     FROM tb_orders
                    WHERE des_code = :pdes_code";
 
-        $row = (new SQL())->send($query, ["pdes_code" => $code])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_code" => $code])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -278,7 +281,7 @@ class Order extends Model implements JsonSerializable
                     FROM tb_orders
                    WHERE id_cart = :pid_cart";
 
-        $row = (new SQL())->send($query, ["pid_cart" => $idCart])->fetch();
+        $row = (SQL::get())->send($query, ["pid_cart" => $idCart])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -301,7 +304,7 @@ class Order extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query, ["pid_user" => $idUser])->fetchAll()
+            (SQL::get())->send($query, ["pid_user" => $idUser])->fetchAll()
         );
     }
 
@@ -324,7 +327,7 @@ class Order extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query, ["pid_status" => $idStatus])->fetchAll()
+            (SQL::get())->send($query, ["pid_status" => $idStatus])->fetchAll()
         );
     }
 
@@ -347,7 +350,7 @@ class Order extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query, ["pid_address" => $idAddress])->fetchAll()
+            (SQL::get())->send($query, ["pid_address" => $idAddress])->fetchAll()
         );
     }
 
@@ -380,7 +383,7 @@ class Order extends Model implements JsonSerializable
         );
 
         $data = [
-            "dataVencimento" => (new DateTime())->modify("+" . getenv("BANK_EXPIRATION_DAYS") . " days"),
+            "dataVencimento" => (new DateTime($this->dateRegister))->modify("+" . getenv("BANK_EXPIRATION_DAYS") . " days"),
             "valor" => $this->totalValue,
             "sequencial" => getenv("BANK_SEQUENTIAL"),
             "sacado" => $drawee,
@@ -407,6 +410,17 @@ class Order extends Model implements JsonSerializable
         };
 
         return $bank->getOutput();
+    }
+
+
+    /**
+     * Verifica se o a data de pagamento expirou
+     *
+     * @return bool
+     */
+    public function expired(): bool
+    {
+        return (new DateTime()) > (new DateTime($this->dateRegister))->modify("+" . getenv("BANK_EXPIRATION_DAYS") . " days");
     }
 
 

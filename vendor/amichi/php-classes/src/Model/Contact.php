@@ -100,7 +100,7 @@ class Contact extends Model implements JsonSerializable
     {
         $query = "CALL sp_save_contact (:pdes_contact, :pdes_contact_email, :pdes_contact_subject, :pdes_message)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pdes_contact", $this->name, \PDO::PARAM_STR);
         $stmt->bindValue("pdes_contact_email", $this->email, \PDO::PARAM_STR);
         $stmt->bindValue("pdes_contact_subject", $this->subject, \PDO::PARAM_STR);
@@ -121,7 +121,7 @@ class Contact extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_contacts WHERE id_contact = :pid_contact";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_contact", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -152,7 +152,7 @@ class Contact extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -177,7 +177,7 @@ class Contact extends Model implements JsonSerializable
                     FROM tb_contacts
                    WHERE id_contact = :pid_contact";
 
-        $row = (new SQL())->send($query, ["pid_contact" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_contact" => $id])->fetch();
         return $row ? self::_translate($row) : null;
     }
 

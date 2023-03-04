@@ -134,16 +134,14 @@ class User extends Person implements JsonSerializable
      */
     public function create(): self
     {
+        $this->password = password_hash($this->password, PASSWORD_DEFAULT, ["cost" => 12]);
+
         $query = "CALL sp_create_user (:pdes_login, :pdes_password, :pis_admin, :pdes_person,
                                        :pdes_email, :pdes_cpf, :pnum_phone, :pbin_photo)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pdes_login", $this->login, \PDO::PARAM_STR);
-        $stmt->bindValue(
-            "pdes_password",
-            password_hash($this->password, PASSWORD_DEFAULT, ["cost" => 12]),
-            \PDO::PARAM_STR
-        );
+        $stmt->bindValue("pdes_password", $this->password, \PDO::PARAM_STR);
         $stmt->bindValue("pis_admin", $this->isAdmin, \PDO::PARAM_BOOL);
         $stmt->bindValue("pdes_person", $this->name, \PDO::PARAM_STR);
         $stmt->bindValue("pdes_email", $this->email, \PDO::PARAM_STR);
@@ -167,7 +165,7 @@ class User extends Person implements JsonSerializable
         $query = "CALL sp_update_user (:pid_user, :pdes_login, :pis_admin, :pdes_person,
                                        :pdes_email, :pdes_cpf, :pnum_phone)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_user", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pdes_login", $this->login, \PDO::PARAM_STR);
         $stmt->bindValue("pis_admin", $this->isAdmin, \PDO::PARAM_BOOL);
@@ -193,7 +191,7 @@ class User extends Person implements JsonSerializable
         $query = "UPDATE tb_users SET des_password = :pdes_password WHERE id_user = :pid_user";
         $password = password_hash($newPassword, PASSWORD_DEFAULT, ["cost" => 12]);
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pdes_password", $password, \PDO::PARAM_STR);
         $stmt->bindValue("pid_user", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
@@ -212,7 +210,7 @@ class User extends Person implements JsonSerializable
     {
         $query = "CALL sp_delete_user (:pid_user)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_user", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -243,7 +241,7 @@ class User extends Person implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -268,7 +266,7 @@ class User extends Person implements JsonSerializable
                     FROM tb_users
                    WHERE id_user = :pid_user";
 
-        $row = (new SQL())->send($query, ["pid_user" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_user" => $id])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -289,7 +287,7 @@ class User extends Person implements JsonSerializable
                     FROM tb_users
                    WHERE id_person = :pid_person";
 
-        $row = (new SQL())->send($query, ["pid_person" => $idPerson])->fetch();
+        $row = (SQL::get())->send($query, ["pid_person" => $idPerson])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -310,7 +308,7 @@ class User extends Person implements JsonSerializable
                     FROM tb_users
                    WHERE des_login = :pdes_login";
 
-        $row = (new SQL())->send($query, ["pdes_login" => $login])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_login" => $login])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -332,7 +330,7 @@ class User extends Person implements JsonSerializable
                    INNER JOIN tb_persons USING (id_person)
                    WHERE des_email = :pdes_email";
 
-        $row = (new SQL())->send($query, ["pdes_email" => $email])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_email" => $email])->fetch();
         return $row ? self::_translate($row) : null;
     }
 

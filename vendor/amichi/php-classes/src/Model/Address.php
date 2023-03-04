@@ -115,7 +115,7 @@ class Address extends Model implements JsonSerializable
         $query = "CALL sp_save_address (:pid_address, :pid_person, :pid_city, :pid_street_type, :pdes_address,
                                         :pdes_number, :pdes_district, :pdes_complement, :pdes_reference, :pnum_zip_code)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_address", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pid_person", $this->idPerson, \PDO::PARAM_INT);
         $stmt->bindValue("pid_city", $this->idCity, \PDO::PARAM_INT);
@@ -128,7 +128,10 @@ class Address extends Model implements JsonSerializable
         $stmt->bindValue("pnum_zip_code", $this->zipCode, \PDO::PARAM_INT);
         $stmt->execute();
 
-        self::_translate($stmt->fetch(), $this);
+        $address = $stmt->fetch();
+        $stmt->closeCursor();
+
+        self::_translate($address, $this);
         return $this;
     }
 
@@ -142,7 +145,7 @@ class Address extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_addresses WHERE id_address = :pid_address";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_address", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -173,7 +176,7 @@ class Address extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -197,7 +200,7 @@ class Address extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query, ["pid_city" => $idCity])->fetchAll()
+            (SQL::get())->send($query, ["pid_city" => $idCity])->fetchAll()
         );
     }
 
@@ -221,7 +224,7 @@ class Address extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query, ["pid_street_type" => $idStreetType])->fetchAll()
+            (SQL::get())->send($query, ["pid_street_type" => $idStreetType])->fetchAll()
         );
     }
 
@@ -246,7 +249,7 @@ class Address extends Model implements JsonSerializable
                     FROM tb_addresses
                    WHERE id_address = :pid_address";
 
-        $row = (new SQL())->send($query, ["pid_address" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_address" => $id])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -267,7 +270,7 @@ class Address extends Model implements JsonSerializable
                     FROM tb_addresses
                    WHERE id_person = :pid_person";
 
-        $row = (new SQL())->send($query, ["pid_person" => $idPerson])->fetch();
+        $row = (SQL::get())->send($query, ["pid_person" => $idPerson])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -289,7 +292,7 @@ class Address extends Model implements JsonSerializable
                    INNER JOIN tb_users USING (id_person)
                    WHERE id_user = :pid_user";
 
-        $row = (new SQL())->send($query, ["pid_user" => $idUser])->fetch();
+        $row = (SQL::get())->send($query, ["pid_user" => $idUser])->fetch();
         return $row ? self::_translate($row) : null;
     }
 

@@ -23,6 +23,7 @@
         <form id="editUser">
           <div class="control-group">
             <input type="hidden" id="idUser" name="idUser" value="{$user.id}" />
+            <input type="hidden" id="isAdmin" name="isAdmin" value="{$user.isAdmin}" />
             <input type="text" class="form-control" id="name" name="name" placeholder="Nome" required value="{$user.name}" />
           </div>
           <p class="help-block text-danger"></p>
@@ -31,6 +32,7 @@
           </div>
           <p class="help-block text-danger"></p>
           <div class="control-group">
+            <input type="hidden" id="login" name="login" value="{$user.login}" />
             <input type="email" class="form-control" id="email" name="email" placeholder="E-mail" required value="{$user.email}" />
           </div>
           <p class="help-block text-danger"></p>

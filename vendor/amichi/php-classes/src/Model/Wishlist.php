@@ -86,7 +86,7 @@ class Wishlist extends Model implements JsonSerializable
     {
         $query = "INSERT INTO tb_wishlist (id_user, id_product) VALUES (:pid_user, :pid_product)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_user", $this->idUser, \PDO::PARAM_INT);
         $stmt->bindValue("pid_product", $this->idProduct, \PDO::PARAM_INT);
         $stmt->execute();
@@ -104,7 +104,7 @@ class Wishlist extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_wishlist WHERE id_user = :pid_user AND id_product = :pid_product";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_user", $this->idUser, \PDO::PARAM_INT);
         $stmt->bindValue("pid_product", $this->idProduct, \PDO::PARAM_INT);
         $stmt->execute();
@@ -129,7 +129,7 @@ class Wishlist extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): Product => Product::translate($row),
-            (new SQL())->send($query, ["pid_user" => $idUser])->fetchAll()
+            (SQL::get())->send($query, ["pid_user" => $idUser])->fetchAll()
         );
     }
 
@@ -157,7 +157,7 @@ class Wishlist extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -181,7 +181,7 @@ class Wishlist extends Model implements JsonSerializable
                      AND id_product = :pid_product";
 
 
-        $row = (new SQL())->send(
+        $row = (SQL::get())->send(
             $query,
             [
                 "pid_user" => $idUser,
@@ -211,7 +211,7 @@ class Wishlist extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query, ["pid_user" => $idUser])->fetchAll()
+            (SQL::get())->send($query, ["pid_user" => $idUser])->fetchAll()
         );
     }
 
@@ -234,7 +234,7 @@ class Wishlist extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query, ["pid_product" => $idProduct])->fetchAll()
+            (SQL::get())->send($query, ["pid_product" => $idProduct])->fetchAll()
         );
     }
 

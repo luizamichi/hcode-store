@@ -124,7 +124,7 @@ class UserLog extends Model implements JsonSerializable
         $query = "CALL sp_save_user_log (:pid_log, :pid_user, :pdes_log, :pdes_device, :pdes_user_agent,
                                          :pdes_php_session_id, :pdes_source_url, :pdes_url)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_log", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pid_user", $this->idUser, \PDO::PARAM_INT);
         $stmt->bindValue("pdes_log", $this->description, \PDO::PARAM_STR);
@@ -135,7 +135,10 @@ class UserLog extends Model implements JsonSerializable
         $stmt->bindValue("pdes_url", $_SERVER["REQUEST_URI"], \PDO::PARAM_STR);
         $stmt->execute();
 
-        self::_translate($stmt->fetch(), $this);
+        $userLog = $stmt->fetch();
+        $stmt->closeCursor();
+
+        self::_translate($userLog, $this);
         return $this;
     }
 
@@ -149,7 +152,7 @@ class UserLog extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_users_logs WHERE id_recovery = :pid_recovery";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_recovery", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -180,7 +183,7 @@ class UserLog extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -205,7 +208,7 @@ class UserLog extends Model implements JsonSerializable
                     FROM tb_users_logs
                    WHERE id_recovery = :pid_recovery";
 
-        $row = (new SQL())->send($query, ["pid_recovery" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_recovery" => $id])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -228,7 +231,7 @@ class UserLog extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query, ["pid_user" => $idUser])->fetchAll()
+            (SQL::get())->send($query, ["pid_user" => $idUser])->fetchAll()
         );
     }
 

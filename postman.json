@@ -490,40 +490,6 @@
                     "response": []
                 },
                 {
-                    "name": "GET PRODUCTS",
-                    "event": [
-                        {
-                            "listen": "test",
-                            "script": {
-                                "exec": [
-                                    "pm.test(\"STATUS 200 / JSON BODY\", function () {\r",
-                                    "    pm.response.to.have.status(200);\r",
-                                    "    pm.response.to.have.jsonBody();\r",
-                                    "});"
-                                ],
-                                "type": "text/javascript"
-                            }
-                        }
-                    ],
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{baseUrl}}/cart/{{cartId}}/product",
-                            "host": [
-                                "{{baseUrl}}"
-                            ],
-                            "path": [
-                                "cart",
-                                "{{cartId}}",
-                                "product"
-                            ]
-                        },
-                        "description": "<small>/cart/{idCart}/product</small>\n### Retorna os produtos do carrinho a partir do ID informado na URL\n\n##### Route Params\n- **INT** idCart: ID do carrinho."
-                    },
-                    "response": []
-                },
-                {
                     "name": "POST",
                     "event": [
                         {
@@ -2175,6 +2141,40 @@
                     "response": []
                 },
                 {
+                    "name": "GET BY USER",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(200);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/user/{{userId}}/order",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "user",
+                                "{{userId}}",
+                                "order"
+                            ]
+                        },
+                        "description": "<small>/user/{idUser}/order</small>\n### Retorna os pedidos do usuário a partir do ID informado na URL\n\n##### Route Params\n- **INT** idUser: ID do usuário."
+                    },
+                    "response": []
+                },
+                {
                     "name": "POST",
                     "event": [
                         {
@@ -2839,6 +2839,40 @@
                             ]
                         },
                         "description": "<small>/product/{idProduct}</small>\n### Retorna o produto a partir do ID informado na URL\n\n##### Route Params\n- **INT** idProduct: ID do produto."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "GET BY CART",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(200);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/cart/{{cartId}}/product",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "cart",
+                                "{{cartId}}",
+                                "product"
+                            ]
+                        },
+                        "description": "<small>/cart/{idCart}/product</small>\n### Retorna os produtos do carrinho a partir do ID informado na URL\n\n##### Route Params\n- **INT** idCart: ID do carrinho."
                     },
                     "response": []
                 },

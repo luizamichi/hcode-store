@@ -195,7 +195,7 @@ class OtherController extends Controller
     {
         $response->getBody()->write(
             json_encode(
-                (new SQL())->send(self::string($request->getParsedBody()["query"], true, "query"))->fetchAll()
+                (SQL::get())->send(self::string($request->getParsedBody()["query"], true, "query"))->fetchAll()
             )
         );
 
@@ -280,9 +280,9 @@ class OtherController extends Controller
             json_encode(
                 [
                     "phpVersion" => phpversion(),
-                    "mysqlVersion" => (new SQL())->getAttribute(SQL::ATTR_SERVER_VERSION),
+                    "mysqlVersion" => (SQL::get())->getAttribute(SQL::ATTR_SERVER_VERSION),
                     "phpDateTime" => date("Y-m-d H:i:s"),
-                    "mysqlDateTime" => (new SQL())->send("SELECT NOW() dt")->fetch()->dt,
+                    "mysqlDateTime" => (SQL::get())->send("SELECT NOW() dt")->fetch()->dt,
                     "requestTime" => $_SERVER["REQUEST_TIME"],
                     "server" => $_SERVER["SERVER_NAME"],
                     "remotePort" => $_SERVER["REMOTE_PORT"]

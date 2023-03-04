@@ -207,7 +207,7 @@ class OrderView extends Controller
     {
         $order = Order::loadFromCode(self::string($args["codeOrder"]));
 
-        if (!$order || $order->user->id !== User::loadFromSession()?->id) {
+        if (!$order || $order->user->id !== User::loadFromSession()?->id || $order->expired()) {
             return $response->withHeader("Location", "/checkout")->withStatus(302);
         }
 
@@ -239,7 +239,7 @@ class OrderView extends Controller
     {
         $order = Order::loadFromCode(self::string($args["codeOrder"]));
 
-        if (!$order || $order->user->id !== User::loadFromSession()?->id) {
+        if (!$order || $order->user->id !== User::loadFromSession()?->id || $order->expired()) {
             return $response->withHeader("Location", "/checkout")->withStatus(302);
         }
 

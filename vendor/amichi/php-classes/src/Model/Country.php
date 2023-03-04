@@ -99,7 +99,7 @@ class Country extends Model implements JsonSerializable
     {
         $query = "CALL sp_save_country (:pid_country, :pnum_ibge_country, :pdes_country, :pdes_coi, :pnum_ddi)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_country", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pnum_ibge_country", $this->ibgeCode, \PDO::PARAM_INT);
         $stmt->bindValue("pdes_country", $this->name, \PDO::PARAM_STR);
@@ -121,7 +121,7 @@ class Country extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_countries WHERE id_country = :pid_country";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_country", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -152,7 +152,7 @@ class Country extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -177,7 +177,7 @@ class Country extends Model implements JsonSerializable
                     FROM tb_countries
                    WHERE id_country = :pid_country";
 
-        $row = (new SQL())->send($query, ["pid_country" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_country" => $id])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -198,7 +198,7 @@ class Country extends Model implements JsonSerializable
                     FROM tb_countries
                    WHERE num_ibge_country = :pnum_ibge_country";
 
-        $row = (new SQL())->send($query, ["pnum_ibge_country" => $ibgeCode])->fetch();
+        $row = (SQL::get())->send($query, ["pnum_ibge_country" => $ibgeCode])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -219,7 +219,7 @@ class Country extends Model implements JsonSerializable
                     FROM tb_countries
                    WHERE des_coi = :pdes_coi";
 
-        $row = (new SQL())->send($query, ["pdes_coi" => $coi])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_coi" => $coi])->fetch();
         return $row ? self::_translate($row) : null;
     }
 

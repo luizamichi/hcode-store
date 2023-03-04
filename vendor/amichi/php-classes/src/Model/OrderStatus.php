@@ -101,7 +101,7 @@ class OrderStatus extends Model implements JsonSerializable
     {
         $query = "CALL sp_save_order_status (:pid_status, :pdes_status, :pnum_code)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_status", $this->id, \PDO::PARAM_INT);
         $stmt->bindValue("pdes_status", $this->description, \PDO::PARAM_STR);
         $stmt->bindValue("pnum_code", $this->code, \PDO::PARAM_INT);
@@ -121,7 +121,7 @@ class OrderStatus extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_orders_status WHERE id_status = :pid_status";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_status", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -152,7 +152,7 @@ class OrderStatus extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -177,7 +177,7 @@ class OrderStatus extends Model implements JsonSerializable
                     FROM tb_orders_status
                    WHERE id_status = :pid_status";
 
-        $row = (new SQL())->send($query, ["pid_status" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_status" => $id])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -198,7 +198,7 @@ class OrderStatus extends Model implements JsonSerializable
                     FROM tb_orders_status
                    WHERE des_status = :pdes_status";
 
-        $row = (new SQL())->send($query, ["pdes_status" => $description])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_status" => $description])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -219,7 +219,7 @@ class OrderStatus extends Model implements JsonSerializable
                     FROM tb_orders_status
                    WHERE num_code = :pnum_code";
 
-        $row = (new SQL())->send($query, ["pnum_code" => $code])->fetch();
+        $row = (SQL::get())->send($query, ["pnum_code" => $code])->fetch();
         return $row ? self::_translate($row) : null;
     }
 

@@ -143,7 +143,7 @@ class UserController extends Controller
 
         $response->getBody()->write(json_encode($userPasswordRecoveries));
 
-        return $response->withStatus($userPasswordRecoveries ? 200 : 204);
+        return $response;
     }
 
 
@@ -358,6 +358,11 @@ class UserController extends Controller
 
         if ($user && password_verify($data["password"] ?? "", $user->password)) {
             $user->saveInSession();
+
+            if ($cart = Cart::loadFromSessionId()) {
+                $cart->idUser = $user->id;
+                $cart->save();
+            }
 
             $userLog = UserLog::loadFromSession();
             $userLog->description = "Login";

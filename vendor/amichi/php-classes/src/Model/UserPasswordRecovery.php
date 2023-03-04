@@ -137,12 +137,15 @@ class UserPasswordRecovery extends Model implements JsonSerializable
     {
         $query = "CALL sp_create_user_password_recovery (:pid_user, :pdes_ip)";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_user", $this->idUser, \PDO::PARAM_INT);
         $stmt->bindValue("pdes_ip", $_SERVER["REMOTE_ADDR"], \PDO::PARAM_STR);
         $stmt->execute();
 
-        self::_translate($stmt->fetch(), $this);
+        $userPasswordRecovery = $stmt->fetch();
+        $stmt->closeCursor();
+
+        self::_translate($userPasswordRecovery, $this);
         return $this;
     }
 
@@ -156,7 +159,7 @@ class UserPasswordRecovery extends Model implements JsonSerializable
     {
         $query = "UPDATE tb_users_passwords_recoveries SET dt_recovery = NOW() WHERE id_recovery = :pid_recovery";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_recovery", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -176,7 +179,7 @@ class UserPasswordRecovery extends Model implements JsonSerializable
     {
         $query = "DELETE FROM tb_users_passwords_recoveries WHERE id_recovery = :pid_recovery";
 
-        $stmt = (new SQL())->prepare($query);
+        $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pid_recovery", $this->id, \PDO::PARAM_INT);
         $stmt->execute();
 
@@ -207,7 +210,7 @@ class UserPasswordRecovery extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query)->fetchAll()
+            (SQL::get())->send($query)->fetchAll()
         );
     }
 
@@ -232,7 +235,7 @@ class UserPasswordRecovery extends Model implements JsonSerializable
                     FROM tb_users_passwords_recoveries
                    WHERE id_recovery = :pid_recovery";
 
-        $row = (new SQL())->send($query, ["pid_recovery" => $id])->fetch();
+        $row = (SQL::get())->send($query, ["pid_recovery" => $id])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -255,7 +258,7 @@ class UserPasswordRecovery extends Model implements JsonSerializable
 
         return array_map(
             fn (object $row): self => self::_translate($row),
-            (new SQL())->send($query, ["pid_user" => $idUser])->fetchAll()
+            (SQL::get())->send($query, ["pid_user" => $idUser])->fetchAll()
         );
     }
 
@@ -276,7 +279,7 @@ class UserPasswordRecovery extends Model implements JsonSerializable
                     FROM tb_users_passwords_recoveries
                    WHERE des_security_key = :pdes_security_key";
 
-        $row = (new SQL())->send($query, ["pdes_security_key" => $securityKey])->fetch();
+        $row = (SQL::get())->send($query, ["pdes_security_key" => $securityKey])->fetch();
         return $row ? self::_translate($row) : null;
     }
 
@@ -299,7 +302,7 @@ class UserPasswordRecovery extends Model implements JsonSerializable
                    WHERE id_recovery = :pid_recovery
                      AND des_security_key = :pdes_security_key";
 
-        $row = (new SQL())->send(
+        $row = (SQL::get())->send(
             $query,
             [
                 "pid_recovery" => (int) self::decrypt($code),
