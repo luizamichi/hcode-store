@@ -1,6 +1,6 @@
 -- BOOL - is
 -- BLOB, MEDIUMBLOB, LONGBLOB - bin
--- CHAR, VARCHAR, TEXT - des
+-- CHAR, VARCHAR, TEXT, MEDIUMTEXT, LONGTEXT - des
 -- DATETIME, DATE, TIMESTAMP - dt
 -- DECIMAL - vl
 -- FOREIGN KEY - fk, id
@@ -279,7 +279,7 @@ CREATE TABLE tb_orders_status (
     id_status INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do status de pedido',
     des_status VARCHAR(32) NOT NULL COMMENT 'Descrição do status de pedido',
     num_code TINYINT UNSIGNED NOT NULL COMMENT 'Código do status de pedido',
-    dt_status_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do status do pedido',
+    dt_status_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do status de pedido',
     CONSTRAINT pk_tb_orders_status PRIMARY KEY (id_status),
     CONSTRAINT uk_tb_orders_status_des_status UNIQUE KEY (des_status),
     CONSTRAINT uk_tb_orders_status_num_code UNIQUE KEY (num_code)
@@ -306,3 +306,46 @@ CREATE TABLE tb_orders (
     CONSTRAINT uk_tb_orders_id_cart UNIQUE KEY (id_cart),
     CONSTRAINT uk_tb_orders_des_code UNIQUE KEY (des_code)
 ) COMMENT = 'Pedidos';
+
+
+DROP TABLE IF EXISTS tb_topics_types;
+
+CREATE TABLE tb_topics_types (
+    id_type INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do tipo de tópico',
+    des_type VARCHAR(32) NOT NULL COMMENT 'Título do tipo de tópico',
+    des_summary VARCHAR(512) NULL COMMENT 'Sumário do tipo de tópico',
+    des_route VARCHAR(64) NOT NULL COMMENT 'Identificador único para acesso na URL',
+    dt_type_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do tipo de tópico',
+    CONSTRAINT pk_tb_topics_types PRIMARY KEY (id_type),
+    CONSTRAINT uk_tb_topics_types_des_type UNIQUE KEY (des_type),
+    CONSTRAINT uk_tb_topics_types_des_route UNIQUE KEY (des_route)
+) COMMENT = 'Tipos de tópicos';
+
+
+DROP TABLE IF EXISTS tb_topics;
+
+CREATE TABLE tb_topics (
+    id_topic INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do tópico',
+    id_type INT UNSIGNED NOT NULL COMMENT 'Tipo do tópico',
+    des_topic VARCHAR(64) NOT NULL COMMENT 'Título do tópico',
+    dt_topic_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do tópico',
+    CONSTRAINT pk_tb_topics PRIMARY KEY (id_topic),
+    CONSTRAINT fk_tb_topics_to_tb_topics_types FOREIGN KEY (id_type) REFERENCES tb_topics_types (id_type) ON DELETE CASCADE
+) COMMENT = 'Tópicos';
+
+
+DROP TABLE IF EXISTS tb_subtopics;
+
+CREATE TABLE tb_subtopics (
+    id_subtopic INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do subtópico',
+    id_topic INT UNSIGNED NULL COMMENT 'Tópico superior',
+    id_type INT UNSIGNED NULL COMMENT 'Tipo do subtópico',
+    des_subtopic VARCHAR(128) NOT NULL COMMENT 'Título do subtópico',
+    des_text MEDIUMTEXT NOT NULL COMMENT 'Texto do subtópico',
+    dt_subtopic_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do subtópico',
+    dt_subtopic_changed_in TIMESTAMP NULL COMMENT 'Data da última alteração do subtópico',
+    CONSTRAINT pk_tb_subtopics PRIMARY KEY (id_subtopic),
+    CONSTRAINT fk_tb_subtopics_to_tb_topics FOREIGN KEY (id_topic) REFERENCES tb_topics (id_topic) ON DELETE CASCADE,
+    CONSTRAINT fk_tb_subtopics_to_tb_topics_types FOREIGN KEY (id_type) REFERENCES tb_topics_types (id_type) ON DELETE CASCADE,
+    CONSTRAINT ck_tb_subtopics_fk_topic_or_topic_type CHECK ((id_topic IS NOT NULL AND id_type IS NULL) OR (id_topic IS NULL AND id_type IS NOT NULL))
+) COMMENT = 'Subtópicos';

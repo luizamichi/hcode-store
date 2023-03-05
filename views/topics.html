@@ -1,0 +1,51 @@
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <div class="col-12">
+      <nav class="breadcrumb bg-light mb-30" aria-label="Submenu">
+        <a class="breadcrumb-item text-dark" href="/">Início</a>
+        <a class="breadcrumb-item text-dark" href="/posts">Postagens</a>
+        <span class="breadcrumb-item active">{$topicType.title}</span>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Shop Start -->
+<div class="container-fluid">
+  <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
+    <span class="bg-secondary pr-3">{$topicType.title}</span>
+  </h2>
+  <div class="row px-xl-5">
+    <!-- Shop Topic Start -->
+    <div class="col-lg-12 col-md-8">
+      <p>{$topicType.summary}</p>
+      {loop="$topics"}
+      <div class="pb-3">
+        <h4 class="p-2 bg-light">{$value.title}</h4>
+        {loop="$value.subtopics"}
+        <div class="pb-1 px-2">
+          <h5>{$value.title}</h5>
+          <p>{function="nl2br($value.text)"}</p>
+          <hr />
+        </div>
+        {/loop}
+
+        {if="isset($value.text) != false"}
+        <div class="pb-1 px-2">
+          <p>{function="nl2br($value.text)"}</p>
+          <hr />
+        </div>
+        {/if}
+      </div>
+      {/loop}
+    </div>
+    <!-- Shop Topic End -->
+  </div>
+</div>
+<!-- Shop End -->
+
+<script>
+  document.title += " (Post)";
+</script>

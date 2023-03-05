@@ -12,6 +12,7 @@
  */
 
 use Amichi\Enumerated\OrderStatus as EnumeratedOrderStatus;
+use Amichi\Enumerated\TopicType as EnumeratedTopicType;
 use Amichi\Model\Cart;
 use Amichi\Model\User;
 use Amichi\Model\Wishlist;
@@ -80,6 +81,17 @@ function checkLogin(): bool
 
 
 /**
+ * Verifica se o usuário da sessão é administrador
+ *
+ * @return bool
+ */
+function checkAdmin(): bool
+{
+    return User::loadFromSession()?->isAdmin ?? false;
+}
+
+
+/**
  * Retorna o ID do carrinho da sessão
  *
  * @return int
@@ -137,11 +149,11 @@ function getCountWishlist(): int
 /**
  * Retorna o ícone do status do pedido
  *
- * @param string $enum Enumerado do status do pedido
+ * @param ?string $enum Enumerado do status do pedido
  *
  * @return string
  */
-function getStatusIcon(string $enum): string
+function getStatusIcon(?string $enum): string
 {
     return match ($enum) {
         EnumeratedOrderStatus::OPEN_ORDER->name => "<i class=\"fas fa-play-circle\"></i>",
@@ -151,5 +163,24 @@ function getStatusIcon(string $enum): string
         EnumeratedOrderStatus::ORDER_DELIVERED->name => "<i class=\"fas fa-check-circle\"></i>",
         EnumeratedOrderStatus::CANCELED_ORDER->name => "<i class=\"fas fa-times-circle\"></i>",
         default => "<i class=\"fas fa-question-circle\"></i>"
+    };
+}
+
+
+/**
+ * Retorna o ícone do tipo de tópico
+ *
+ * @param ?string $enum Enumerado do tipo de tópico
+ *
+ * @return string
+ */
+function getTopicIcon(?string $enum): string
+{
+    return match ($enum) {
+        EnumeratedTopicType::FAQ->name => "<i class=\"fas fa-question-circle\"></i>",
+        EnumeratedTopicType::CCE->name => "<i class=\"fas fa-hand-holding\"></i>",
+        EnumeratedTopicType::COOKIE->name => "<i class=\"fas fa-cookie-bite\"></i>",
+        EnumeratedTopicType::PRIVACY->name => "<i class=\"fas fa-shield-alt\"></i>",
+        default => "<i class=\"fas fa-stream\"></i>"
     };
 }

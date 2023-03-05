@@ -34,6 +34,11 @@
           <a class="text-body mr-3" href="/profile">
             <i class="fa fa-user"></i> {if="checkLogin()"}{function="getUserName()"}{else}Minha conta{/if}
           </a>
+          {if="checkAdmin()"}
+          <a class="text-body mr-3" href="/admin">
+            <i class="fas fa-cog"></i></i> Painel administrativo
+          </a>
+          {/if}
           <a class="text-body mr-3" href="/wishlist">
             <i class="fa fa-heart"></i> Lista de desejos
           </a>
@@ -136,6 +141,7 @@
               <a href="/products" class="nav-item nav-link">Produtos</a>
               <a href="/categories" class="nav-item nav-link">Categorias</a>
               <a href="/contact" class="nav-item nav-link">Contato</a>
+              <a href="/posts" class="nav-item nav-link">Postagens</a>
             </div>
             <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
               <a href="/wishlist" class="btn px-0">

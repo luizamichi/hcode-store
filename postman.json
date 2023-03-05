@@ -2351,12 +2351,13 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{baseUrl}}/orderstatus?_limit=10&_offset=0&_sortBy=description",
+                            "raw": "{{baseUrl}}/order/status?_limit=10&_offset=0&_sortBy=description",
                             "host": [
                                 "{{baseUrl}}"
                             ],
                             "path": [
-                                "orderstatus"
+                                "order",
+                                "status"
                             ],
                             "query": [
                                 {
@@ -2396,12 +2397,13 @@
                         "method": "GET",
                         "header": [],
                         "url": {
-                            "raw": "{{baseUrl}}/orderstatus/{{orderStatusId}}",
+                            "raw": "{{baseUrl}}/order/status/{{orderStatusId}}",
                             "host": [
                                 "{{baseUrl}}"
                             ],
                             "path": [
-                                "orderstatus",
+                                "order",
+                                "status",
                                 "{{orderStatusId}}"
                             ]
                         },
@@ -2448,12 +2450,13 @@
                             ]
                         },
                         "url": {
-                            "raw": "{{baseUrl}}/orderstatus",
+                            "raw": "{{baseUrl}}/order/status",
                             "host": [
                                 "{{baseUrl}}"
                             ],
                             "path": [
-                                "orderstatus"
+                                "order",
+                                "status"
                             ]
                         },
                         "description": "<small>/orderstatus</small>\n### Salva o status de pedido informado no corpo da requisição no banco de dados\n\n##### Body Params\n- **STR** description: Descrição do status de pedido;\n- **INT** code: Código do status de pedido."
@@ -2495,12 +2498,13 @@
                             ]
                         },
                         "url": {
-                            "raw": "{{baseUrl}}/orderstatus/{{newOrderStatusId}}",
+                            "raw": "{{baseUrl}}/order/status/{{newOrderStatusId}}",
                             "host": [
                                 "{{baseUrl}}"
                             ],
                             "path": [
-                                "orderstatus",
+                                "order",
+                                "status",
                                 "{{newOrderStatusId}}"
                             ]
                         },
@@ -2528,12 +2532,13 @@
                         "method": "DELETE",
                         "header": [],
                         "url": {
-                            "raw": "{{baseUrl}}/orderstatus/{{newOrderStatusId}}",
+                            "raw": "{{baseUrl}}/order/status/{{newOrderStatusId}}",
                             "host": [
                                 "{{baseUrl}}"
                             ],
                             "path": [
-                                "orderstatus",
+                                "order",
+                                "status",
                                 "{{newOrderStatusId}}"
                             ]
                         },
@@ -3604,6 +3609,688 @@
             ]
         },
         {
+            "name": "Subtopic",
+            "item": [
+                {
+                    "name": "ALL",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(200);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/subtopic?_limit=10&_offset=0&_sortBy=title",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "subtopic"
+                            ],
+                            "query": [
+                                {
+                                    "key": "_limit",
+                                    "value": "10"
+                                },
+                                {
+                                    "key": "_offset",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "_sortBy",
+                                    "value": "title"
+                                }
+                            ]
+                        },
+                        "description": "<small>/subtopic</small>\n### Retorna todos os subtópicos do banco de dados\n\n##### Query Params\n- **INT** _limit (*opcional*): Número máximo de registros a serem listados;\n- **INT** _offset (*opcional*): Indica o início da leitura;\n- **INT** _sortBy (*opcional*): Ordenar registros (id, idTopic, idType, title, text, dateRegister, dateLastChange)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "GET",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200|204\", function () {\r",
+                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/subtopic/{{subtopicId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "subtopic",
+                                "{{subtopicId}}"
+                            ]
+                        },
+                        "description": "<small>/subtopic/{idSubtopic}</small>\n### Retorna o subtópico a partir do ID informado na URL\n\n##### Route Params\n- **INT** idSubtopic: ID do subtópico."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "POST",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 201 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(201);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});\r",
+                                    "\r",
+                                    "if (pm.response.code === 201) {\r",
+                                    "    pm.collectionVariables.set(\"newSubtopicId\", pm.response.json().id);\r",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "idTopic",
+                                    "value": "{{topicId}}",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "idType",
+                                    "value": "{{topicTypeId}}",
+                                    "type": "default",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "title",
+                                    "value": "Como cancelar meu pedido?",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "text",
+                                    "value": "Não conseguimos cancelar pedidos que já estão em rota de entrega.",
+                                    "type": "default"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/subtopic",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "subtopic"
+                            ]
+                        },
+                        "description": "<small>/subtopic</small>\n### Salva o subtópico informado no corpo da requisição no banco de dados\n\n##### Body Params\n- **INT** idTopic (*opcional*): ID do tópico;\n- **INT** idType (*opcional*): ID do tipo de tópico;\n- **STR** title: Título do subtópico;\n- **STR** text: Texto do subtópico."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "PUT",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(200);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "idTopic",
+                                    "value": "{{topicId}}",
+                                    "type": "default",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "idType",
+                                    "value": "{{topicTypeId}}",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "title",
+                                    "value": "Onde retiro meu produto?",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "text",
+                                    "value": "Atualmente, não possuímos lojas físicas. Portando, ainda não há a possibilidade de retirada.",
+                                    "type": "default"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/subtopic/{{newSubtopicId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "subtopic",
+                                "{{newSubtopicId}}"
+                            ]
+                        },
+                        "description": "<small>/subtopic/{idSubtopic}</small>\n### Altera os dados do subtópico informado no corpo da requisição a partir do ID informado na URL\n\n##### Route Params\n- **INT** idSubtopic: ID do subtópico.\n\n##### Body Params\n- **INT** idTopic (*opcional*): ID do tópico;\n- **INT** idType (*opcional*): ID do tipo de tópico;\n- **STR** title: Título do subtópico;\n- **STR** text: Texto do subtópico."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "DELETE",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(200);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/subtopic/{{newSubtopicId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "subtopic",
+                                "{{newSubtopicId}}"
+                            ]
+                        },
+                        "description": "<small>/subtopic/{idSubtopic}</small>\n### Remove o subtópico a partir do ID informado na URL\n\n##### Route Params\n- **INT** idSubtopic: ID do subtópico."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Topic",
+            "item": [
+                {
+                    "name": "ALL",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(200);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/topic?_limit=10&_offset=0&_sortBy=title",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "topic"
+                            ],
+                            "query": [
+                                {
+                                    "key": "_limit",
+                                    "value": "10"
+                                },
+                                {
+                                    "key": "_offset",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "_sortBy",
+                                    "value": "title"
+                                }
+                            ]
+                        },
+                        "description": "<small>/topic</small>\n### Retorna todos os tópicos do banco de dados\n\n##### Query Params\n- **INT** _limit (*opcional*): Número máximo de registros a serem listados;\n- **INT** _offset (*opcional*): Indica o início da leitura;\n- **INT** _sortBy (*opcional*): Ordenar registros (id, idType, title, dateRegister)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "GET",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200|204\", function () {\r",
+                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/topic/{{topicId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "topic",
+                                "{{topicId}}"
+                            ]
+                        },
+                        "description": "<small>/topic/{idTopic}</small>\n### Retorna o tópico a partir do ID informado na URL\n\n##### Route Params\n- **INT** idTopic: ID do tópico."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "POST",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 201 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(201);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});\r",
+                                    "\r",
+                                    "if (pm.response.code === 201) {\r",
+                                    "    pm.collectionVariables.set(\"newTopicId\", pm.response.json().id);\r",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "idType",
+                                    "value": "{{topicTypeId}}",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "title",
+                                    "value": "Contato",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/topic",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "topic"
+                            ]
+                        },
+                        "description": "<small>/topic</small>\n### Salva o tópico informado no corpo da requisição no banco de dados\n\n##### Body Params\n- **INT** idType: ID do tipo de tópico;\n- **STR** title: Título do tópico."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "PUT",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(200);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "idType",
+                                    "value": "{{topicTypeId}}",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "title",
+                                    "value": "Garantia ou arrependimento",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/topic/{{newTopicId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "topic",
+                                "{{newTopicId}}"
+                            ]
+                        },
+                        "description": "<small>/topic/{idTopic}</small>\n### Altera os dados do tópico informado no corpo da requisição a partir do ID informado na URL\n\n##### Route Params\n- **INT** idTopic: ID do tópico.\n\n##### Body Params\n- **INT** idType: ID do tipo de tópico;\n- **STR** title: Título do tópico."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "DELETE",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(200);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/topic/{{newTopicId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "topic",
+                                "{{newTopicId}}"
+                            ]
+                        },
+                        "description": "<small>/topic/{idTopic}</small>\n### Remove o tópico a partir do ID informado na URL\n\n##### Route Params\n- **INT** idTopic: ID do tópico."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Topic Type",
+            "item": [
+                {
+                    "name": "ALL",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(200);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/topic/type?_limit=10&_offset=0&_sortBy=slug",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "topic",
+                                "type"
+                            ],
+                            "query": [
+                                {
+                                    "key": "_limit",
+                                    "value": "10"
+                                },
+                                {
+                                    "key": "_offset",
+                                    "value": "0"
+                                },
+                                {
+                                    "key": "_sortBy",
+                                    "value": "slug"
+                                }
+                            ]
+                        },
+                        "description": "<small>/topic/type</small>\n### Retorna todos os tipos de tópicos do banco de dados\n\n##### Query Params\n- **INT** _limit (*opcional*): Número máximo de registros a serem listados;\n- **INT** _offset (*opcional*): Indica o início da leitura;\n- **INT** _sortBy (*opcional*): Ordenar registros (id, title, summary, slug, dateRegister)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "GET",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200|204\", function () {\r",
+                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/topic/type/{{topicTypeId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "topic",
+                                "type",
+                                "{{topicTypeId}}"
+                            ]
+                        },
+                        "description": "<small>/topic/type/{idTopicType}</small>\n### Retorna o tipo de tópico a partir do ID informado na URL\n\n##### Route Params\n- **INT** idTopicType: ID do tipo de tópico."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "POST",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 201 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(201);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});\r",
+                                    "\r",
+                                    "if (pm.response.code === 201) {\r",
+                                    "    pm.collectionVariables.set(\"newTopicTypeId\", pm.response.json().id);\r",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "title",
+                                    "value": "Políticas do marketplace",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "summary",
+                                    "value": "Aqui você encontrará informações importantes sobre os seus direitos e obrigações, bem como dos procedimentos a serem adotados.",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "slug",
+                                    "value": "marketplace-policies",
+                                    "type": "default"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/topic/type",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "topic",
+                                "type"
+                            ]
+                        },
+                        "description": "<small>/topic/type</small>\n### Salva o tipo de tópico informado no corpo da requisição no banco de dados\n\n##### Body Params\n- **STR** title: Título do tipo de tópico;\n- **STR** summary (*opcional*): Sumário do tipo de tópico;\n- **STR** slug: Identificador único para acesso na URL."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "PUT",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(200);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "urlencoded",
+                            "urlencoded": [
+                                {
+                                    "key": "title",
+                                    "value": "Formas de pagamento",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "summary",
+                                    "value": "Esclareça dúvidas sobre os métodos de pagamentos que nosso marketplace possibilita.",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "slug",
+                                    "value": "payment-options",
+                                    "type": "default"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/topic/type/{{newTopicTypeId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "topic",
+                                "type",
+                                "{{newTopicTypeId}}"
+                            ]
+                        },
+                        "description": "<small>/topic/type/{idTopicType}</small>\n### Altera os dados do tipo de tópico informado no corpo da requisição a partir do ID informado na URL\n\n##### Route Params\n- **INT** idTopicType: ID do tipo de tópico.\n\n##### Body Params\n- **STR** title: Título do tipo de tópico;\n- **STR** summary (*opcional*): Sumário do tipo de tópico;\n- **STR** slug: Identificador único para acesso na URL."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "DELETE",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"STATUS 200 / JSON BODY\", function () {\r",
+                                    "    pm.response.to.have.status(200);\r",
+                                    "    pm.response.to.have.jsonBody();\r",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/topic/type/{{newTopicTypeId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "topic",
+                                "type",
+                                "{{newTopicTypeId}}"
+                            ]
+                        },
+                        "description": "<small>/topic/type/{idTopicType}</small>\n### Remove o tipo de tópico a partir do ID informado na URL\n\n##### Route Params\n- **INT** idTopicType: ID do tipo de tópico."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
             "name": "User",
             "item": [
                 {
@@ -4339,8 +5026,23 @@
             "type": "default"
         },
         {
+            "key": "subtopicId",
+            "value": "ID do subtópico",
+            "type": "default"
+        },
+        {
             "key": "superCategoryId",
             "value": "ID da categoria superior",
+            "type": "default"
+        },
+        {
+            "key": "topicId",
+            "value": "ID do tópico",
+            "type": "default"
+        },
+        {
+            "key": "topicTypeId",
+            "value": "ID do tipo de tópico",
             "type": "default"
         },
         {
@@ -4412,6 +5114,21 @@
         {
             "key": "newStreetTypeId",
             "value": "Novo ID do tipo de logradouro",
+            "type": "default"
+        },
+        {
+            "key": "newSubtopicId",
+            "value": "Novo ID do subtópico",
+            "type": "default"
+        },
+        {
+            "key": "newTopicId",
+            "value": "Novo ID do tópico",
+            "type": "default"
+        },
+        {
+            "key": "newTopicTypeId",
+            "value": "Novo ID do tipo de tópico",
             "type": "default"
         },
         {

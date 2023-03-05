@@ -160,7 +160,7 @@
 
                 <div>
                   <button type="submit" class="btn btn-dark">Salvar</button>
-                  <button id="resetButton" type="reset" class="btn btn-outline-dark">Limpar</button>
+                  <button id="resetButton" type="button" class="btn btn-outline-dark">Limpar</button>
                 </div>
               </div>
             </form>
@@ -323,6 +323,8 @@
         $(element).removeClass("is-invalid");
       },
     });
+
+    $("#resetButton").trigger("reset");
 
     $("#resetButton").click(() => $("#idPerson").val("{$address.idPerson}").trigger("change"));
     '{if="$address.idStreetType != null"}'

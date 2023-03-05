@@ -167,10 +167,6 @@
       $("#slug").val($(this).val().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replaceAll(" ", "-"));
     });
 
-    '{if="$category.idSuper != null"}'
-    $("#resetButton").click(() => $("#idSuper").val("{$category.idSuper}").trigger("change"));
-    '{else}'
     $("#resetButton").click(() => $("#idSuper").val("Selecione uma categoria").trigger("change"));
-    '{/if}'
   });
 </script>

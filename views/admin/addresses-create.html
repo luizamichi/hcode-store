@@ -304,5 +304,7 @@
         $(element).removeClass("is-invalid");
       }
     });
+
+    $("#resetButton").click(() => $("#idPerson").val("Selecione um usuário").trigger("change"));
   });
 </script>

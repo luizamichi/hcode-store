@@ -1,0 +1,38 @@
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <div class="col-12">
+      <nav class="breadcrumb bg-light mb-30" aria-label="Submenu">
+        <a class="breadcrumb-item text-dark" href="/">Início</a>
+        <span class="breadcrumb-item active">Postagens</span>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Shop Start -->
+<div class="container-fluid">
+  <div class="row px-xl-5">
+    <!-- Shop Topic Type Start -->
+    <div class="col-lg-12 col-md-8">
+      <div class="row pb-3">
+        {loop="$types"}
+        <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+          <div class="product-item bg-light mb-4">
+            <div class="text-center py-4">
+              <a class="h6 text-decoration-none text-truncate" href="/posts/{$value.slug}">{$value.title}</a>
+            </div>
+          </div>
+        </div>
+        {/loop}
+      </div>
+    </div>
+    <!-- Shop Topic Type End -->
+  </div>
+</div>
+<!-- Shop End -->
+
+<script>
+  document.title += " (Posts)";
+</script>

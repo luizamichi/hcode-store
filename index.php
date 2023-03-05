@@ -33,6 +33,9 @@ use Amichi\Controller\OtherController;
 use Amichi\Controller\ProductController;
 use Amichi\Controller\StateController;
 use Amichi\Controller\StreetTypeController;
+use Amichi\Controller\SubtopicController;
+use Amichi\Controller\TopicController;
+use Amichi\Controller\TopicTypeController;
 use Amichi\Controller\UserController;
 use Amichi\Controller\WishlistController;
 
@@ -53,6 +56,9 @@ use Amichi\View\OtherView;
 use Amichi\View\ProductView;
 use Amichi\View\StateView;
 use Amichi\View\StreetTypeView;
+use Amichi\View\SubtopicView;
+use Amichi\View\TopicTypeView;
+use Amichi\View\TopicView;
 use Amichi\View\UserView;
 use Amichi\View\WishlistView;
 
@@ -308,7 +314,7 @@ $app->group(
 
 
 $app->group(
-    "/api/orderstatus",
+    "/api/order/status",
     function ($app) use ($midLoggedAdmin) {
         $app->get("", OrderStatusController::class . ":getAll");
         $app->get("/{idStatus}", OrderStatusController::class . ":get");
@@ -330,6 +336,42 @@ $app->group(
         $app->delete("/{idOrder}", OrderController::class . ":delete")->add($midLoggedAdmin)->add($midJSON);
     }
 )->add($midCORS);
+
+
+$app->group(
+    "/api/topic/type",
+    function ($app) use ($midLoggedAdmin) {
+        $app->get("", TopicTypeController::class . ":getAll");
+        $app->get("/{idType}", TopicTypeController::class . ":get");
+        $app->post("", TopicTypeController::class . ":post")->add($midLoggedAdmin);
+        $app->put("/{idType}", TopicTypeController::class . ":put")->add($midLoggedAdmin);
+        $app->delete("/{idType}", TopicTypeController::class . ":delete")->add($midLoggedAdmin);
+    }
+)->add($midCORS)->add($midJSON);
+
+
+$app->group(
+    "/api/topic",
+    function ($app) use ($midLoggedAdmin) {
+        $app->get("", TopicController::class . ":getAll");
+        $app->get("/{idTopic}", TopicController::class . ":get");
+        $app->post("", TopicController::class . ":post")->add($midLoggedAdmin);
+        $app->put("/{idTopic}", TopicController::class . ":put")->add($midLoggedAdmin);
+        $app->delete("/{idTopic}", TopicController::class . ":delete")->add($midLoggedAdmin);
+    }
+)->add($midCORS)->add($midJSON);
+
+
+$app->group(
+    "/api/subtopic",
+    function ($app) use ($midLoggedAdmin) {
+        $app->get("", SubtopicController::class . ":getAll");
+        $app->get("/{idSubtopic}", SubtopicController::class . ":get");
+        $app->post("", SubtopicController::class . ":post")->add($midLoggedAdmin);
+        $app->put("/{idSubtopic}", SubtopicController::class . ":put")->add($midLoggedAdmin);
+        $app->delete("/{idSubtopic}", SubtopicController::class . ":delete")->add($midLoggedAdmin);
+    }
+)->add($midCORS)->add($midJSON);
 
 
 $app->group(
@@ -380,10 +422,18 @@ $app->group(
         $app->get("/carts", CartView::class . ":getAll");
         $app->get("/carts/{idCart}/products", CartView::class . ":getProducts");
 
-        $app->get("/ordersstatus", OrderStatusView::class . ":getAll");
-
         $app->get("/orders", OrderView::class . ":getAll");
+        $app->get("/orders/status", OrderStatusView::class . ":getAll");
         $app->get("/orders/{idOrder}", OrderView::class . ":view");
+
+        $app->get("/topics", TopicView::class . ":getAll");
+        $app->get("/topics/types", TopicTypeView::class . ":getAll");
+        $app->get("/topics/create", TopicView::class . ":create");
+        $app->get("/topics/{idTopic}", TopicView::class . ":update");
+
+        $app->get("/subtopics", SubtopicView::class . ":getAll");
+        $app->get("/subtopics/create", SubtopicView::class . ":create");
+        $app->get("/subtopics/{idSubtopic}", SubtopicView::class . ":update");
     }
 )->add($midView)->add($midIsAdmin);
 
@@ -400,6 +450,8 @@ $app->group(
         $app->get("/orders", OrderView::class . ":webList")->add($midIsUser);
         $app->get("/orders/{codeOrder}/pagseguro", OrderView::class . ":pagSeguro")->add($midIsUser);
         $app->get("/orders/{codeOrder}/paypal", OrderView::class . ":payPal")->add($midIsUser);
+        $app->get("/posts", TopicTypeView::class . ":webView");
+        $app->get("/posts/{slugTopicType}", TopicView::class . ":webView");
         $app->get("/profile", UserView::class . ":webView")->add($midIsUser);
         $app->get("/products", ProductView::class . ":webList");
         $app->get("/products/{slugProduct}", ProductView::class . ":webView");

@@ -173,3 +173,30 @@ CREATE VIEW vw_orders AS
      INNER JOIN tb_users u ON o.id_user = u.id_user
      INNER JOIN tb_orders_status s ON o.id_status = s.id_status
      INNER JOIN tb_addresses a ON o.id_address = a.id_address;
+
+
+DROP VIEW IF EXISTS vw_topics_types;
+
+CREATE VIEW vw_topics_types AS
+    SELECT id_type, des_type, des_summary, des_route, dt_type_created_at
+      FROM tb_topics_types;
+
+
+DROP VIEW IF EXISTS vw_topics;
+
+CREATE VIEW vw_topics AS
+    SELECT id_topic, des_topic, dt_topic_created_at,
+           id_type, des_type, des_summary, des_route, dt_type_created_at
+      FROM tb_topics
+     INNER JOIN tb_topics_types USING (id_type);
+
+
+DROP VIEW IF EXISTS vw_subtopics;
+
+CREATE VIEW vw_subtopics AS
+    SELECT st.id_subtopic, st.des_subtopic, st.des_text, st.dt_subtopic_created_at, st.dt_subtopic_changed_in,
+           t.id_topic, t.des_topic, t.dt_topic_created_at,
+           tt.id_type, tt.des_type, tt.des_summary, tt.des_route, tt.dt_type_created_at
+      FROM tb_subtopics st
+      LEFT OUTER JOIN tb_topics t ON st.id_topic = t.id_topic
+      LEFT OUTER JOIN tb_topics_types tt ON st.id_type = tt.id_type;

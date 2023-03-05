@@ -1,0 +1,201 @@
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>
+            <i class="fas fa-plus-circle"></i>
+            Cadastro de Subtópico
+          </h1>
+        </div>
+
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item">
+              <a href="/admin">Início</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="/admin/subtopics">Subtópicos</a>
+            </li>
+            <li class="breadcrumb-item active">Novo</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <form id="addSubtopic">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="title">Título *</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-heading"></i>
+                      </span>
+                    </div>
+                    <input autofocus class="form-control" id="title" name="title" placeholder="Digite o título" type="text" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="idTopic">Tópico</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="idTopic">
+                        <i class="fas fas fa-align-justify"></i>
+                      </label>
+                    </div>
+                    <select class="custom-select select2" id="idTopic" name="idTopic">
+                      <option disabled selected>Selecione um tópico</option>
+                      {loop="$topics"}
+                      <option value="{$value.id}">{$value.title}</option>
+                      {/loop}
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="idType">Tipo</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="idType">
+                        <i class="fas fa-quote-right"></i>
+                      </label>
+                    </div>
+                    <select class="custom-select select2" id="idType" name="idType">
+                      <option disabled selected>Selecione um tipo</option>
+                      {loop="$types"}
+                      <option value="{$value.id}">{$value.title}</option>
+                      {/loop}
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="text">Texto</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-file-alt"></i>
+                      </span>
+                    </div>
+                    <textarea class="form-control" id="text" name="text" placeholder="Digite o texto" rows="3"></textarea>
+                  </div>
+                </div>
+
+                <div>
+                  <button type="submit" class="btn btn-dark">Salvar</button>
+                  <button id="resetButton" type="button" class="btn btn-outline-dark">Limpar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.title += " (Change Subtopic)";
+
+  window.addEventListener("load", () => {
+    $(".select2").select2();
+
+    $.validator.setDefaults({
+      submitHandler: function () {
+        $.ajax({
+          type: "post",
+          url: "/api/subtopic",
+          data: $("#addSubtopic").serialize(),
+          dataType: "json",
+          beforeSend: () => {
+            $("button, input, select").attr("disabled", true);
+          },
+          complete: () => {
+            $("button, input, select").attr("disabled", false);
+          },
+          success: (response) => {
+            alert("Subtópico " + response.id + " cadastrado com sucesso.");
+          },
+          error: (xhr, status, error) => {
+            let json = xhr.responseJSON ?? {};
+            alert(json.message ?? "Não foi possível cadastrar o subtópico.");
+          }
+        });
+      }
+    });
+
+    $.validator.methods.idTopic = function (value, element) {
+      return (parseInt(value) > 0 && !(parseInt($("#idType").val()) > 0)) ||
+        !(parseInt(value) > 0) && parseInt($("#idType").val()) > 0;
+    }
+
+    $.validator.methods.idType = function (value, element) {
+      return (parseInt(value) > 0 && !(parseInt($("#idTopic").val()) > 0)) ||
+        (!(parseInt(value) > 0) && parseInt($("#idTopic").val()) > 0);
+    }
+
+    $("#addSubtopic").validate({
+      rules: {
+        title: {
+          required: true,
+          minlength: 6,
+          maxlength: 64
+        },
+        idTopic: {
+          idTopic: true
+        },
+        idType: {
+          idType: true
+        },
+        text: {
+          required: true,
+          minlength: 16,
+          maxlength: 16777215
+        },
+      },
+      messages: {
+        title: {
+          required: "Por favor, insira um título",
+          minlength: "Por favor, insira um título com no mínimo 2 caracteres",
+          maxlength: "Por favor, insira um título com no máximo 32 caracteres"
+        },
+        idTopic: {
+          idTopic: "Por favor, selecione apenas um tópico ou um tipo"
+        },
+        idType: {
+          idType: "Por favor, selecione apenas um tópico ou um tipo"
+        },
+        text: {
+          required: "Por favor, insira um texto",
+          minlength: "Por favor, insira um texto com no mínimo 16 caracteres",
+          maxlength: "Por favor, insira um texto com no máximo 16.777.215 caracteres"
+        },
+      },
+      errorElement: "span",
+      errorPlacement: function (error, element) {
+        error.addClass("invalid-feedback");
+        element.closest(".form-group").append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass("is-invalid");
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass("is-invalid");
+      }
+    });
+
+    $("#resetButton").trigger("reset");
+
+    $("#resetButton").click(() => $("#idTopic").val("Selecione um tópico").trigger("change"));
+
+    $("#resetButton").click(() => $("#idType").val("Selecione um tipo").trigger("change"));
+  });
+</script>

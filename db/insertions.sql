@@ -313,3 +313,28 @@ INSERT INTO
 VALUES
     (1, 2, 2, 1, 7, 8231.02, UUID_SHORT(), NULL, NOW()),
     (2, 5, 3, 6, 10, 0, UUID_SHORT(), NULL, NOW());
+
+
+INSERT INTO
+    tb_topics_types (id_type, des_type, des_summary, des_route, dt_type_created_at)
+VALUES
+    (1, 'Perguntas frequentes', 'Tire todas as suas dúvidas aqui, confira nossas perguntas frequentes sobre cadastro, compra, garantia e outros assuntos.', 'faq', NOW()),
+    (2, 'Código de conduta ética', 'O Código de conduta ética reúne os princípios e valores adotados em nossa organização, objetivando orientar a conduta pessoal e profissional dos colaboradores, prestadores de serviços e terceiros, a fim de prestar o auxílio necessário para que desempenhem seu papel profissional de forma íntegra.', 'cce', NOW()),
+    (3, 'Política de cookies', 'Pensando na manutenção e tratamento dos seus dados pessoais criamos nossa Política de Privacidade e Proteção de Dados Pessoais. Aqui é possível entender as nossas práticas sobre o tratamento dos seus dados, o propósito dessa coleta e como buscamos melhorar a experiência do usuário na plataforma.', 'cookie-policy', NOW()),
+    (4, 'Política de privacidade', 'Aqui você encontrará informações importantes sobre os seus direitos e obrigações, bem como dos procedimentos a serem adotados.', 'privacy-policies', NOW());
+
+
+INSERT INTO
+    tb_topics (id_topic, id_type, des_topic, dt_topic_created_at)
+VALUES
+    (1, 1, 'Pedido', NOW()),
+    (2, 1, 'Pagamento e estorno', NOW());
+
+
+INSERT INTO
+    tb_subtopics (id_subtopic, id_topic, id_type, des_subtopic, des_text, dt_subtopic_created_at, dt_subtopic_changed_in)
+VALUES
+    (1, 1, NULL, 'Dúvidas sobre o status do pedido', 'Para verificar o status do seu pedido, acesse sua conta e clique para acessar a lista de pedidos. Na lista, procure pelo pedido desejado.', NOW(), NULL),
+    (2, 1, NULL, 'Posso alterar o endereço de entrega com o objeto em transporte?', 'Quando seu pedido já estiver em transporte, infelizmente não será possível alterar o endereço de entrega.', NOW(), NULL),
+    (3, 1, NULL, 'Qual o prazo para confirmação do pagamento?', 'Pagamentos efetuados via boleto bancário e cartão de crédito têm um prazo de 1 a 2 dias úteis para confirmação. Já para pagamentos via PIX, o prazo de confirmação é de até 30 minutos.', NOW(), NULL),
+    (4, NULL, 3, 'O que são cookies', 'Os cookies são pequenos arquivos enviados pelos sites durante a navegação. Eles ficam armazenados nos dispositivos de computadores e dispositivos móveis, que permitem melhorar o desempenho e a experiência de navegação dos nossos clientes.', NOW(), NULL);

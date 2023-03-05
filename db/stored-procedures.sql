@@ -568,3 +568,97 @@ BEGIN
      WHERE id_order = pid_order;
 END $$
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_topic_type;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_topic_type (
+    IN pid_type INT,
+    IN pdes_type VARCHAR(32),
+    IN pdes_summary VARCHAR(256),
+    IN pdes_route VARCHAR(64)
+)
+BEGIN
+    IF pid_type > 0 THEN
+        UPDATE tb_topics_types
+           SET des_type = pdes_type,
+               des_summary = pdes_summary,
+               des_route = pdes_route
+         WHERE id_type = pid_type;
+
+    ELSE
+        INSERT INTO tb_topics_types (des_type, des_summary, des_route, dt_type_created_at)
+                             VALUES (pdes_type, pdes_summary, pdes_route, NOW());
+
+        SET pid_type = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_topics_types
+     WHERE id_type = pid_type;
+END $$
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_topic;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_topic (
+    IN pid_topic INT,
+    IN pid_type INT,
+    IN pdes_topic VARCHAR(64)
+)
+BEGIN
+    IF pid_topic > 0 THEN
+        UPDATE tb_topics
+           SET id_type = pid_type,
+               des_topic = pdes_topic
+         WHERE id_topic = pid_topic;
+
+    ELSE
+        INSERT INTO tb_topics (id_type, des_topic, dt_topic_created_at)
+                       VALUES (pid_type, pdes_topic, NOW());
+
+        SET pid_topic = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_topics
+     WHERE id_topic = pid_topic;
+END $$
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS sp_save_subtopic;
+
+DELIMITER $$
+CREATE PROCEDURE sp_save_subtopic (
+    IN pid_subtopic INT,
+    IN pid_topic INT,
+    IN pid_type INT,
+    IN pdes_subtopic VARCHAR(128),
+    IN pdes_text MEDIUMTEXT
+)
+BEGIN
+    IF pid_subtopic > 0 THEN
+        UPDATE tb_subtopics
+           SET id_topic = pid_topic,
+               id_type = pid_type,
+               des_subtopic = pdes_subtopic,
+               des_text = pdes_text,
+               dt_subtopic_changed_in = NOW()
+         WHERE id_subtopic = pid_subtopic;
+
+    ELSE
+        INSERT INTO tb_subtopics (id_topic, id_type, des_subtopic, des_text, dt_subtopic_created_at)
+                       VALUES (pid_topic, pid_type, pdes_subtopic, pdes_text, NOW());
+
+        SET pid_subtopic = LAST_INSERT_ID();
+    END IF;
+
+    SELECT *
+      FROM vw_subtopics
+     WHERE id_subtopic = pid_subtopic;
+END $$
+DELIMITER ;
