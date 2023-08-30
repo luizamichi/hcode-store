@@ -34,9 +34,9 @@ class WishlistView extends Controller
     /**
      * Retorna o template da página da lista de desejos
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *

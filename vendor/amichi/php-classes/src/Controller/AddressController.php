@@ -35,9 +35,9 @@ class AddressController extends Controller
     /**
      * Retorna todos os endereços do banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -66,9 +66,9 @@ class AddressController extends Controller
     /**
      * Retorna o endereço a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -86,9 +86,9 @@ class AddressController extends Controller
     /**
      * Salva o endereço informado no corpo da requisição no banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -133,9 +133,9 @@ class AddressController extends Controller
     /**
      * Altera os dados do endereço informado no corpo da requisição a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -184,9 +184,9 @@ class AddressController extends Controller
     /**
      * Remove o endereço a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *

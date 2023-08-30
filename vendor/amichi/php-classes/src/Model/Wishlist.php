@@ -30,7 +30,7 @@ class Wishlist extends Model implements JsonSerializable
     /**
      * Propriedade
      *
-     * @var array $_columns Colunas de mapeamento objeto relacional
+     * @var array<string,string> $_columns Colunas de mapeamento objeto relacional
      */
     private static array $_columns = [
         "idUser" => "id_user", // ID do usuário
@@ -118,7 +118,7 @@ class Wishlist extends Model implements JsonSerializable
      *
      * @param int $idUser ID do usuário
      *
-     * @return array[Product]
+     * @return array<Product>
      */
     public static function getProducts(int $idUser): array
     {
@@ -143,7 +143,7 @@ class Wishlist extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listAll(int $limit = 0, int $offset = 0, string $sortBy = ""): array
     {
@@ -200,7 +200,7 @@ class Wishlist extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listFromUserId(int $idUser): array
     {
@@ -223,7 +223,7 @@ class Wishlist extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listFromProductId(int $idProduct): array
     {
@@ -242,8 +242,8 @@ class Wishlist extends Model implements JsonSerializable
     /**
      * Instancia a classe a partir de um vetor de argumentos
      *
-     * @param array $arguments Vetor com os dados da lista de desejos
-     * @param ?self $wishlist  Objeto instanciado
+     * @param array<mixed> $arguments Vetor com os dados da lista de desejos
+     * @param ?self        $wishlist  Objeto instanciado
      *
      * @static
      *
@@ -266,7 +266,7 @@ class Wishlist extends Model implements JsonSerializable
     /**
      * Valida se os argumentos da classe estão corretos
      *
-     * @param array $errors Vetor para adicionar as mensagens
+     * @param array<string> $errors Vetor para adicionar as mensagens
      *
      * @return bool
      */

@@ -34,9 +34,9 @@ class CartView extends Controller
     /**
      * Retorna o template da lista de todos os carrinho do banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -71,9 +71,9 @@ class CartView extends Controller
     /**
      * Retorna o template da lista de todos os produtos do carrinho
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -111,9 +111,9 @@ class CartView extends Controller
     /**
      * Retorna o template da página do carrinho
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -122,13 +122,13 @@ class CartView extends Controller
     public static function webView(Request $request, Response $response, array $args): Response
     {
         $cart = Cart::loadFromSession();
-        $cart?->refresh();
+        $cart->refresh();
 
         $page = new Page();
         $page->setTpl(
             "cart",
             [
-                "cart" => $cart?->array()
+                "cart" => $cart->array()
             ]
         );
 

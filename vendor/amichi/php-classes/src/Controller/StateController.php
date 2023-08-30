@@ -32,9 +32,9 @@ class StateController extends Controller
     /**
      * Retorna todos os estados do banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -63,9 +63,9 @@ class StateController extends Controller
     /**
      * Retorna o estado a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -83,9 +83,9 @@ class StateController extends Controller
     /**
      * Retorna os estados do país a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -107,9 +107,9 @@ class StateController extends Controller
     /**
      * Salva o estado informado no corpo da requisição no banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -135,9 +135,9 @@ class StateController extends Controller
     /**
      * Altera os dados do estado informado no corpo da requisição a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -170,9 +170,9 @@ class StateController extends Controller
     /**
      * Remove o estado a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *

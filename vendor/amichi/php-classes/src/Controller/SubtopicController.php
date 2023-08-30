@@ -32,9 +32,9 @@ class SubtopicController extends Controller
     /**
      * Retorna todos os subtópicos do banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -63,9 +63,9 @@ class SubtopicController extends Controller
     /**
      * Retorna o subtópico a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -83,9 +83,9 @@ class SubtopicController extends Controller
     /**
      * Salva o subtópico informado no corpo da requisição no banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -111,9 +111,9 @@ class SubtopicController extends Controller
     /**
      * Altera os dados do subtópico informado no corpo da requisição a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -146,9 +146,9 @@ class SubtopicController extends Controller
     /**
      * Remove o subtópico a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *

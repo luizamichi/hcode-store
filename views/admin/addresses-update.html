@@ -197,7 +197,7 @@
               $("#district").val(data.district);
               $("#complement").val(data.complement ?? $("#complement").val());
             }
-          },
+          }
         });
       }
     });
@@ -225,90 +225,90 @@
           error: (xhr, status, error) => {
             let json = xhr.responseJSON ?? {};
             alert(json.message ?? "Não foi possível alterar o endereço.");
-          },
+          }
         });
-      },
+      }
     });
 
     $("#editAddress").validate({
       rules: {
         idPerson: {
-          required: true,
+          required: true
         },
         zipCode: {
           zipCode: true,
           required: true,
           minlength: 10,
-          maxlength: 10,
+          maxlength: 10
         },
         idCity: {
-          required: true,
+          required: true
         },
         publicPlace: {
           required: true,
           minlength: 6,
-          maxlength: 128,
+          maxlength: 128
         },
         number: {
           required: true,
           minlength: 1,
-          maxlength: 8,
+          maxlength: 10
         },
         district: {
           minlength: 4,
-          maxlength: 32,
+          maxlength: 32
         },
         complement: {
           required: true,
           minlength: 4,
-          maxlength: 32,
+          maxlength: 32
         },
         reference: {
           minlength: 4,
-          maxlength: 32,
+          maxlength: 32
         }
       },
       messages: {
         idPerson: {
-          required: "Por favor, insira um usuário",
+          required: "Por favor, insira um usuário"
         },
         zipCode: {
           zipCode: "Por favor, insira um CEP válido",
           required: "Por favor, insira um CEP",
           minlength: "Por favor, insira um CEP com tamanho válido",
-          maxlength: "Por favor, insira um CEP com tamanho válido",
+          maxlength: "Por favor, insira um CEP com tamanho válido"
         },
         idCity: {
-          required: "Por favor, insira um CEP válido para localizar a cidade",
+          required: "Por favor, insira um CEP válido para localizar a cidade"
         },
         publicPlace: {
           required: "Por favor, insira um logradouro",
           minlength:
             "Por favor, insira um logradouro com no mínimo 6 caracteres",
           maxlength:
-            "Por favor, insira um logradouro com no máximo 128 caracteres",
+            "Por favor, insira um logradouro com no máximo 128 caracteres"
         },
         number: {
           required: "Por favor, insira um número",
           minlength: "Por favor, insira um número com no mínimo 1 caracter",
-          maxlength: "Por favor, insira um número com no máximo 8 caracteres",
+          maxlength: "Por favor, insira um número com no máximo 10 caracteres"
         },
         district: {
           minlength: "Por favor, insira um bairro com no mínimo 4 caracteres",
-          maxlength: "Por favor, insira um bairro com no máximo 32 caracteres",
+          maxlength: "Por favor, insira um bairro com no máximo 32 caracteres"
         },
         complement: {
           required: "Por favor, insira um complemento",
           minlength:
             "Por favor, insira um complemento com no mínimo 4 caracteres",
           maxlength:
-            "Por favor, insira um complemento com no máximo 32 caracteres",
+            "Por favor, insira um complemento com no máximo 32 caracteres"
         },
         reference: {
           minlength:
             "Por favor, insira uma referência com no mínimo 4 caracteres",
           maxlength:
-            "Por favor, insira uma referência com no máximo 32 caracteres",
+            "Por favor, insira uma referência com no máximo 32 caracteres"
         }
       },
       errorElement: "span",
@@ -321,7 +321,7 @@
       },
       unhighlight: function (element, errorClass, validClass) {
         $(element).removeClass("is-invalid");
-      },
+      }
     });
 
     $("#resetButton").trigger("reset");

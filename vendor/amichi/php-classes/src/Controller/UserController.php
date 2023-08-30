@@ -37,9 +37,9 @@ class UserController extends Controller
     /**
      * Retorna todos os usuários do banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -68,9 +68,9 @@ class UserController extends Controller
     /**
      * Retorna o usuário a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -88,9 +88,9 @@ class UserController extends Controller
     /**
      * Retorna os logs do usuário a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -119,9 +119,9 @@ class UserController extends Controller
     /**
      * Retorna as recuperações de senha do usuário a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -150,9 +150,9 @@ class UserController extends Controller
     /**
      * Salva o usuário informado no corpo da requisição no banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -198,9 +198,9 @@ class UserController extends Controller
     /**
      * Altera os dados do usuário informado no corpo da requisição a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -257,9 +257,9 @@ class UserController extends Controller
     /**
      * Altera a senha do usuário informada no corpo da requisição a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -293,9 +293,9 @@ class UserController extends Controller
     /**
      * Remove o usuário a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -343,9 +343,9 @@ class UserController extends Controller
     /**
      * Realiza o login do usuário
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -379,9 +379,9 @@ class UserController extends Controller
     /**
      * Realiza o logout do usuário
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -390,7 +390,7 @@ class UserController extends Controller
     public static function logout(Request $request, Response $response, array $args): Response
     {
         $userLog = UserLog::loadFromSession();
-        $user = User::loadFromSession()->clearSession();
+        $user = User::loadFromSession()?->clearSession();
 
         $response->getBody()->write(json_encode($user));
 
@@ -407,9 +407,9 @@ class UserController extends Controller
     /**
      * Retorna o endereço do usuário a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *

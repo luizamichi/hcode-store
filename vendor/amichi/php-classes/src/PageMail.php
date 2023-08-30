@@ -26,8 +26,8 @@ class PageMail extends Page
     /**
      * Construtor
      *
-     * @param array  $options   Opções de definição do template
-     * @param string $directory Diretório de templates HTML
+     * @param array<string,mixed> $options   Opções de definição do template
+     * @param string              $directory Diretório de templates HTML
      *
      * @return void
      */

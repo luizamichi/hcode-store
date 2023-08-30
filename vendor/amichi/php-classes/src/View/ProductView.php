@@ -33,9 +33,9 @@ class ProductView extends Controller
     /**
      * Retorna o template da lista de todos os produtos do banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -68,9 +68,9 @@ class ProductView extends Controller
     /**
      * Retorna o template para cadastro de produto no banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -89,9 +89,9 @@ class ProductView extends Controller
     /**
      * Retorna o template para alteração de produto no banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -116,9 +116,9 @@ class ProductView extends Controller
     /**
      * Retorna o template da página de produtos
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -145,7 +145,7 @@ class ProductView extends Controller
                         fn (Product $product): ?array => str_contains(mb_strtoupper($product->name), mb_strtoupper($search)) ? $product->array() : null,
                         Product::listAll(
                             $limit,
-                            $offset,
+                            (int) $offset,
                             self::string($params["_sortBy"])
                         )
                     )
@@ -165,9 +165,9 @@ class ProductView extends Controller
     /**
      * Retorna o template da página de produto
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *

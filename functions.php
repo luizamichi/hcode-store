@@ -52,7 +52,7 @@ function formatDate(?string $date): string
  */
 function formatPrice(?float $number): string
 {
-    return number_format($number, 2, ",", ".");
+    return number_format((float) $number, 2, ",", ".");
 }
 
 
@@ -65,7 +65,7 @@ function formatPrice(?float $number): string
  */
 function formatZipCode(?string $zipCode): string
 {
-    return (string) preg_replace("/(\d{2})(\d{3})(\d{2})/", "$1.$2-$3", $zipCode);
+    return (string) preg_replace("/(\d{2})(\d{3})(\d{2})/", "$1.$2-$3", (string) $zipCode);
 }
 
 

@@ -31,12 +31,18 @@ class User extends Person implements JsonSerializable
 
 
     /**
-     * Propriedades
+     * Propriedade
      *
-     * @var string SESSION   Nome da sessão para armazenar os dados do usuário logado
-     * @var array  $_columns Colunas de mapeamento objeto relacional
+     * @var string SESSION Nome da sessão para armazenar os dados do usuário logado
      */
     public const SESSION = "User";
+
+
+    /**
+     * Propriedade
+     *
+     * @var array<string,string> $_columns Colunas de mapeamento objeto relacional
+     */
     private static array $_columns = [
         "id" => "id_user", // ID do usuário
         "idPerson" => "id_person", // ID da pessoa
@@ -227,7 +233,7 @@ class User extends Person implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listAll(int $limit = 0, int $offset = 0, string $sortBy = ""): array
     {
@@ -338,8 +344,8 @@ class User extends Person implements JsonSerializable
     /**
      * Instancia a classe a partir de um vetor de argumentos
      *
-     * @param array $arguments Vetor com os dados do usuário
-     * @param ?self $user      Objeto instanciado
+     * @param array<mixed> $arguments Vetor com os dados do usuário
+     * @param ?self        $user      Objeto instanciado
      *
      * @static
      *
@@ -384,7 +390,7 @@ class User extends Person implements JsonSerializable
     {
         $sessionUser = self::loadFromSession();
         if ($this->id === $sessionUser?->id) {
-            $sessionUser = self::loadFromId($this->id)->saveInSession();
+            $sessionUser = self::loadFromId($this->id)?->saveInSession();
         }
 
         return $sessionUser ?? $this;
@@ -394,7 +400,7 @@ class User extends Person implements JsonSerializable
     /**
      * Valida se os argumentos da classe estão corretos
      *
-     * @param array $errors Vetor para adicionar as mensagens
+     * @param array<string> $errors Vetor para adicionar as mensagens
      *
      * @return bool
      */

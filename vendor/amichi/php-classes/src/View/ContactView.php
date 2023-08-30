@@ -37,9 +37,9 @@ class ContactView extends Controller
     /**
      * Retorna o template da lista de todos os contatos do banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -72,9 +72,9 @@ class ContactView extends Controller
     /**
      * Retorna o template da página de contato
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -82,7 +82,7 @@ class ContactView extends Controller
      */
     public static function webView(Request $request, Response $response, array $args): Response
     {
-        $phone = (new self)->_phone(getenv("ENTERPRISE_PHONE"));
+        $phone = (new self)->_phone((string) getenv("ENTERPRISE_PHONE"));
 
         $page = new Page();
         $page->setTpl(

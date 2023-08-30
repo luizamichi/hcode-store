@@ -26,9 +26,9 @@ class PageAdmin extends Page
     /**
      * Construtor
      *
-     * @param array  $options    Opções de definição do template
-     * @param string $directory  Diretório de templates HTML
-     * @param bool   $returnHTML Retorna o HTML?
+     * @param array<string,mixed> $options    Opções de definição do template
+     * @param string              $directory  Diretório de templates HTML
+     * @param bool                $returnHTML Retorna o HTML?
      *
      * @return void
      */

@@ -43,7 +43,7 @@ class Order extends Model implements JsonSerializable
     /**
      * Propriedade
      *
-     * @var array  $_columns Colunas de mapeamento objeto relacional
+     * @var array<string,string> $_columns Colunas de mapeamento objeto relacional
      */
     private static array $_columns = [
         "id" => "id_order", // ID do pedido
@@ -168,7 +168,7 @@ class Order extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listAll(int $limit = 0, int $offset = 0, string $sortBy = ""): array
     {
@@ -215,7 +215,7 @@ class Order extends Model implements JsonSerializable
     /**
      * Retorna o pedido a partir do código fornecido
      *
-     * @param str $code Código do pedido
+     * @param string $code Código do pedido
      *
      * @static
      *
@@ -236,8 +236,8 @@ class Order extends Model implements JsonSerializable
     /**
      * Instancia a classe a partir de um vetor de argumentos
      *
-     * @param array $arguments Vetor com os dados do pedido
-     * @param ?self $order     Objeto instanciado
+     * @param array<mixed> $arguments Vetor com os dados do pedido
+     * @param ?self        $order     Objeto instanciado
      *
      * @static
      *
@@ -293,7 +293,7 @@ class Order extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listFromUserId(int $idUser): array
     {
@@ -316,7 +316,7 @@ class Order extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listFromStatusId(int $idStatus): array
     {
@@ -339,7 +339,7 @@ class Order extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listFromAddressId(int $idAddress): array
     {
@@ -374,12 +374,12 @@ class Order extends Model implements JsonSerializable
         );
 
         $assignor = new Agente(
-            getenv("ENTERPRISE_NAME") ?? "",
-            $this->_cnpj(getenv("ENTERPRISE_CNPJ") ?? ""),
-            getenv("ENTERPRISE_ADDRESS") ?? "",
-            $this->_zipCode(getenv("ENTERPRISE_ZIP_CODE") ?? ""),
-            getenv("ENTERPRISE_CITY") ?? "",
-            getenv("ENTERPRISE_FU") ?? ""
+            (string) (getenv("ENTERPRISE_NAME") ?: ""),
+            $this->_cnpj((string) (getenv("ENTERPRISE_CNPJ") ?: "")),
+            (string) (getenv("ENTERPRISE_ADDRESS") ?: ""),
+            $this->_zipCode((string) (getenv("ENTERPRISE_ZIP_CODE") ?: "")),
+            (string) (getenv("ENTERPRISE_CITY") ?: ""),
+            (string) (getenv("ENTERPRISE_FU") ?: "")
         );
 
         $data = [
@@ -399,7 +399,7 @@ class Order extends Model implements JsonSerializable
             )
         ];
 
-        $bank = match (Bank::tryFrom(getenv("BANK_NAME"))) {
+        $bank = match (Bank::tryFrom((int) getenv("BANK_NAME"))) {
             Bank::BRB => new Brb($data),
             Bank::BB => new BancoDoBrasil($data),
             Bank::BRADESCO => new Bradesco($data),
@@ -427,7 +427,7 @@ class Order extends Model implements JsonSerializable
     /**
      * Valida se os argumentos da classe estão corretos
      *
-     * @param array $errors Vetor para adicionar as mensagens
+     * @param array<string> $errors Vetor para adicionar as mensagens
      *
      * @return bool
      */

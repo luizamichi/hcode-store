@@ -12,6 +12,7 @@
  */
 
 // Servidor PHP
+putenv("BASE_URL=http://localhost:8080"); // URL base do servidor
 putenv("PHP_DEBUG=true"); // Modo depuração
 putenv("PHP_ROOT_DIR=" . __DIR__ . "/"); // Caminho até a raiz do projeto
 putenv("PHP_SESSION_NAME=HcodeStore"); // Nome da sessão para armazenar no cookie do navegador
@@ -21,7 +22,7 @@ date_default_timezone_set("America/Sao_Paulo"); // Localização para ajustar o 
 
 
 // Banco de dados
-putenv("MYSQL_HOSTNAME=192.168.15.33"); // Servidor SQL
+putenv("MYSQL_HOSTNAME=192.168.100.79"); // Servidor SQL
 putenv("MYSQL_DRIVER=mysql"); // Driver SQL
 putenv("MYSQL_SCHEMA=hcode_store"); // Nome do banco de dados
 putenv("MYSQL_USERNAME=pi"); // Nome do usuário

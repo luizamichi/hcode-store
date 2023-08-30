@@ -34,9 +34,9 @@ class OrderController extends Controller
     /**
      * Retorna todos os pedidos do banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -65,9 +65,9 @@ class OrderController extends Controller
     /**
      * Retorna o pedido a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -85,9 +85,9 @@ class OrderController extends Controller
     /**
      * Retorna os pedidos do usuário a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -116,9 +116,9 @@ class OrderController extends Controller
     /**
      * Retorna o boleto de pagamento do pedido a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -134,7 +134,7 @@ class OrderController extends Controller
             throw (new HttpException("Não foi possível consultar o boleto do pedido $id, pois, você não possui permissão.", 400))->json();
         }
 
-        $response->getBody()->write($order->getBankPaymentSlip());
+        $response->getBody()->write($order?->getBankPaymentSlip());
 
         return $response->withStatus($order ? 200 : 204);
     }
@@ -143,9 +143,9 @@ class OrderController extends Controller
     /**
      * Salva o pedido informado no corpo da requisição no banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -173,9 +173,9 @@ class OrderController extends Controller
     /**
      * Altera os dados do pedido informado no corpo da requisição a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -209,9 +209,9 @@ class OrderController extends Controller
     /**
      * Remove o pedido a partir do ID informado na URL
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *

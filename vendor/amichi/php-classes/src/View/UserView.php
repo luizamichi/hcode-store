@@ -38,9 +38,9 @@ class UserView extends Controller
     /**
      * Retorna o template da lista de todos os usuários do banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -73,9 +73,9 @@ class UserView extends Controller
     /**
      * Retorna o template da lista de logs do usuário
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -113,9 +113,9 @@ class UserView extends Controller
     /**
      * Retorna o template para cadastro de usuário no banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -134,9 +134,9 @@ class UserView extends Controller
     /**
      * Retorna o template para alteração de usuário no banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -161,9 +161,9 @@ class UserView extends Controller
     /**
      * Retorna o template de login
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -197,9 +197,9 @@ class UserView extends Controller
     /**
      * Realiza o logout e redireciona para a página de login
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -210,7 +210,7 @@ class UserView extends Controller
         $userLog = UserLog::loadFromSession();
         $user = User::loadFromSession()?->clearSession();
 
-        if ($user) {
+        if ($user && $userLog) {
             Cart::clearSession();
 
             $userLog->idUser = $user->id;
@@ -229,9 +229,9 @@ class UserView extends Controller
     /**
      * Retorna o template de registro de novo usuário
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -255,9 +255,9 @@ class UserView extends Controller
     /**
      * Retorna o template da página de perfil
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *

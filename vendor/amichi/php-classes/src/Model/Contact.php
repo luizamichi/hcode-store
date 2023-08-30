@@ -14,6 +14,7 @@ namespace Amichi\Model;
 
 use Amichi\DB\SQL;
 use Amichi\Model;
+use Amichi\Trait\Validator;
 use JsonSerializable;
 
 /**
@@ -27,15 +28,19 @@ use JsonSerializable;
  */
 class Contact extends Model implements JsonSerializable
 {
+    use Validator;
+
+
     /**
      * Propriedade
      *
-     * @var array $_columns Colunas de mapeamento objeto relacional
+     * @var array<string,string> $_columns Colunas de mapeamento objeto relacional
      */
     private static array $_columns = [
         "id" => "id_contact", // ID do contato
         "name" => "des_contact", // Nome do contato
         "email" => "des_contact_email", // E-mail do contato
+        "phone" => "num_contact_phone", // Telefone do contato
         "subject" => "des_contact_subject", // Assunto do contato
         "message" => "des_message", // Mensagem do contato
         "dateRegister" => "dt_contact_created_at" // Data de cadastro do contato
@@ -98,11 +103,12 @@ class Contact extends Model implements JsonSerializable
      */
     public function save(): self
     {
-        $query = "CALL sp_save_contact (:pdes_contact, :pdes_contact_email, :pdes_contact_subject, :pdes_message)";
+        $query = "CALL sp_save_contact (:pdes_contact, :pdes_contact_email, :pnum_contact_phone, :pdes_contact_subject, :pdes_message)";
 
         $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pdes_contact", $this->name, \PDO::PARAM_STR);
         $stmt->bindValue("pdes_contact_email", $this->email, \PDO::PARAM_STR);
+        $stmt->bindValue("pnum_contact_phone", $this->phone, \PDO::PARAM_STR);
         $stmt->bindValue("pdes_contact_subject", $this->subject, \PDO::PARAM_STR);
         $stmt->bindValue("pdes_message", $this->message, \PDO::PARAM_STR);
         $stmt->execute();
@@ -138,7 +144,7 @@ class Contact extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listAll(int $limit = 0, int $offset = 0, string $sortBy = ""): array
     {
@@ -185,8 +191,8 @@ class Contact extends Model implements JsonSerializable
     /**
      * Instancia a classe a partir de um vetor de argumentos
      *
-     * @param array $arguments Vetor com os dados do contato
-     * @param ?self $contact   Objeto instanciado
+     * @param array<mixed> $arguments Vetor com os dados do contato
+     * @param ?self        $contact   Objeto instanciado
      *
      * @static
      *
@@ -199,6 +205,7 @@ class Contact extends Model implements JsonSerializable
         $contact->id = (int) ($arguments["id"] ?? 0);
         $contact->name = $arguments["name"] ?? "";
         $contact->email = $arguments["email"] ?? "";
+        $contact->phone = (int) (preg_replace("/\D/", "", $arguments["phone"] ?? 0)) ?: null;
         $contact->subject = $arguments["subject"] ?? "";
         $contact->message = $arguments["message"] ?? "";
         $contact->dateRegister = $arguments["dateRegister"] ?? date("Y-m-d H:i:s");
@@ -210,7 +217,7 @@ class Contact extends Model implements JsonSerializable
     /**
      * Valida se os argumentos da classe estão corretos
      *
-     * @param array $errors Vetor para adicionar as mensagens
+     * @param array<string> $errors Vetor para adicionar as mensagens
      *
      * @return bool
      */
@@ -227,10 +234,13 @@ class Contact extends Model implements JsonSerializable
         !filter_var($this->email, FILTER_VALIDATE_EMAIL) &&
         array_push($errors, "e-mail inválido");
 
+        $this->phone !== null && !$this->_validatePhone($this->phone) &&
+        array_push($errors, "telefone inválido");
+
         (strlen($this->subject) < 6 || strlen($this->subject) > 256) &&
         array_push($errors, "assunto possui tamanho inválido");
 
-        (strlen($this->message) < 12 || strlen($this->message) > 4294967295) &&
+        (strlen($this->message) < 12 || strlen($this->message) > 65535) &&
         array_push($errors, "mensagem possui tamanho inválido");
 
         return empty($errors);
@@ -248,6 +258,7 @@ class Contact extends Model implements JsonSerializable
             "id" => $this->id,
             "name" => $this->name,
             "email" => $this->email,
+            "phone" => $this->phone,
             "subject" => $this->subject,
             "message" => $this->message,
             "dateRegister" => $this->dateRegister

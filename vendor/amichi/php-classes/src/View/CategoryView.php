@@ -34,9 +34,9 @@ class CategoryView extends Controller
     /**
      * Retorna o template da lista de todas as categorias do banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -69,9 +69,9 @@ class CategoryView extends Controller
     /**
      * Retorna o template da lista de todos os produtos da categoria
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -109,9 +109,9 @@ class CategoryView extends Controller
     /**
      * Retorna o template para cadastro de categoria no banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -138,9 +138,9 @@ class CategoryView extends Controller
     /**
      * Retorna o template para alteração de categoria no banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -174,9 +174,9 @@ class CategoryView extends Controller
     /**
      * Retorna o template da página de categorias
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -201,7 +201,7 @@ class CategoryView extends Controller
                     fn (Category $category): array => $category->array(),
                     Category::listAll(
                         $limit,
-                        $offset,
+                        (int) $offset,
                         self::string($params["_sortBy"])
                     )
                 ),
@@ -219,9 +219,9 @@ class CategoryView extends Controller
     /**
      * Retorna o template da página de produtos da categoria
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *

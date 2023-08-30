@@ -66,7 +66,7 @@ class HttpException extends \Exception
      */
     public function __toString(): string
     {
-        return json_encode($this->array(!$this->_debug));
+        return (string) json_encode($this->array(!$this->_debug));
     }
 
 
@@ -75,7 +75,7 @@ class HttpException extends \Exception
      *
      * @param boolean $hideSensitiveInformation Oculta informações sensíveis
      *
-     * @return array
+     * @return array<string,bool|int|null|string>
      */
     public function array(bool $hideSensitiveInformation = true): array
     {

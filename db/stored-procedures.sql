@@ -136,14 +136,15 @@ DELIMITER $$
 CREATE PROCEDURE sp_save_contact (
     IN pdes_contact VARCHAR(64),
     IN pdes_contact_email VARCHAR(128),
+    IN pnum_contact_phone BIGINT,
     IN pdes_contact_subject VARCHAR(256),
     IN pdes_message LONGTEXT
 )
 BEGIN
     DECLARE vid_contact INT DEFAULT 0;
 
-    INSERT INTO tb_contacts (des_contact, des_contact_email, des_contact_subject, des_message, dt_contact_created_at)
-                     VALUES (pdes_contact, pdes_contact_email, pdes_contact_subject, pdes_message, NOW());
+    INSERT INTO tb_contacts (des_contact, des_contact_email, num_contact_phone, des_contact_subject, des_message, dt_contact_created_at)
+                     VALUES (pdes_contact, pdes_contact_email, pnum_contact_phone, pdes_contact_subject, pdes_message, NOW());
 
     SET vid_contact = LAST_INSERT_ID();
 

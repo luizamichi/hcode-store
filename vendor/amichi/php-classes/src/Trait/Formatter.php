@@ -32,6 +32,7 @@ trait Formatter
      */
     private function _decimalToFloat(?string $decimal): float
     {
+        $decimal = (string) $decimal;
         $decimal = str_replace(".", "", $decimal);
         return (float) str_replace(",", ".", $decimal);
     }
@@ -56,9 +57,7 @@ trait Formatter
                     $maskared .= $value[$k++];
                 }
             } else {
-                if (isset($mask[$i])) {
-                    $maskared .= $mask[$i];
-                }
+                $maskared .= $mask[$i];
             }
         }
         return $maskared;

@@ -34,6 +34,7 @@
                     <th>#</th>
                     <th>Nome</th>
                     <th>E-mail</th>
+                    <th>Telefone</th>
                     <th>Assunto</th>
                     <th>Data</th>
                     <th>Mensagem</th>
@@ -45,6 +46,7 @@
                     <td>{$value.id}</td>
                     <td data-find="search">{$value.name}</td>
                     <td data-find="search">{$value.email}</td>
+                    <td data-find="search">{$value.phone}</td>
                     <td data-find="search">{$value.subject}</td>
                     <td>{function="formatDate($value.dateRegister)"}</td>
                     <td data-type="showMessage">
@@ -56,7 +58,7 @@
                 </tbody>
                 <tfoot>
                   <tr class="text-right">
-                    <td colspan="6">
+                    <td colspan="7">
                       <small>
                         <span id="count">{function="count($contacts)"}</span>
                         <span id="countText">contatos encontrados</span>

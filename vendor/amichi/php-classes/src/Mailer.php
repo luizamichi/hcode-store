@@ -36,41 +36,36 @@ class Mailer
     /**
      * Construtor
      *
-     * @param string $to      E-mail do destinatário
-     * @param string $name    Nome do destinatário
-     * @param string $subject Assunto do e-mail
-     * @param string $content Conteúdo do corpo do e-mail
-     * @param array  $files   Arquivos para serem anexados no e-mail
+     * @param string        $to      E-mail do destinatário
+     * @param string        $name    Nome do destinatário
+     * @param string        $subject Assunto do e-mail
+     * @param string        $content Conteúdo do corpo do e-mail
+     * @param array<string> $files   Arquivos para serem anexados no e-mail
      *
      * @return void
      */
-    public function __construct(
-        private string $to,
-        private string $name,
-        private string $subject,
-        private string $content,
-        private array $files = []
-    ) {
+    public function __construct(string $to, string $name, string $subject, string $content, array $files = [])
+    {
         $this->_mail = new PHPMailer();
 
         $this->_mail->CharSet = "UTF-8";
         $this->_mail->isSMTP();
         $this->_mail->Mailer = "smtp";
-        $this->_mail->SMTPDebug = getenv("SMTP_DEBUG");
+        $this->_mail->SMTPDebug = (int) getenv("SMTP_DEBUG");
         $this->_mail->Priority = 1;
 
-        $this->_mail->Host = getenv("SMTP_EMAIL_HOSTNAME");
+        $this->_mail->Host = (string) getenv("SMTP_EMAIL_HOSTNAME");
         $this->_mail->Port = (int) getenv("SMTP_PORT");
-        $this->_mail->SMTPSecure = getenv("SMTP_SECURE");
+        $this->_mail->SMTPSecure = (string) getenv("SMTP_SECURE");
         $this->_mail->SMTPAuth = getenv("SMTP_AUTH") === "true";
         $this->_mail->SMTPAutoTLS = getenv("SMTP_AUTH") === "true";
 
-        $this->_mail->Username = getenv("SMTP_EMAIL_ADDRESS");
-        $this->_mail->Password = getenv("SMTP_EMAIL_PASSWORD");
+        $this->_mail->Username = (string) getenv("SMTP_EMAIL_ADDRESS");
+        $this->_mail->Password = (string) getenv("SMTP_EMAIL_PASSWORD");
 
-        $this->_mail->setFrom(getenv("SMTP_EMAIL_ADDRESS"), getenv("SMTP_EMAIL_NAME_FROM"));
+        $this->_mail->setFrom((string) getenv("SMTP_EMAIL_ADDRESS"), (string) getenv("SMTP_EMAIL_NAME_FROM"));
 
-        getenv("SMTP_EMAIL_REPLY") && $this->_mail->addReplyTo(getenv("SMTP_EMAIL_REPLY"), getenv("SMTP_EMAIL_NAME_FROM"));
+        getenv("SMTP_EMAIL_REPLY") && $this->_mail->addReplyTo((string) getenv("SMTP_EMAIL_REPLY"), (string) getenv("SMTP_EMAIL_NAME_FROM"));
 
         $this->_mail->addAddress($to, $name);
 

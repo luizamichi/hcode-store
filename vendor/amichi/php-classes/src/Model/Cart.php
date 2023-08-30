@@ -34,12 +34,18 @@ class Cart extends Model implements JsonSerializable
 
 
     /**
-     * Propriedades
+     * Propriedade
      *
-     * @var string SESSION   Nome da sessão para armazenar os dados do carrinho
-     * @var array  $_columns Colunas de mapeamento objeto relacional
+     * @var string SESSION Nome da sessão para armazenar os dados do carrinho
      */
     public const SESSION = "Cart";
+
+
+    /**
+     * Propriedade
+     *
+     * @var array<string,string> $_columns Colunas de mapeamento objeto relacional
+     */
     private static array $_columns = [
         "id" => "id_cart", // ID do carrinho
         "sessionId" => "des_session_id", // ID da sessão PHP do carrinho
@@ -170,7 +176,7 @@ class Cart extends Model implements JsonSerializable
      *
      * @param bool $related Relacionado ou não (adicionado/removido)
      *
-     * @return array[Product]
+     * @return array<Product>
      */
     public function getProducts(bool $related = true): array
     {
@@ -201,7 +207,7 @@ class Cart extends Model implements JsonSerializable
      * @param int  $idProduct ID do produto
      * @param bool $related   Relacionado ou não (adicionado/removido)
      *
-     * @return self
+     * @return bool
      */
     public function containsProduct(int $idProduct, bool $related = true): bool
     {
@@ -297,7 +303,7 @@ class Cart extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listAll(int $limit = 0, int $offset = 0, string $sortBy = ""): array
     {
@@ -344,8 +350,8 @@ class Cart extends Model implements JsonSerializable
     /**
      * Instancia a classe a partir de um vetor de argumentos
      *
-     * @param array $arguments Vetor com os dados do carrinho
-     * @param ?self $cart      Objeto instanciado
+     * @param array<mixed> $arguments Vetor com os dados do carrinho
+     * @param ?self        $cart      Objeto instanciado
      *
      * @static
      *
@@ -409,7 +415,7 @@ class Cart extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listFromUserId(int $idUser): array
     {
@@ -478,7 +484,7 @@ class Cart extends Model implements JsonSerializable
             (SQL::get())->send($query, ["pid_cart" => $this->id])->fetchAll()
         );
 
-        $this->totalPrice = array_reduce($this->products, fn (int $agg, Product $product): float => $product->totalPrice + $agg, 0) + $this->freightValue;
+        $this->totalPrice = array_reduce($this->products, fn (float $agg, Product $product): float => $product->totalPrice + $agg, 0) + $this->freightValue;
     }
 
 
@@ -545,7 +551,8 @@ class Cart extends Model implements JsonSerializable
                 $this->freightType = match ((int) getenv("COURIER_ORDER_FORMAT")) {
                     1 => "Formato caixa/pacote",
                     2 => "Formato rolo/prisma",
-                    3 => "Envelope"
+                    3 => "Envelope",
+                    default => "Formato caixa/pacote",
                 };
 
                 $this->save();
@@ -573,7 +580,7 @@ class Cart extends Model implements JsonSerializable
     /**
      * Valida se os argumentos da classe estão corretos
      *
-     * @param array $errors Vetor para adicionar as mensagens
+     * @param array<string> $errors Vetor para adicionar as mensagens
      *
      * @return bool
      */

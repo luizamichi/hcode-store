@@ -35,7 +35,7 @@ CREATE VIEW vw_street_types AS
 DROP VIEW IF EXISTS vw_contacts;
 
 CREATE VIEW vw_contacts AS
-    SELECT id_contact, des_contact, des_contact_email, des_contact_subject, des_message, dt_contact_created_at
+    SELECT id_contact, des_contact, des_contact_email, num_contact_phone, des_contact_subject, des_message, dt_contact_created_at
       FROM tb_contacts;
 
 

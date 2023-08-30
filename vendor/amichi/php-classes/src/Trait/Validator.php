@@ -36,10 +36,12 @@ trait Validator
             return false;
         }
 
-        $cpf = preg_replace("/[^0-9]/is", "", $cpf); // Remove os traços e pontos
-        if (strlen($cpf) !== 11) { // Verifica se o tamanho está correto
+        $cpf = (string) preg_replace("/[^0-9]/is", "", $cpf); // Remove os traços e pontos
+        $cpf = str_split($cpf);
+        $cpf = array_map("intval", $cpf);
+        if (count($cpf) !== 11) { // Verifica se o tamanho está correto
             return false;
-        } elseif (in_array($cpf, array_map(fn (int $number): string => str_repeat($number, 11), range(0, 9)))) { // Verifica se foi informada uma sequência de dígitos repetidos
+        } elseif (in_array($cpf, array_map(fn (int $number): string => str_repeat((string) $number, 11), range(0, 9)))) { // Verifica se foi informada uma sequência de dígitos repetidos
             return false;
         }
 
@@ -97,7 +99,7 @@ trait Validator
      */
     private function _validatePhone(int|string $phone): bool
     {
-        $phone = preg_replace("/[^0-9]/", "", $phone);
+        $phone = (string) preg_replace("/[^0-9]/", "", $phone);
         return strlen($phone) === 11;
     }
 
@@ -111,7 +113,7 @@ trait Validator
      */
     private function _validateZipCode(int|string $zipCode): bool
     {
-        $zipCode = preg_replace("/[^0-9]/", "", $zipCode);
+        $zipCode = (string) preg_replace("/[^0-9]/", "", $zipCode);
         return strlen($zipCode) === 8;
     }
 }

@@ -35,7 +35,7 @@ abstract class Person extends Model implements JsonSerializable
     /**
      * Propriedade
      *
-     * @var array $columns Colunas de mapeamento objeto relacional
+     * @var array<string,string> $columns Colunas de mapeamento objeto relacional
      */
     protected static array $columns = [
         "idPerson" => "id_person", // ID da pessoa
@@ -139,7 +139,7 @@ abstract class Person extends Model implements JsonSerializable
     /**
      * Carrega a classe a partir de um vetor de argumentos
      *
-     * @param array $arguments Vetor com os dados da pessoa
+     * @param array<mixed> $arguments Vetor com os dados da pessoa
      *
      * @return void
      */
@@ -157,7 +157,7 @@ abstract class Person extends Model implements JsonSerializable
     /**
      * Valida se os argumentos da classe estão corretos
      *
-     * @param array $errors Vetor para adicionar as mensagens
+     * @param array<string> $errors Vetor para adicionar as mensagens
      *
      * @return bool
      */

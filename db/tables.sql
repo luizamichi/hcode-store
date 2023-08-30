@@ -1,10 +1,10 @@
--- BOOL - is
--- BLOB, MEDIUMBLOB, LONGBLOB - bin
--- CHAR, VARCHAR, TEXT, MEDIUMTEXT, LONGTEXT - des
+-- BOOL - is, fl(ag)
+-- BLOB, MEDIUMBLOB, LONGBLOB - bin(ary)
+-- CHAR, VARCHAR, TEXT, MEDIUMTEXT, LONGTEXT - des(cription)
 -- DATETIME, DATE, TIMESTAMP - dt
 -- DECIMAL - vl
 -- FOREIGN KEY - fk, id
--- INT, TINYINT, BIGINT - num
+-- INT, TINYINT, BIGINT - num(ber)
 -- PRIMARY KEY - id
 
 
@@ -68,11 +68,12 @@ CREATE TABLE tb_street_types (
 DROP TABLE IF EXISTS tb_contacts;
 
 CREATE TABLE tb_contacts (
-    id_contact INT UNSIGNED AUTO_INCREMENT COMMENT 'PK do contato',
+    id_contact INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do contato',
     des_contact VARCHAR(64) NOT NULL COMMENT 'Nome do contato',
     des_contact_email VARCHAR(128) NOT NULL COMMENT 'E-mail do contato',
+    num_contact_phone BIGINT UNSIGNED NULL COMMENT 'Telefone do contato',
     des_contact_subject VARCHAR(256) NOT NULL COMMENT 'Assunto do contato',
-    des_message LONGTEXT NOT NULL COMMENT 'Mensagem do contato',
+    des_message TEXT NOT NULL COMMENT 'Mensagem do contato',
     dt_contact_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do contato',
     CONSTRAINT pk_tb_contacts PRIMARY KEY (id_contact)
 ) COMMENT = 'Contatos';
@@ -85,7 +86,7 @@ CREATE TABLE tb_persons (
     des_person VARCHAR(64) NOT NULL COMMENT 'Nome completo da pessoa',
     des_email VARCHAR(128) NULL COMMENT 'E-mail da pessoa',
     des_cpf CHAR(11) NULL COMMENT 'CPF da pessoa',
-    num_phone bigint UNSIGNED NULL COMMENT 'Telefone da pessoa',
+    num_phone BIGINT UNSIGNED NULL COMMENT 'Telefone da pessoa',
     bin_photo MEDIUMBLOB NULL COMMENT 'Foto da pessoa',
     CONSTRAINT pk_tb_persons PRIMARY KEY (id_person),
     CONSTRAINT uk_tb_persons_des_email UNIQUE KEY (des_email),
@@ -129,7 +130,7 @@ CREATE TABLE tb_users_logs (
 DROP TABLE IF EXISTS tb_mails;
 
 CREATE TABLE tb_mails (
-    id_mail INT UNSIGNED AUTO_INCREMENT COMMENT 'PK do e-mail',
+    id_mail INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK do e-mail',
     des_recipient_email VARCHAR(128) NOT NULL COMMENT 'E-mail do destinatário',
     des_recipient_name VARCHAR(64) NOT NULL COMMENT 'Nome do destinatário do e-mail',
     des_subject VARCHAR(256) NOT NULL COMMENT 'Assunto do e-mail',
@@ -164,11 +165,11 @@ CREATE TABLE tb_addresses (
     id_city INT UNSIGNED NOT NULL COMMENT 'Cidade do endereço',
     id_street_type INT UNSIGNED NULL COMMENT 'Tipo do logradouro',
     des_address VARCHAR(128) NOT NULL COMMENT 'Logradouro do endereço',
-    des_number VARCHAR(8) NOT NULL DEFAULT 'S/N' COMMENT 'Número do endereço',
+    des_number VARCHAR(10) NOT NULL DEFAULT 'S/N' COMMENT 'Número do endereço',
     des_district VARCHAR(32) NULL COMMENT 'Bairro do endereço',
     des_complement VARCHAR(32) NOT NULL COMMENT 'Complemento do endereço',
     des_reference VARCHAR(32) NULL COMMENT 'Referência do endereço',
-    num_zip_code bigint(8) UNSIGNED ZEROFILL NOT NULL COMMENT 'Código postal do endereço',
+    num_zip_code BIGINT UNSIGNED ZEROFILL NOT NULL COMMENT 'Código postal do endereço',
     dt_address_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro do endereço',
     dt_address_changed_in TIMESTAMP NULL COMMENT 'Data da última alteração do endereço',
     CONSTRAINT pk_tb_addresses PRIMARY KEY (id_address),
@@ -206,14 +207,15 @@ DROP TABLE IF EXISTS tb_categories;
 CREATE TABLE tb_categories (
     id_category INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'PK da categoria',
     des_category VARCHAR(32) NOT NULL COMMENT 'Descrição da categoria',
-    des_nickname VARCHAR(256) NOT NULL COMMENT 'Identificador único da categoria (utilizado na URL)',
+    des_nickname VARCHAR(64) NOT NULL COMMENT 'Identificador único da categoria (utilizado na URL)',
     fk_category INT UNSIGNED NULL COMMENT 'Categoria mãe',
     dt_category_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data de cadastro da categoria',
     dt_category_changed_in TIMESTAMP NULL COMMENT 'Data da última alteração da categoria',
     CONSTRAINT pk_tb_categories PRIMARY KEY (id_category),
     CONSTRAINT fk_tb_categories_to_tb_categories FOREIGN KEY (fk_category) REFERENCES tb_categories (id_category) ON DELETE SET NULL,
     CONSTRAINT uk_tb_categories_des_category UNIQUE KEY (des_category),
-    CONSTRAINT uk_tb_categories_des_nickname UNIQUE KEY (des_nickname)
+    CONSTRAINT uk_tb_categories_des_nickname UNIQUE KEY (des_nickname),
+    INDEX idx_tb_categories_fk_category (fk_category)
 ) COMMENT = 'Categorias';
 
 
@@ -247,7 +249,7 @@ CREATE TABLE tb_carts (
     des_session_id VARCHAR(64) NOT NULL COMMENT 'ID da sessão',
     id_user INT UNSIGNED NULL COMMENT 'Usuário do carrinho',
     id_address INT UNSIGNED NULL COMMENT 'Endereço de entrega',
-    num_temporary_zip_code bigint(8) UNSIGNED ZEROFILL NULL COMMENT 'Código postal temporário do endereço de entrega',
+    num_temporary_zip_code BIGINT UNSIGNED ZEROFILL NULL COMMENT 'Código postal temporário do endereço de entrega',
     vl_freight DECIMAL(10, 2) NULL COMMENT 'Valor do frete',
     des_type_freight VARCHAR(32) NULL COMMENT 'Tipo do frete',
     num_days INT UNSIGNED NULL COMMENT 'Dias para entrega',

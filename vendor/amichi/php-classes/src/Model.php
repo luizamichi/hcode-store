@@ -25,12 +25,18 @@ namespace Amichi;
 abstract class Model
 {
     /**
-     * Propriedades
+     * Propriedade
      *
-     * @var array $values Valores auxiliares
-     * @var array $_cache Valores em cache para evitar consultas repetidas ao banco
+     * @var array<string,mixed> $values Valores auxiliares
      */
     protected array $values = [];
+
+
+    /**
+     * Propriedade
+     *
+     * @var array<string,mixed> $_cache Valores em cache para evitar consultas repetidas ao banco
+     */
     private static array $_cache = [];
 
 
@@ -53,7 +59,7 @@ abstract class Model
      *
      * @param string $name Nome da variável
      *
-     * @throws InvalidArgumentException Se a propriedade não existir
+     * @throws \InvalidArgumentException Se a propriedade não existir
      *
      * @return mixed
      */
@@ -70,10 +76,10 @@ abstract class Model
     /**
      * Trata métodos inacessíveis no contexto do objeto
      *
-     * @param string $name      Nome da função
-     * @param array  $arguments Valores dos parâmetros
+     * @param string       $name      Nome da função
+     * @param array<mixed> $arguments Valores dos parâmetros
      *
-     * @throws BadMethodCallException Se o método não for SET ou GET/IS
+     * @throws \BadMethodCallException Se o método não for SET ou GET/IS
      *
      * @return mixed
      */
@@ -97,8 +103,8 @@ abstract class Model
     /**
      * Armazena/recupera um objeto salvo em cache
      *
-     * @param int          $id     ID do objeto
-     * @param ?self|string $object Objeto instanciado
+     * @param int              $id     ID do objeto
+     * @param null|self|string $object Objeto instanciado
      *
      * @static
      *

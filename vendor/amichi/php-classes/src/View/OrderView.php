@@ -39,9 +39,9 @@ class OrderView extends Controller
     /**
      * Retorna o template da lista de todos os pedidos do banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -76,9 +76,9 @@ class OrderView extends Controller
     /**
      * Retorna o template para visualização de pedido
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -99,7 +99,7 @@ class OrderView extends Controller
                 "order" => $order->array(),
                 "products" => array_map(
                     fn (Product $product): array => $product->array(),
-                    Cart::loadFromId($order->idCart)->getProducts()
+                    Cart::loadFromId($order->idCart)?->getProducts()
                 ),
                 "status" => array_map(
                     fn (OrderStatus $status): array => $status->array(),
@@ -116,9 +116,9 @@ class OrderView extends Controller
     /**
      * Retorna o template da página do pedido
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -131,7 +131,7 @@ class OrderView extends Controller
         $address = Address::loadFromUserId($user?->id ?? 0);
         $order = null;
 
-        if ($cart && count($cart->products) > 0 && $user && $address) {
+        if (count($cart->products) > 0 && $user && $address) {
             $order = Order::loadFromCartId($cart->id);
             if (!$order) {
                 $order = Order::loadFromData(
@@ -166,9 +166,9 @@ class OrderView extends Controller
     /**
      * Retorna o template da página de pedidos do usuário
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -195,9 +195,9 @@ class OrderView extends Controller
     /**
      * Retorna o template da página de redirecionamento do PagSeguro
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *
@@ -227,9 +227,9 @@ class OrderView extends Controller
     /**
      * Retorna o template da página de redirecionamento do PayPal
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *

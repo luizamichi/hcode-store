@@ -32,9 +32,9 @@ class OrderStatusView extends Controller
     /**
      * Retorna o template da lista de todos os status de pedidos do banco de dados
      *
-     * @param Request  $request  Requisição
-     * @param Response $response Resposta
-     * @param array    $args     Argumentos da URL
+     * @param Request       $request  Requisição
+     * @param Response      $response Resposta
+     * @param array<string> $args     Argumentos da URL
      *
      * @static
      *

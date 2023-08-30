@@ -30,7 +30,7 @@ class Category extends Model implements JsonSerializable
     /**
      * Propriedade
      *
-     * @var array $_columns Colunas de mapeamento objeto relacional
+     * @var array<string,string> $_columns Colunas de mapeamento objeto relacional
      */
     private static array $_columns = [
         "id" => "id_category", // ID da categoria
@@ -183,7 +183,7 @@ class Category extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listAll(int $limit = 0, int $offset = 0, string $sortBy = ""): array
     {
@@ -209,7 +209,7 @@ class Category extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listFromSuperId(int $idSuper): array
     {
@@ -312,8 +312,8 @@ class Category extends Model implements JsonSerializable
     /**
      * Instancia a classe a partir de um vetor de argumentos
      *
-     * @param array $arguments Vetor com os dados da categoria
-     * @param ?self $category  Objeto instanciado
+     * @param array<mixed> $arguments Vetor com os dados da categoria
+     * @param ?self        $category  Objeto instanciado
      *
      * @static
      *
@@ -340,7 +340,7 @@ class Category extends Model implements JsonSerializable
      *
      * @param bool $related Relacionado ou não
      *
-     * @return array[Product]
+     * @return array<Product>
      */
     public function getProducts(bool $related = true): array
     {
@@ -370,7 +370,7 @@ class Category extends Model implements JsonSerializable
     /**
      * Valida se os argumentos da classe estão corretos
      *
-     * @param array $errors Vetor para adicionar as mensagens
+     * @param array<string> $errors Vetor para adicionar as mensagens
      *
      * @return bool
      */
@@ -385,7 +385,7 @@ class Category extends Model implements JsonSerializable
         $id !== $this->id &&
         array_push($errors, "nome já cadastrado");
 
-        (strlen($this->slug) < 2 || strlen($this->slug) > 256) &&
+        (strlen($this->slug) < 2 || strlen($this->slug) > 64) &&
         array_push($errors, "slug possui tamanho inválido");
 
         ($id = (int) self::loadFromSlug($this->slug)?->id) &&

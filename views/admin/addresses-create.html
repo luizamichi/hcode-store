@@ -184,7 +184,7 @@
               $("#district").val(data.district);
               $("#complement").val(data.complement ?? $("#complement").val());
             }
-          },
+          }
         });
       }
     });
@@ -239,7 +239,7 @@
         number: {
           required: true,
           minlength: 1,
-          maxlength: 8
+          maxlength: 10
         },
         district: {
           minlength: 4,
@@ -276,7 +276,7 @@
         number: {
           required: "Por favor, insira um número",
           minlength: "Por favor, insira um número com no mínimo 1 caracter",
-          maxlength: "Por favor, insira um número com no máximo 8 caracteres"
+          maxlength: "Por favor, insira um número com no máximo 10 caracteres"
         },
         district: {
           minlength: "Por favor, insira um bairro com no mínimo 4 caracteres",

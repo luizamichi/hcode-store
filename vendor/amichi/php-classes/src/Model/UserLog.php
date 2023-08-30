@@ -30,7 +30,7 @@ class UserLog extends Model implements JsonSerializable
     /**
      * Propriedade
      *
-     * @var array $_columns Colunas de mapeamento objeto relacional
+     * @var array<string,string> $_columns Colunas de mapeamento objeto relacional
      */
     private static array $_columns = [
         "id" => "id_log", // ID do log
@@ -169,7 +169,7 @@ class UserLog extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listAll(int $limit = 0, int $offset = 0, string $sortBy = ""): array
     {
@@ -220,7 +220,7 @@ class UserLog extends Model implements JsonSerializable
      *
      * @static
      *
-     * @return array[self]
+     * @return array<self>
      */
     public static function listFromUserId(int $idUser): array
     {
@@ -259,8 +259,8 @@ class UserLog extends Model implements JsonSerializable
     /**
      * Instancia a classe a partir de um vetor de argumentos
      *
-     * @param array $arguments Vetor com os dados do log
-     * @param ?self $userLog   Objeto instanciado
+     * @param array<mixed> $arguments Vetor com os dados do log
+     * @param ?self        $userLog   Objeto instanciado
      *
      * @static
      *

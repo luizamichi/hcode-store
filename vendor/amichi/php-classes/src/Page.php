@@ -30,12 +30,24 @@ class Page
      *
      * @var Tpl   $_tpl        Template
      * @var bool  $_returnHTML Retorna o HTML ou imprime?
-     * @var array $templates   Vetor de templates HTML
-     * @var array $_options    Opcões de template
      */
     private Tpl $_tpl;
     private bool $_returnHTML;
+
+
+    /**
+     * Propriedade
+     *
+     * @var array<string> $_templates Vetor de templates HTML
+     */
     private array $_templates;
+
+
+    /**
+     * Propriedade
+     *
+     * @var array<string,mixed> $_options Opcões de template
+     */
     private array $_options = [
         "data" => [], // Dados que serão populados dinamicamente
         "header" => true, // Monta o cabeçalho?
@@ -46,9 +58,9 @@ class Page
     /**
      * Construtor
      *
-     * @param array  $options    Opções de definição do template
-     * @param string $directory  Diretório de templates HTML
-     * @param bool   $returnHTML Retorna o HTML?
+     * @param array<string,mixed> $options    Opções de definição do template
+     * @param string              $directory  Diretório de templates HTML
+     * @param bool                $returnHTML Retorna o HTML?
      *
      * @return void
      */
@@ -87,8 +99,8 @@ class Page
     /**
      * Define o template HTML
      *
-     * @param string $name Nome do arquivo
-     * @param array  $data Vetor de dados
+     * @param string              $name Nome do arquivo
+     * @param array<string,mixed> $data Vetor de dados
      *
      * @return string
      */
@@ -128,7 +140,7 @@ class Page
     /**
      * Define os dados dinâmicos
      *
-     * @param array $data Vetor de dados
+     * @param array<string,mixed> $data Vetor de dados
      *
      * @return void
      */

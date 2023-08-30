@@ -26,27 +26,33 @@ use Amichi\HttpException;
 class SQL extends \PDO
 {
     /**
-     * Propriedades
+     * Propriedade
      *
-     * @var int   $_id          Identificadores das conexões abertas
-     * @var array $_connections Vetor estáticos das conexões abertas
+     * @var int $_id Identificadores das conexões abertas
      */
     private int $_id;
+
+
+    /**
+     * Propriedade
+     *
+     * @var array<self> $_connections Vetor estáticos das conexões abertas
+     */
     private static array $_connections = [];
 
 
     /**
      * Construtor
      *
-     * @param string $schema   Nome da base de dados
-     * @param string $hostname URL ou IP do servidor
-     * @param string $username Usuário da base de dados
-     * @param string $password Senha de acesso
-     * @param int    $port     Porta da conexão
-     * @param string $driver   SGBD
-     * @param array  $options  Opções de configuração
+     * @param string           $schema   Nome da base de dados
+     * @param string           $hostname URL ou IP do servidor
+     * @param string           $username Usuário da base de dados
+     * @param string           $password Senha de acesso
+     * @param int              $port     Porta da conexão
+     * @param string           $driver   SGBD
+     * @param array<int,mixed> $options  Opções de configuração
      *
-     * @throws PDOException Se não conseguir se conectar ao banco de dados
+     * @throws \PDOException Se não conseguir se conectar ao banco de dados
      *
      * @return void
      */
@@ -63,12 +69,12 @@ class SQL extends \PDO
             \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8; SET time_zone = '-3:00'"
         ]
     ) {
-        $this->schema = $schema ?: getenv("MYSQL_SCHEMA");
-        $this->hostname = $hostname ?: getenv("MYSQL_HOSTNAME");
-        $this->username = $username ?: getenv("MYSQL_USERNAME");
-        $this->password = $password ?: getenv("MYSQL_PASSWORD");
-        $this->port = $port ?: getenv("MYSQL_PORT");
-        $this->driver = $driver ?: getenv("MYSQL_DRIVER");
+        $this->schema = $schema ?: (string) getenv("MYSQL_SCHEMA");
+        $this->hostname = $hostname ?: (string) getenv("MYSQL_HOSTNAME");
+        $this->username = $username ?: (string) getenv("MYSQL_USERNAME");
+        $this->password = $password ?: (string) getenv("MYSQL_PASSWORD");
+        $this->port = $port ?: (int) getenv("MYSQL_PORT");
+        $this->driver = $driver ?: (string) getenv("MYSQL_DRIVER");
         $this->_id = $this->_check();
 
         try {
@@ -151,7 +157,7 @@ class SQL extends \PDO
     /**
      * Retorna um vetor com as configurações da conexão com o banco de dados
      *
-     * @return array
+     * @return array<string,array<int,mixed>|int|string>
      */
     public function configurations(): array
     {
@@ -188,15 +194,15 @@ class SQL extends \PDO
     /**
      * Faz uma consulta na base de dados
      *
-     * @param string $query      Consulta
-     * @param array  $parameters Parâmetros
-     * @param bool   $param      Utilizará bindParam (true) ou bindValue (false)
+     * @param string              $query      Consulta
+     * @param array<string,mixed> $parameters Parâmetros
+     * @param bool                $param      Utilizará bindParam (true) ou bindValue (false)
      *
-     * @throws PDOException Se não conseguir realizar a consulta no banco de dados
+     * @throws \PDOException Se não conseguir realizar a consulta no banco de dados
      *
-     * @return mixed
+     * @return \PDOStatement
      */
-    public function send(string $query, array $parameters = [], bool $param = false): mixed
+    public function send(string $query, array $parameters = [], bool $param = false): \PDOStatement
     {
         $statement = $this->prepare($query);
         foreach ($parameters as $key => $value) {
