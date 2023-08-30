@@ -46,7 +46,7 @@
                     <td>{$value.id}</td>
                     <td data-find="search">{$value.name}</td>
                     <td data-find="search">{$value.email}</td>
-                    <td data-find="search">{$value.phone}</td>
+                    <td data-find="search">{function="formatPhone($value.phone)"}</td>
                     <td data-find="search">{$value.subject}</td>
                     <td>{function="formatDate($value.dateRegister)"}</td>
                     <td data-type="showMessage">

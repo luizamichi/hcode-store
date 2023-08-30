@@ -108,7 +108,7 @@ class Contact extends Model implements JsonSerializable
         $stmt = (SQL::get())->prepare($query);
         $stmt->bindValue("pdes_contact", $this->name, \PDO::PARAM_STR);
         $stmt->bindValue("pdes_contact_email", $this->email, \PDO::PARAM_STR);
-        $stmt->bindValue("pnum_contact_phone", $this->phone, \PDO::PARAM_STR);
+        $stmt->bindValue("pnum_contact_phone", $this->phone, \PDO::PARAM_INT);
         $stmt->bindValue("pdes_contact_subject", $this->subject, \PDO::PARAM_STR);
         $stmt->bindValue("pdes_message", $this->message, \PDO::PARAM_STR);
         $stmt->execute();

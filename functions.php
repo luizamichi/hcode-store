@@ -44,6 +44,19 @@ function formatDate(?string $date): string
 
 
 /**
+ * Retorna o número de celular formatado no padrão brasileiro
+ *
+ * @param ?string $phone Número de telefone celular
+ *
+ * @return string
+ */
+function formatPhone(?string $phone): string
+{
+    return (string) preg_replace("/(\d{2})(\d{5})(\d{4})/", "($1) $2-$3", (string) $phone);
+}
+
+
+/**
  * Retorna o número formatado no padrão monetário nacional
  *
  * @param ?float $number Número

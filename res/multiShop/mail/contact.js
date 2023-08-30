@@ -6,12 +6,13 @@ $(function () {
         },
         submitSuccess: function ($form, event) {
             event.preventDefault();
-            var name = $("input#name").val();
-            var email = $("input#email").val();
-            var subject = $("input#subject").val();
-            var message = $("textarea#message").val();
+            const name = $("input#name").val();
+            const email = $("input#email").val();
+            const phone = $("input#phone").val();
+            const subject = $("input#subject").val();
+            const message = $("textarea#message").val();
 
-            $this = $("#sendMessageButton");
+            const $this = $("#sendMessageButton");
             $this.prop("disabled", true);
 
             $.ajax({
@@ -20,6 +21,7 @@ $(function () {
                 data: {
                     name: name,
                     email: email,
+                    phone: phone,
                     subject: subject,
                     message: message
                 },

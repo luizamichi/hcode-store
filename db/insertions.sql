@@ -142,10 +142,10 @@ VALUES
 
 
 INSERT INTO
-    tb_contacts (id_contact, des_contact, des_contact_email, des_contact_subject, des_message, dt_contact_created_at)
+    tb_contacts (id_contact, des_contact, des_contact_email, num_contact_phone, des_contact_subject, des_message, dt_contact_created_at)
 VALUES
-    (1, 'Contato', 'contato@luizamichi.com.br', 'Parabéns', 'Meus parabéns pela inauguração da loja online.', NOW()),
-    (2, 'Contact', 'contact@luizamichi.com.br', 'Dúvida', 'Gostaria de saber se é possível realizar o pagamento pelo cartão de crédito.', NOW());
+    (1, 'Contato', 'contato@luizamichi.com.br', NULL, 'Parabéns', 'Meus parabéns pela inauguração da loja online.', NOW()),
+    (2, 'Contact', 'contact@luizamichi.com.br', NULL, 'Dúvida', 'Gostaria de saber se é possível realizar o pagamento pelo cartão de crédito.', NOW());
 
 
 INSERT INTO
